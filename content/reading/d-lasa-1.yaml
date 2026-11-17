@@ -1,0 +1,277 @@
+# D reading pack 1. Original texts in the official task formats.
+# Every text is a draft until a reviewer approves it (docs/CONTENT.md).
+id: d-lasa-1
+version: 1
+level: D
+skill: lasa
+title: Läsa D – paket 1
+texts:
+  - id: d-lasa-1-kurser
+    status: draft
+    kp27: [lyssna-lasa.tabeller-diagram-kartor]
+    theme: utbildning
+    instruction: Här är en del av kursprogrammet från en vuxenskola. Svara på frågorna med hjälp av informationen.
+    title: Vuxenskolan i Lindvik – kurser i vår
+    blocks:
+      - heading: Datorkunskap för nybörjare
+        lines:
+          - Lär dig att skicka e-post, använda BankID och boka tider på nätet.
+          - Tisdagar 17.30–19.00, sex gånger. Start 3 februari.
+          - Kursavgift 450 kr. Ta med egen dator eller låna en av oss.
+      - heading: Svenska i yrkeslivet
+        lines:
+          - För dig som läser sfi och vill öva på att prata om ditt arbete.
+          - Vi tränar på möten, telefonsamtal och anställningsintervjuer.
+          - Onsdagar 18.00–20.00. Start 4 februari. Avgiftsfri.
+      - heading: Matlagning från hela världen
+        lines:
+          - Varje vecka lagar en deltagare mat från sitt hemland.
+          - Torsdagar 17.00–20.00 i skolans kök. Kursavgift 900 kr, råvaror ingår.
+          - Högst tolv deltagare.
+      - heading: Cykelskola för vuxna
+        lines:
+          - Har du aldrig cyklat? Vi börjar på en skolgård där det inte finns någon trafik.
+          - Lördagar 10.00–12.00 i april och maj. Cykel och hjälm finns att låna.
+          - Kursavgift 200 kr.
+      - heading: Anmälan
+        lines:
+          - Anmäl dig på vår webbplats eller i receptionen senast en vecka före kursstart.
+    items:
+      - type: short
+        id: d-lasa-1-kurser-gratis
+        prompt: Vilken kurs kostar ingenting?
+        accept: [Svenska i yrkeslivet, svenska i yrkeslivet-kursen]
+        model: Svenska i yrkeslivet.
+        explain: '"Avgiftsfri" means it costs nothing. Only "Svenska i yrkeslivet" says that.'
+      - type: short
+        id: d-lasa-1-kurser-lana
+        prompt: Vad kan man låna på cykelskolan?
+        accept:
+          - cykel och hjälm
+          - en cykel och en hjälm
+          - hjälm och cykel
+          - en hjälm och en cykel
+          - cykel, hjälm
+        model: Cykel och hjälm.
+        explain: '"Cykel och hjälm finns att låna" – a bike and a helmet can be borrowed.'
+      - type: short
+        id: d-lasa-1-kurser-ganger
+        prompt: Hur många gånger träffas gruppen i datorkunskap?
+        accept: [sex gånger, sex, '6', 6 gånger]
+        model: Sex gånger.
+        explain: The Datorkunskap ad says "sex gånger" (six times).
+      - type: mc
+        id: d-lasa-1-kurser-intervju
+        prompt: Vilken kurs passar bäst för en person som vill förbereda sig inför en anställningsintervju?
+        options:
+          - Datorkunskap för nybörjare
+          - Svenska i yrkeslivet
+          - Matlagning från hela världen
+          - Cykelskola för vuxna
+        answer: 1
+        explain: '"Svenska i yrkeslivet" practises meetings, phone calls and "anställningsintervjuer" (job interviews).'
+
+  - id: d-lasa-1-meddelanden
+    status: draft
+    kp27:
+      [lyssna-lasa.berattelser-nyheter-instruktioner, lyssna-lasa.strategier]
+    theme: vardag
+    instruction: Här kan du läsa tre meddelanden. Vad vill personerna? Välj det alternativ som passar bäst.
+    title: Tre meddelanden
+    blocks:
+      - heading: A
+        author: Lina
+        lines:
+          - Hej! Jag är sjuk i dag och kan inte komma på vårt möte kl. 14. Går det bra att vi ses på fredag i stället?
+      - heading: B
+        author: Grannarna i 3B
+        lines:
+          - Tack för att du tog hand om våra blommor när vi var bortresta! Vi har ställt en liten present utanför din dörr.
+      - heading: C
+        author: Omar
+        lines:
+          - Hej Peter! Tvättstugan var smutsig igen när jag kom dit i morse. Kan du se till att du städar efter ditt pass? Det står i reglerna.
+    items:
+      - type: mc
+        id: d-lasa-1-meddelanden-a
+        prompt: A. Vad vill Lina?
+        options: [Flytta en tid, Be om hjälp, Tacka för något, Klaga på något]
+        answer: 0
+        explain: Lina is ill and asks to meet on Friday "i stället" (instead) – she wants to move the meeting.
+      - type: mc
+        id: d-lasa-1-meddelanden-b
+        prompt: B. Vad vill grannarna?
+        options: [Flytta en tid, Be om hjälp, Tacka för något, Klaga på något]
+        answer: 2
+        explain: '"Tack för att du tog hand om våra blommor" – they thank you for looking after their plants.'
+      - type: mc
+        id: d-lasa-1-meddelanden-c
+        prompt: C. Vad vill Omar?
+        options: [Flytta en tid, Be om hjälp, Tacka för något, Klaga på något]
+        answer: 3
+        explain: The laundry room was dirty "igen" (again), and Omar points to the rules – he is complaining.
+
+  - id: d-lasa-1-intervju
+    status: draft
+    kp27:
+      [lyssna-lasa.berattelser-nyheter-instruktioner, lyssna-lasa.strategier]
+    theme: arbete
+    instruction: Här kan du läsa delar av en intervju med Samira, som arbetar på ett äldreboende och studerar på kvällarna. Para ihop frågorna med rätt svar. Två svar blir över.
+    title: Samira – undersköterska och student
+    blocks:
+      - lines:
+          - Samira är 34 år och kom till Sverige för sex år sedan. I dag arbetar hon som undersköterska på ett äldreboende i Lindvik. På kvällarna läser hon för att bli sjuksköterska.
+    items:
+      - type: match
+        id: d-lasa-1-intervju-para
+        prompt: Para ihop frågorna med rätt svar.
+        pairs:
+          - q: Varför valde du att arbeta inom äldreomsorgen?
+            answer: 2
+          - q: Hur hinner du med både jobbet och studierna?
+            answer: 0
+          - q: Vad är det svåraste med ditt arbete?
+            answer: 4
+          - q: Var ser du dig själv om fem år?
+            answer: 5
+        options:
+          - Jag gör ett schema för varje vecka, och jag pluggar alltid på tåget till jobbet.
+          - Jag började där för tre år sedan, direkt efter sfi.
+          - Min mormor bodde hos oss när jag var liten, och jag tyckte om att hjälpa henne.
+          - Ungefär tjugo timmar i veckan, mest på helgerna.
+          - Att det ofta är för lite personal, så att vi inte hinner prata med de boende.
+          - Då hoppas jag att jag är färdig sjuksköterska.
+        explain: Look for the answer that fits the question word. "Varför" needs a reason, "Hur hinner du" needs a method, and "om fem år" needs a plan for the future.
+
+  - id: d-lasa-1-mottagare
+    status: draft
+    kp27: [lyssna-lasa.strategier, digitalt.kallkritik]
+    theme: samhälle
+    instruction: Här ser du två texter som vänder sig till olika läsare. Vilka? Läs texterna och välj rätt svar.
+    title: Vem vänder sig texten till?
+    blocks:
+      - heading: 'Text A: Viktig information om vattnet'
+        lines:
+          - På tisdag den 10 mars stänger vi av vattnet i hus 4 och 6 mellan klockan 8 och 15, eftersom vi byter rör i källaren.
+          - Fyll gärna några flaskor med vatten kvällen innan. Har du frågor kan du kontakta fastighetsskötaren.
+          - Lindviks Bostäder
+      - heading: 'Text B: Nu börjar vi med utedagar'
+        lines:
+          - Från och med nästa vecka är barnen ute hela dagen på onsdagar, även när det regnar.
+          - Se till att ert barn har regnkläder, stövlar och extra strumpor i sin låda. Märk gärna kläderna med barnets namn.
+          - Hälsningar personalen på Solrosens förskola
+    items:
+      - type: mc
+        id: d-lasa-1-mottagare-a
+        prompt: Text A vänder sig till …
+        options: [hyresgäster, föräldrar, arbetsgivare, patienter]
+        answer: 0
+        explain: A housing company ("Lindviks Bostäder") writes about the water in the buildings – the readers are tenants (hyresgäster).
+      - type: mc
+        id: d-lasa-1-mottagare-b
+        prompt: Text B vänder sig till …
+        options: [hyresgäster, föräldrar, arbetsgivare, patienter]
+        answer: 1
+        explain: Preschool staff write "ert barn" (your child) – the readers are parents (föräldrar).
+
+  - id: d-lasa-1-distans
+    status: draft
+    kp27: [lyssna-lasa.strategier]
+    theme: arbete
+    instruction: Här kan du läsa inlägg från ett diskussionsforum. Några personer berättar vad de tycker om att arbeta hemifrån. Vem tycker vad?
+    title: Vill du jobba hemifrån?
+    blocks:
+      - author: Ahmed
+        lines:
+          - Jag jobbar hemma två dagar i veckan och det passar mig perfekt. Jag slipper sitta en timme i bilen, och de dagarna hinner jag träna på lunchen.
+      - author: Karin
+        lines:
+          - Jag provade under en period men kände mig ensam. Jag saknar kollegorna och fikat, så nu åker jag till kontoret varje dag.
+      - author: Diego
+        lines:
+          - Jag är busschaufför, så för mig är frågan inte aktuell. Men jag förstår att många vill slippa trängseln på morgonen.
+      - author: Maja
+        lines:
+          - Hemma blir jag lätt störd av barnen och tvättmaskinen. Jag behöver ett riktigt kontor för att kunna koncentrera mig.
+    items:
+      - type: match
+        id: d-lasa-1-distans-vem
+        prompt: Vem tycker vad? Välj rätt namn till varje påstående.
+        pairs:
+          - q: Personen kan inte arbeta hemifrån på grund av sitt yrke.
+            answer: 2
+          - q: Personen tycker att det är svårt att fokusera hemma.
+            answer: 3
+          - q: Personen använder tiden som hen sparar till motion.
+            answer: 0
+          - q: Personen tycker att gemenskapen på jobbet är viktig.
+            answer: 1
+        options: [Ahmed, Karin, Diego, Maja]
+        explain: 'The statements use other words than the posts: "motion" = "träna", "fokusera" = "koncentrera mig", "gemenskapen" = "kollegorna och fikat".'
+
+  - id: d-lasa-1-cykel
+    status: draft
+    kp27:
+      - lyssna-lasa.skonlitteratur-sakprosa
+      - lyssna-lasa.berattelser-nyheter-instruktioner
+      - lyssna-lasa.strategier
+    theme: trafik
+    instruction: Läs artikeln och svara på frågorna.
+    title: Fler cyklar till jobbet – även på vintern
+    blocks:
+      - lines:
+          - I Lindvik har antalet personer som cyklar till jobbet ökat med nästan 30 procent på fem år. Det visar en ny undersökning från kommunen. Den största ökningen har skett under vintermånaderna.
+          - – Förut ställde nästan alla in cykeln i förrådet i november. Nu ser vi cyklister året runt, säger Erik Holm, som ansvarar för trafikfrågor på kommunen.
+          - En förklaring är att kommunen har börjat prioritera cykelvägarna när det snöar. I dag plogas de stora cykelvägarna före bilvägarna, och de sandas varje morgon före klockan sju. Dessutom har flera arbetsplatser byggt varma cykelrum där man kan byta om och torka sina kläder.
+          - Linnea Berg, 41 år, cyklar sex kilometer till sitt arbete på sjukhuset varje dag.
+          - – Jag trodde att det skulle bli jobbigt i mörkret och kylan, men det är tvärtom. Jag kommer fram piggare än när jag tog bussen, och dessutom sparar jag mycket pengar, säger hon.
+          - Alla är dock inte lika positiva. Flera bilister har hört av sig till kommunen och klagat på att bilvägarna plogas för sent.
+          - – Vi förstår att det kan vara irriterande, men en bil klarar lite snö bättre än en cykel gör, säger Erik Holm.
+          - Kommunen planerar nu att bygga ytterligare tre mil cykelväg till år 2030. Målet är att hälften av alla resor till jobb och skola ska ske med cykel, buss eller till fots.
+    items:
+      - type: mc
+        id: d-lasa-1-cykel-handlar
+        prompt: Vad handlar artikeln främst om?
+        options:
+          - Att fler personer cyklar till jobbet, även på vintern.
+          - Att kommunen ska sluta ploga bilvägarna.
+          - Att det har blivit dyrare att åka buss.
+          - Att sjukhuset har byggt ett nytt cykelrum.
+        answer: 0
+        explain: The title and first paragraph give the main idea. The other options are details that are wrong or never said.
+      - type: mc
+        id: d-lasa-1-cykel-varfor
+        prompt: Varför cyklar fler på vintern nu än tidigare?
+        options:
+          - Vintrarna har blivit varmare.
+          - Cykelvägarna sköts bättre när det snöar.
+          - Bussarna har slutat gå på morgonen.
+          - Kommunen ger bort vinterdäck.
+        answer: 1
+        explain: '"En förklaring är…" – the cycle paths are ploughed first and gritted every morning.'
+      - type: short
+        id: d-lasa-1-cykel-km
+        prompt: Hur långt cyklar Linnea Berg till jobbet?
+        accept: [sex kilometer, 6 kilometer, 6 km, sex km]
+        model: Sex kilometer.
+        explain: '"Linnea Berg … cyklar sex kilometer till sitt arbete."'
+      - type: mc
+        id: d-lasa-1-cykel-menar
+        prompt: Vad menar Erik Holm när han säger att ”en bil klarar lite snö bättre än en cykel gör”?
+        options:
+          - Han förklarar varför cykelvägarna plogas först.
+          - Han tycker att bilisterna borde köpa nya bilar.
+          - Han menar att det sällan snöar i Lindvik.
+          - Han vill att fler ska åka bil på vintern.
+        answer: 0
+        explain: He answers the drivers' complaint. Reading between the lines, he defends ploughing cycle paths before roads.
+      - type: mc
+        id: d-lasa-1-cykel-mal
+        prompt: Vad är kommunens mål till år 2030?
+        options:
+          - Att alla ska cykla till jobbet.
+          - Att hälften av resorna till jobb och skola ska ske utan bil.
+          - Att bygga tre nya bussgarage.
+          - Att stänga bilvägarna på vintern.
+        answer: 1
+        explain: '"Med cykel, buss eller till fots" means without a car – for half of all trips to work and school.'

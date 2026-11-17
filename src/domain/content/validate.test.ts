@@ -1,0 +1,133 @@
+import { describe, expect, it } from 'vitest'
+import type { ReadingPack } from './schema.ts'
+import { packProblems, publishable, textWords } from './validate.ts'
+
+const sentence = 'Det här är en mening med några ord i sig.' // 10 words
+
+function pack(overrides: Partial<ReadingPack> = {}): ReadingPack {
+  return {
+    id: 'p',
+    version: 1,
+    level: 'D',
+    skill: 'lasa',
+    title: 'P',
+    texts: [
+      {
+        id: 't',
+        status: 'draft',
+        kp27: ['lyssna-lasa.strategier'],
+        theme: 'arbete',
+        instruction: 'Läs.',
+        title: 'T',
+        blocks: [{ lines: [sentence, sentence, sentence, sentence] }],
+        items: [
+          {
+            type: 'mc',
+            id: 'i',
+            prompt: '?',
+            options: ['a', 'b'],
+            answer: 0,
+            explain: '-',
+          },
+        ],
+      },
+    ],
+    ...overrides,
+  }
+}
+
+const withItem = (item: ReadingPack['texts'][number]['items'][number]) => {
+  const p = pack()
+  p.texts[0]!.items = [item]
+  return p
+}
+
+describe('packProblems', () => {
+  it('passes a valid pack', () => {
+    expect(packProblems([pack()])).toEqual([])
+  })
+
+  it('finds an id used twice, across packs too', () => {
+    const other = pack({ id: 'q' })
+    expect(packProblems([pack(), other]).join()).toMatch(/id t is used twice/)
+  })
+
+  it('finds a multiple-choice answer that is not an option', () => {
+    const p = withItem({
+      type: 'mc',
+      id: 'i',
+      prompt: '?',
+      options: ['a', 'b'],
+      answer: 2,
+      explain: '-',
+    })
+    expect(packProblems([p]).join()).toMatch(/answer 2 is not one of 2 options/)
+  })
+
+  it('finds repeated options and accepted answers', () => {
+    expect(
+      packProblems([
+        withItem({
+          type: 'mc',
+          id: 'i',
+          prompt: '?',
+          options: ['a', 'A '],
+          answer: 0,
+          explain: '-',
+        }),
+      ]).join(),
+    ).toMatch(/options repeat/)
+    expect(
+      packProblems([
+        withItem({
+          type: 'short',
+          id: 'i',
+          prompt: '?',
+          accept: ['x', 'X'],
+          model: 'x',
+          explain: '-',
+        }),
+      ]).join(),
+    ).toMatch(/accepted answers repeat/)
+  })
+
+  it('finds match pairs that point nowhere or share an answer', () => {
+    const p = withItem({
+      type: 'match',
+      id: 'i',
+      prompt: '?',
+      pairs: [
+        { q: 'a', answer: 0 },
+        { q: 'b', answer: 0 },
+        { q: 'c', answer: 5 },
+      ],
+      options: ['x', 'y'],
+      explain: '-',
+    })
+    const found = packProblems([p]).join()
+    expect(found).toMatch(/two pairs share one answer/)
+    expect(found).toMatch(/"c" points at option 5/)
+  })
+
+  it('finds a text whose length does not fit its level', () => {
+    const p = pack({ level: 'C' })
+    p.texts[0]!.blocks = [{ lines: Array(40).fill(sentence) }]
+    expect(textWords(p.texts[0]!)).toBe(400)
+    expect(packProblems([p]).join()).toMatch(
+      /400 words, outside 20-350 for level C/,
+    )
+  })
+
+  it('requires a reviewer and date on a reviewed text', () => {
+    const p = pack()
+    p.texts[0]!.status = 'reviewed'
+    expect(packProblems([p]).join()).toMatch(/reviewed without reviewedBy/)
+  })
+})
+
+describe('publishable', () => {
+  it('drops drafts and empty packs in production, and keeps them in previews', () => {
+    expect(publishable([pack()], false)).toEqual([])
+    expect(publishable([pack()], true)).toHaveLength(1)
+  })
+})
