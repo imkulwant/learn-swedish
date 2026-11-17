@@ -1,17 +1,18 @@
 import { Component, type ReactNode } from 'react'
+import { SaveBackupButton } from '../features/settings/SaveBackupButton'
 import { Button } from '../ui/Button'
 import { EmptyState } from '../ui/EmptyState'
 
-// Export backup joins this screen when backups exist (slice 2 of docs/PLAN.md).
 function Fallback() {
   return (
     <div className="flex h-full flex-col items-center justify-center gap-4 px-4">
       <EmptyState
         title="Something went wrong"
-        description="The app hit an unexpected error. Your progress is still stored on this device. Reload to carry on."
+        description="The app hit an unexpected error. Your progress is still stored on this device. Save a backup if you like, then reload."
       />
       <div className="flex w-full max-w-sm flex-col gap-2">
         <Button onClick={() => window.location.reload()}>Reload</Button>
+        <SaveBackupButton label="Export backup" variant="secondary" />
       </div>
     </div>
   )

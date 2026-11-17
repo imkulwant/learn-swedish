@@ -1,9 +1,14 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
-import { heading } from './helpers.ts'
+import { heading, openToday } from './helpers.ts'
+
+// Screens fade in for 150 ms. A scan during the fade sees low contrast, so
+// these checks run with motion reduced, which turns the fade off.
+test.use({ reducedMotion: 'reduce' })
 
 const SCREENS: [string, string][] = [
-  ['./', 'Today'],
+  ['./', 'Welcome to SFI Prep'],
+  ['settings', 'Settings'],
   ['exam', 'Exam'],
   ['exam/lasa', 'Läsa – reading'],
   ['exam/lasa/d-lasa-1', 'Läsa D – paket 1'],
@@ -20,6 +25,14 @@ for (const [path, title] of SCREENS) {
     expect(violations.map((v) => `${v.id}: ${v.help}`)).toEqual([])
   })
 }
+
+test('Today after the welcome screen has no detectable problems', async ({
+  page,
+}) => {
+  await openToday(page, { examDate: '2027-01-18' })
+  const { violations } = await new AxeBuilder({ page }).analyze()
+  expect(violations.map((v) => `${v.id}: ${v.help}`)).toEqual([])
+})
 
 test('a checked question with feedback stays accessible', async ({ page }) => {
   await page.goto('exam/lasa/d-lasa-1')

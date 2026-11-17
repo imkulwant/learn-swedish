@@ -1,3 +1,4 @@
+import { firstScreen } from './helpers.ts'
 import { expect, test } from '@playwright/test'
 
 // What GitHub Pages does that a typical dev server hides. These run against
@@ -59,7 +60,7 @@ test.describe('GitHub Pages hosting', () => {
     })
 
     await page.goto('./')
-    await expect(heading(page, 'Today')).toBeVisible()
+    await expect(firstScreen(page)).toBeVisible()
     await page.evaluate(() => navigator.serviceWorker.ready)
     await page.goto('exam/lasa/d-lasa-1')
     await expect(heading(page, 'Läsa D – paket 1')).toBeVisible()
@@ -73,7 +74,7 @@ test.describe('GitHub Pages hosting', () => {
     page,
   }) => {
     await page.goto('./')
-    await expect(heading(page, 'Today')).toBeVisible()
+    await expect(firstScreen(page)).toBeVisible()
 
     const registration = await page.evaluate(async () => {
       const ready = await navigator.serviceWorker.ready

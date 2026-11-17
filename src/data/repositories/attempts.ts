@@ -34,3 +34,19 @@ export async function listAttempts(
     .toArray()
   return rows.sort((a, b) => b.answeredAt - a.answeredAt)
 }
+
+export const countAttempts = (): Promise<number> => db.attempts.count()
+
+/**
+ * When the oldest answer given after `since` was given, or null with none.
+ * With `since` null, every answer counts.
+ */
+export async function oldestAttemptSince(
+  since: number | null,
+): Promise<number | null> {
+  const first = await db.attempts
+    .where('answeredAt')
+    .above(since ?? -1)
+    .first()
+  return first?.answeredAt ?? null
+}

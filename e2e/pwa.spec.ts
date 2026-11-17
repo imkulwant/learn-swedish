@@ -1,3 +1,4 @@
+import { firstScreen } from './helpers.ts'
 import { expect, test } from '@playwright/test'
 
 const heading = (page: import('@playwright/test').Page, name: string) =>
@@ -96,12 +97,12 @@ test.describe('offline', () => {
     context,
   }) => {
     await page.goto('./')
-    await expect(heading(page, 'Today')).toBeVisible()
+    await expect(firstScreen(page)).toBeVisible()
     // Wait for the service worker to finish precaching, then reload so it
     // controls the page, as it does on every launch after the first.
     await page.evaluate(() => navigator.serviceWorker.ready)
     await page.reload()
-    await expect(heading(page, 'Today')).toBeVisible()
+    await expect(firstScreen(page)).toBeVisible()
     expect(
       await page.evaluate(() => navigator.serviceWorker.controller !== null),
     ).toBe(true)
@@ -109,7 +110,7 @@ test.describe('offline', () => {
     await context.setOffline(true)
 
     await page.reload()
-    await expect(heading(page, 'Today')).toBeVisible()
+    await expect(firstScreen(page)).toBeVisible()
     await page.goto('exam')
     await expect(heading(page, 'Exam')).toBeVisible()
     await page.goto('exam/lasa/d-lasa-1')

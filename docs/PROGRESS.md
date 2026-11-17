@@ -2,8 +2,9 @@
 
 ## Current state
 
-- **Slice 1 (one D reading drill, offline): built and verified locally.** `npm run verify` and `npm run test:e2e` pass.
-- Next slice: 2, onboarding, Settings, and backup and restore.
+- **Slice 1 (one D reading drill, offline):** done.
+- **Slice 2 (welcome screen, Settings, exam countdown, backup and restore, backup reminder, data-loss restore screen):** built and verified locally.
+- Next slice: 3, Höra (Piper voice spike, audio build, player, listening drill).
 
 ## Known issues and open items
 

@@ -1,4 +1,5 @@
 import { BrowserRouter } from 'react-router'
+import { ToastProvider } from '../ui/Toast'
 import { Boot } from './Boot'
 import { ErrorBoundary } from './ErrorBoundary'
 import { StorageFailureGate } from './StorageFailureGate'
@@ -6,7 +7,7 @@ import { AppRoutes } from './routes'
 
 function App() {
   return (
-    <>
+    <ToastProvider>
       <StorageFailureGate />
       <ErrorBoundary>
         <Boot>
@@ -16,7 +17,7 @@ function App() {
           </BrowserRouter>
         </Boot>
       </ErrorBoundary>
-    </>
+    </ToastProvider>
   )
 }
 

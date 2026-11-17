@@ -1,3 +1,4 @@
+import { firstScreen } from './helpers.ts'
 import { expect, test, type Page } from '@playwright/test'
 import { CONTENT_SECURITY_POLICY } from '../csp.ts'
 
@@ -40,9 +41,7 @@ test.describe('Content-Security-Policy', () => {
   }) => {
     await watchViolations(page)
     await page.goto('./')
-    await expect(
-      page.getByRole('heading', { name: 'Today', level: 1 }),
-    ).toBeVisible()
+    await expect(firstScreen(page)).toBeVisible()
 
     const ran = await page.evaluate(() => {
       const script = document.createElement('script')
@@ -67,9 +66,7 @@ test.describe('Content-Security-Policy', () => {
     await watchViolations(page)
 
     await page.goto('./')
-    await expect(
-      page.getByRole('heading', { name: 'Today', level: 1 }),
-    ).toBeVisible()
+    await expect(firstScreen(page)).toBeVisible()
     await page.evaluate(() => navigator.serviceWorker.ready)
     for (const path of [
       'exam',
@@ -78,6 +75,7 @@ test.describe('Content-Security-Policy', () => {
       'learn',
       'everyday',
       'progress',
+      'settings',
     ]) {
       await page.goto(path)
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible()

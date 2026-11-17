@@ -12,6 +12,7 @@ import { MatchQuestion } from './items/MatchQuestion'
 import { McQuestion } from './items/McQuestion'
 import { ShortQuestion } from './items/ShortQuestion'
 import type { Answered, OnAnswered } from './items/types'
+import { dataMarker } from '../../platform/dataMarker'
 import { reportStorageFailure } from '../../platform/storageFailure'
 import { ReadinessCard } from './ReadinessCard'
 import { ReadingTextView } from './ReadingTextView'
@@ -84,6 +85,8 @@ function Drill({ pack }: { pack: ReadingPack }) {
       reportStorageFailure(error)
       throw error
     }
+    // From now on, an empty database at launch means progress was lost.
+    dataMarker.mark()
     setAnswers((a) => ({ ...a, [item.id]: answer }))
   }
 

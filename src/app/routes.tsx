@@ -3,6 +3,7 @@ import { ExamScreen } from '../features/exam/ExamScreen'
 import { LasaScreen } from '../features/exam/LasaScreen'
 import { ReadingDrillScreen } from '../features/exam/ReadingDrillScreen'
 import { ComingSoonScreen } from '../features/placeholder/ComingSoonScreen'
+import { SettingsScreen } from '../features/settings/SettingsScreen'
 import { TodayScreen } from '../features/today/TodayScreen'
 import { EmptyState } from '../ui/EmptyState'
 import { Screen } from '../ui/Screen'
@@ -59,6 +60,7 @@ export function AppRoutes() {
             />
           }
         />
+        <Route path="settings" element={<SettingsScreen />} />
         <Route path="*" element={<NotFoundScreen />} />
       </Route>
     </Routes>

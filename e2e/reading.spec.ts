@@ -18,11 +18,12 @@ async function mc(page: Page, prompt: string, option: string) {
 }
 
 /** Picks option `n` (counted from 1) for each statement. */
-async function match(page: Page, choices: [string, number][]) {
+async function match(page: Page, prompt: string, choices: [string, number][]) {
+  const group = page.getByRole('group', { name: prompt })
   for (const [q, option] of choices)
-    await page.getByLabel(q).selectOption({ index: option })
-  await page.getByRole('button', { name: 'Check' }).click()
-  await expect(page.getByRole('status')).toContainText(
+    await group.getByLabel(q).selectOption({ index: option })
+  await group.getByRole('button', { name: 'Check' }).click()
+  await expect(group.getByRole('status')).toContainText(
     `${choices.length} of ${choices.length} right`,
   )
 }
@@ -75,7 +76,7 @@ test('a D reading drill from Today to a stored result', async ({ page }) => {
   await next(page)
 
   // Text 3: interview questions matched to numbered answers.
-  await match(page, [
+  await match(page, 'Para ihop frågorna med rätt svar.', [
     ['Varför valde du att arbeta inom äldreomsorgen?', 3],
     ['Hur hinner du med både jobbet och studierna?', 1],
     ['Vad är det svåraste med ditt arbete?', 5],
@@ -89,7 +90,7 @@ test('a D reading drill from Today to a stored result', async ({ page }) => {
   await next(page)
 
   // Text 5: who thinks what, matched to names.
-  await match(page, [
+  await match(page, 'Vem tycker vad? Välj rätt namn till varje påstående.', [
     ['Personen kan inte arbeta hemifrån på grund av sitt yrke.', 3],
     ['Personen tycker att det är svårt att fokusera hemma.', 4],
     ['Personen använder tiden som hen sparar till motion.', 1],

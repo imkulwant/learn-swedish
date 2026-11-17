@@ -1,7 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { resetDb } from '../../test/db'
 import { SfiDb } from '../db'
-import { listAttempts, recordAttempt, type NewAttempt } from './attempts'
+import {
+  listAttempts,
+  oldestAttemptSince,
+  recordAttempt,
+  type NewAttempt,
+} from './attempts'
 import { getReadiness } from './readiness'
 
 const answer = (overrides: Partial<NewAttempt> = {}): NewAttempt => ({
@@ -43,6 +48,18 @@ describe('attempts', () => {
       'new',
       'old',
     ])
+  })
+
+  it('finds the oldest answer given after a moment', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    for (const t of [1000, 2000, 3000]) {
+      vi.setSystemTime(t)
+      await recordAttempt(answer({ itemId: `at-${t}` }))
+    }
+    vi.useRealTimers()
+    expect(await oldestAttemptSince(null)).toBe(1000)
+    expect(await oldestAttemptSince(1000)).toBe(2000)
+    expect(await oldestAttemptSince(3000)).toBeNull()
   })
 
   it('refuses an impossible score instead of storing it', async () => {
