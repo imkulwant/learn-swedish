@@ -8,7 +8,7 @@ title: Läsa D – paket 1
 texts:
   - id: d-lasa-1-kurser
     status: reviewed
-    reviewedBy: Reviewer (via Kul)
+    reviewedBy: Anna
     reviewedAt: '2026-11-17'
     kp27: [lyssna-lasa.tabeller-diagram-kartor]
     theme: utbildning
@@ -75,7 +75,7 @@ texts:
 
   - id: d-lasa-1-meddelanden
     status: reviewed
-    reviewedBy: Reviewer (via Kul)
+    reviewedBy: Anna
     reviewedAt: '2026-11-17'
     kp27:
       [lyssna-lasa.berattelser-nyheter-instruktioner, lyssna-lasa.strategier]
@@ -117,7 +117,7 @@ texts:
 
   - id: d-lasa-1-intervju
     status: reviewed
-    reviewedBy: Reviewer (via Kul)
+    reviewedBy: Anna
     reviewedAt: '2026-11-17'
     kp27:
       [lyssna-lasa.berattelser-nyheter-instruktioner, lyssna-lasa.strategier]
@@ -151,7 +151,7 @@ texts:
 
   - id: d-lasa-1-mottagare
     status: reviewed
-    reviewedBy: Reviewer (via Kul)
+    reviewedBy: Anna
     reviewedAt: '2026-11-17'
     kp27: [lyssna-lasa.strategier, digitalt.kallkritik]
     theme: samhälle
@@ -184,7 +184,7 @@ texts:
 
   - id: d-lasa-1-distans
     status: reviewed
-    reviewedBy: Reviewer (via Kul)
+    reviewedBy: Anna
     reviewedAt: '2026-11-17'
     kp27: [lyssna-lasa.strategier]
     theme: arbete
@@ -221,7 +221,7 @@ texts:
 
   - id: d-lasa-1-cykel
     status: reviewed
-    reviewedBy: Reviewer (via Kul)
+    reviewedBy: Anna
     reviewedAt: '2026-11-17'
     kp27:
       - lyssna-lasa.skonlitteratur-sakprosa

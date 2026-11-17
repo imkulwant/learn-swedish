@@ -4,7 +4,7 @@ Every pack is drafted, checked by `npm run content`, and reviewed by a native sp
 
 | Pack | Level | Part | Texts | Questions | Status |
 | --- | --- | --- | --- | --- | --- |
-| `d-lasa-1` | D | Läsa | 6 | 16 | Reviewed 2026-11-17 |
+| `d-lasa-1` | D | Läsa | 6 | 16 | Reviewed by Anna, 2026-11-17 |
 
 ## How to review a pack
 
