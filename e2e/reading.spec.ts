@@ -45,9 +45,10 @@ test('a D reading drill from Today to a stored result', async ({ page }) => {
   )
   await page.getByRole('link', { name: new RegExp(PACK) }).click()
   await expect(heading(page, PACK)).toBeVisible()
+  // The pack is reviewed, so no text carries the draft badge.
   await expect(
     page.getByText('Draft – not yet checked by a reviewer'),
-  ).toBeVisible()
+  ).toHaveCount(0)
 
   // Text 1: open answers, one of them judged by the learner, and a choice.
   await short(page, 'Vilken kurs kostar ingenting?', ' svenska i yrkeslivet. ')

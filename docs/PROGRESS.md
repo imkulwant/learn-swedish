@@ -7,7 +7,7 @@
 
 ## Known issues and open items
 
-- Pack `d-lasa-1` is a draft. Until a reviewer approves it, the deployed production build shows no reading packs (see `DECISIONS.md` row 8).
+- Pack `d-lasa-1` is reviewed (2026-11-17) and ships in production builds.
 - Not yet tested on a real iPhone. That waits for Kul to push and enable Pages.
 - **[HUMAN]** Enable GitHub Pages on `imkulwant/learn-swedish` (Settings → Pages → Source: GitHub Actions). The site will be at `https://imkulwant.github.io/learn-swedish/`.
 - The `examFormat` constants (durations, audio plays, aids) are still unconfirmed and are not yet in the code. They arrive with mocks.

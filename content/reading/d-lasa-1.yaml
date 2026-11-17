@@ -1,5 +1,5 @@
 # D reading pack 1. Original texts in the official task formats.
-# Every text is a draft until a reviewer approves it (docs/CONTENT.md).
+# Approved by the reviewer on 2026-11-17 (docs/CONTENT.md).
 id: d-lasa-1
 version: 1
 level: D
@@ -7,7 +7,9 @@ skill: lasa
 title: Läsa D – paket 1
 texts:
   - id: d-lasa-1-kurser
-    status: draft
+    status: reviewed
+    reviewedBy: Reviewer (via Kul)
+    reviewedAt: '2026-11-17'
     kp27: [lyssna-lasa.tabeller-diagram-kartor]
     theme: utbildning
     instruction: Här är en del av kursprogrammet från en vuxenskola. Svara på frågorna med hjälp av informationen.
@@ -72,7 +74,9 @@ texts:
         explain: '"Svenska i yrkeslivet" practises meetings, phone calls and "anställningsintervjuer" (job interviews).'
 
   - id: d-lasa-1-meddelanden
-    status: draft
+    status: reviewed
+    reviewedBy: Reviewer (via Kul)
+    reviewedAt: '2026-11-17'
     kp27:
       [lyssna-lasa.berattelser-nyheter-instruktioner, lyssna-lasa.strategier]
     theme: vardag
@@ -112,7 +116,9 @@ texts:
         explain: The laundry room was dirty "igen" (again), and Omar points to the rules – he is complaining.
 
   - id: d-lasa-1-intervju
-    status: draft
+    status: reviewed
+    reviewedBy: Reviewer (via Kul)
+    reviewedAt: '2026-11-17'
     kp27:
       [lyssna-lasa.berattelser-nyheter-instruktioner, lyssna-lasa.strategier]
     theme: arbete
@@ -144,7 +150,9 @@ texts:
         explain: Look for the answer that fits the question word. "Varför" needs a reason, "Hur hinner du" needs a method, and "om fem år" needs a plan for the future.
 
   - id: d-lasa-1-mottagare
-    status: draft
+    status: reviewed
+    reviewedBy: Reviewer (via Kul)
+    reviewedAt: '2026-11-17'
     kp27: [lyssna-lasa.strategier, digitalt.kallkritik]
     theme: samhälle
     instruction: Här ser du två texter som vänder sig till olika läsare. Vilka? Läs texterna och välj rätt svar.
@@ -175,7 +183,9 @@ texts:
         explain: Preschool staff write "ert barn" (your child) – the readers are parents (föräldrar).
 
   - id: d-lasa-1-distans
-    status: draft
+    status: reviewed
+    reviewedBy: Reviewer (via Kul)
+    reviewedAt: '2026-11-17'
     kp27: [lyssna-lasa.strategier]
     theme: arbete
     instruction: Här kan du läsa inlägg från ett diskussionsforum. Några personer berättar vad de tycker om att arbeta hemifrån. Vem tycker vad?
@@ -210,7 +220,9 @@ texts:
         explain: 'The statements use other words than the posts: "motion" = "träna", "fokusera" = "koncentrera mig", "gemenskapen" = "kollegorna och fikat".'
 
   - id: d-lasa-1-cykel
-    status: draft
+    status: reviewed
+    reviewedBy: Reviewer (via Kul)
+    reviewedAt: '2026-11-17'
     kp27:
       - lyssna-lasa.skonlitteratur-sakprosa
       - lyssna-lasa.berattelser-nyheter-instruktioner
