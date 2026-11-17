@@ -53,12 +53,21 @@ export function TodayScreen() {
       </p>
       <ExamCountdown examDate={settings.examDate} />
       <ReadinessCard level={settings.level} skill="lasa" />
-      <Link
-        to="/exam/lasa"
-        className="tap-target flex items-center justify-center rounded-control bg-accent px-4 py-2 font-semibold text-on-accent"
-      >
-        Practise reading
-      </Link>
+      <ReadinessCard level={settings.level} skill="hora" />
+      <div className="flex gap-2">
+        <Link
+          to="/exam/lasa"
+          className="tap-target flex flex-1 items-center justify-center rounded-control bg-accent px-4 py-2 font-semibold text-on-accent"
+        >
+          Practise reading
+        </Link>
+        <Link
+          to="/exam/hora"
+          className="tap-target flex flex-1 items-center justify-center rounded-control bg-accent px-4 py-2 font-semibold text-on-accent"
+        >
+          Practise listening
+        </Link>
+      </div>
     </Screen>
   )
 }

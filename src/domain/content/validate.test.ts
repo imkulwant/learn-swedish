@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { ReadingPack } from './schema.ts'
+import type { ListeningPack, ReadingPack } from './schema.ts'
 import { packProblems, publishable, textWords } from './validate.ts'
 
 const sentence = 'Det här är en mening med några ord i sig.' // 10 words
@@ -129,5 +129,57 @@ describe('publishable', () => {
   it('drops drafts and empty packs in production, and keeps them in previews', () => {
     expect(publishable([pack()], false)).toEqual([])
     expect(publishable([pack()], true)).toHaveLength(1)
+  })
+})
+
+describe('listening packs', () => {
+  const clipPack = (): ListeningPack => ({
+    id: 'h',
+    version: 1,
+    level: 'D',
+    skill: 'hora',
+    title: 'H',
+    clips: [
+      {
+        id: 'c',
+        status: 'draft',
+        kp27: ['lyssna-lasa.strategier'],
+        theme: 'trafik',
+        kind: 'utrop',
+        instruction: 'Lyssna.',
+        title: 'C',
+        lines: [{ voice: 'nst', text: sentence + ' ' + sentence }],
+        items: [
+          {
+            type: 'mc',
+            id: 'ci',
+            prompt: '?',
+            options: ['a', 'b'],
+            answer: 1,
+            explain: '-',
+          },
+        ],
+      },
+    ],
+  })
+
+  it('checks clips like texts, counting what is said', () => {
+    expect(packProblems([clipPack()])).toEqual([])
+    const short = clipPack()
+    short.clips[0]!.lines = [{ voice: 'alma', text: 'Hej.' }]
+    expect(packProblems([short]).join()).toMatch(
+      /1 words, outside 20-450 for level D/,
+    )
+  })
+
+  it('finds ids shared between a text and a clip', () => {
+    const p = clipPack()
+    p.clips[0]!.id = 't'
+    expect(packProblems([pack(), p]).join()).toMatch(/id t is used twice/)
+  })
+
+  it('ships draft clips only in previews', () => {
+    expect(publishable([clipPack()], false)).toEqual([])
+    expect(publishable([clipPack()], true)[0]?.clips).toHaveLength(1)
   })
 })

@@ -1,5 +1,13 @@
-import type { Item, Level, ReadingPack, ReadingText } from './schema.ts'
+import type {
+  Item,
+  Level,
+  ListeningPack,
+  ReadingPack,
+  ReadingText,
+} from './schema.ts'
 import { KP27_POINT_IDS, type Kp27Point } from './kp27.ts'
+
+export type Pack = ReadingPack | ListeningPack
 
 /**
  * Word-count range of one reading text per level. C texts stay short; D allows
@@ -8,6 +16,12 @@ import { KP27_POINT_IDS, type Kp27Point } from './kp27.ts'
 export const TEXT_WORDS: Record<Level, { min: number; max: number }> = {
   C: { min: 20, max: 350 },
   D: { min: 30, max: 600 },
+}
+
+/** Word-count range of everything said in one listening clip. */
+export const CLIP_WORDS: Record<Level, { min: number; max: number }> = {
+  C: { min: 15, max: 300 },
+  D: { min: 20, max: 450 },
 }
 
 export const countWords = (s: string): number =>
@@ -21,6 +35,32 @@ export const textWords = (t: ReadingText): number =>
       b.lines.reduce((m, line) => m + countWords(line), 0),
     0,
   )
+
+/** One text or clip: what every pack shares, whatever its part of the test. */
+interface Unit {
+  id: string
+  status: 'draft' | 'reviewed'
+  reviewedBy?: string
+  reviewedAt?: string
+  kp27: Kp27Point[]
+  items: Item[]
+  words: number
+  range: { min: number; max: number }
+}
+
+export function packUnits(pack: Pack): Unit[] {
+  if (pack.skill === 'lasa')
+    return pack.texts.map((t) => ({
+      ...t,
+      words: textWords(t),
+      range: TEXT_WORDS[pack.level],
+    }))
+  return pack.clips.map((c) => ({
+    ...c,
+    words: c.lines.reduce((n, l) => n + countWords(l.say ?? l.text), 0),
+    range: CLIP_WORDS[pack.level],
+  }))
+}
 
 function itemProblems(item: Item): string[] {
   const problems: string[] = []
@@ -52,7 +92,7 @@ function itemProblems(item: Item): string[] {
 }
 
 /** Problems that Zod cannot see. An empty list means the packs are valid. */
-export function packProblems(packs: ReadingPack[]): string[] {
+export function packProblems(packs: Pack[]): string[] {
   const problems: string[] = []
   const seen = new Map<string, string>()
   const claim = (id: string, where: string) => {
@@ -63,18 +103,17 @@ export function packProblems(packs: ReadingPack[]): string[] {
 
   for (const pack of packs) {
     claim(pack.id, `pack ${pack.id}`)
-    for (const text of pack.texts) {
-      const where = `${pack.id}/${text.id}`
-      claim(text.id, where)
-      const words = textWords(text)
-      const range = TEXT_WORDS[pack.level]
-      if (words < range.min || words > range.max)
+    for (const unit of packUnits(pack)) {
+      const where = `${pack.id}/${unit.id}`
+      claim(unit.id, where)
+      const { min, max } = unit.range
+      if (unit.words < min || unit.words > max)
         problems.push(
-          `${where}: ${words} words, outside ${range.min}-${range.max} for level ${pack.level}`,
+          `${where}: ${unit.words} words, outside ${min}-${max} for level ${pack.level}`,
         )
-      if (text.status === 'reviewed' && !(text.reviewedBy && text.reviewedAt))
+      if (unit.status === 'reviewed' && !(unit.reviewedBy && unit.reviewedAt))
         problems.push(`${where}: reviewed without reviewedBy and reviewedAt`)
-      for (const item of text.items) {
+      for (const item of unit.items) {
         claim(item.id, `${where}/${item.id}`)
         problems.push(...itemProblems(item).map((p) => `${where}: ${p}`))
       }
@@ -83,24 +122,30 @@ export function packProblems(packs: ReadingPack[]): string[] {
   return problems
 }
 
+const keep = <T extends { status: string }>(list: T[], drafts: boolean) =>
+  list.filter((u) => drafts || u.status === 'reviewed')
+
 /**
- * The packs as shipped. Production keeps only reviewed texts and drops packs
- * left empty; preview builds keep drafts so they can be tried and reviewed.
+ * The packs as shipped. Production keeps only reviewed texts and clips and
+ * drops packs left empty; preview builds keep drafts so they can be tried.
  */
-export function publishable(
-  packs: ReadingPack[],
+export function publishable<P extends Pack>(
+  packs: P[],
   includeDrafts: boolean,
-): ReadingPack[] {
+): P[] {
   return packs
-    .map((pack) => ({
-      ...pack,
-      texts: pack.texts.filter((t) => includeDrafts || t.status === 'reviewed'),
-    }))
-    .filter((pack) => pack.texts.length > 0)
+    .map((pack) =>
+      pack.skill === 'lasa'
+        ? { ...pack, texts: keep(pack.texts, includeDrafts) }
+        : { ...pack, clips: keep(pack.clips, includeDrafts) },
+    )
+    .filter((pack) => packUnits(pack).length > 0) as P[]
 }
 
-/** KP27 points that no text trains yet. */
-export function uncoveredPoints(packs: ReadingPack[]): Kp27Point[] {
-  const covered = new Set(packs.flatMap((p) => p.texts.flatMap((t) => t.kp27)))
+/** KP27 points that no text or clip trains yet. */
+export function uncoveredPoints(packs: Pack[]): Kp27Point[] {
+  const covered = new Set(
+    packs.flatMap((p) => packUnits(p).flatMap((u) => u.kp27)),
+  )
   return KP27_POINT_IDS.filter((id) => !covered.has(id))
 }

@@ -11,7 +11,12 @@ export interface SettingValues {
   onboarded: boolean
   /** When a JSON backup last reached the learner. */
   lastBackupAt: EpochMs | null
+  /** Speed of listening practice; mock exams always play at 1. */
+  playbackRate: PlaybackRate
 }
+
+export const PLAYBACK_RATES = [0.75, 1] as const
+export type PlaybackRate = (typeof PLAYBACK_RATES)[number]
 
 export type SettingKey = keyof SettingValues
 
@@ -20,6 +25,7 @@ export const SETTING_DEFAULTS: SettingValues = {
   examDate: null,
   onboarded: false,
   lastBackupAt: null,
+  playbackRate: 1,
 }
 
 /** The stored value, or the default when the setting was never written. */

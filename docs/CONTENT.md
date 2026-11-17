@@ -2,9 +2,10 @@
 
 Every pack is drafted, checked by `npm run content`, and reviewed by a native speaker or SFI teacher before it ships. Production builds include only texts with `status: reviewed`.
 
-| Pack | Level | Part | Texts | Questions | Status |
+| Pack | Level | Part | Texts or clips | Questions | Status |
 | --- | --- | --- | --- | --- | --- |
 | `d-lasa-1` | D | Läsa | 6 | 16 | Reviewed by Anna, 2026-11-17 |
+| `d-hora-1` | D | Höra | 5 clips | 18 | Reviewed by Anna, 2026-11-18 |
 
 ## How to review a pack
 
@@ -13,3 +14,9 @@ Every pack is drafted, checked by `npm run content`, and reviewed by a native sp
 3. After the fixes, set `status: reviewed`, `reviewedBy` and `reviewedAt` on each approved text.
 
 The plan's printable review sheet and the `content:approve` command come in a later slice. Until then, review uses the YAML file or the app.
+
+## Reviewing a listening pack
+
+Listening packs are in `content/listening/`. Each clip has `lines` with a `voice` (`nst` or `alma`) and the `text` the transcript shows. A `say` field, when present, is what the voice actually reads, for example numbers spelled out. Please check both, and listen to each clip in the app (`npm run dev`, then Exam → Höra). The voice is text-to-speech, so note any word it pronounces wrongly, and give the line id.
+
+After any change to `voice`, `say` or `text`, run `npm run audio` on a Mac with `scripts/setup-audio.sh` done once. The build refuses clips whose audio is out of date.

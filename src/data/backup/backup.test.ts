@@ -168,6 +168,19 @@ describe('parseBackup', () => {
   })
   const parse = (value: unknown) => parseBackup(JSON.stringify(value))
 
+  it('accepts the listening speed setting, and only the speeds the app offers', () => {
+    const withRate = (value: number) =>
+      parse({
+        ...valid(),
+        data: {
+          attempts: [],
+          settings: [{ key: 'playbackRate', value, updatedAt: 1 }],
+        },
+      })
+    expect(withRate(0.75).ok).toBe(true)
+    expect(withRate(3).ok).toBe(false)
+  })
+
   it('accepts an empty backup', () => {
     expect(parse(valid()).ok).toBe(true)
   })

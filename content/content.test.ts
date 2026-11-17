@@ -1,6 +1,6 @@
 // Checks the real content sources with the same rules as the build, so a bad
 // pack fails `npm test` before it fails a build.
-import { readdirSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { parse } from 'yaml'
 import { ReadingPack } from '../src/domain/content/schema.ts'
@@ -8,6 +8,12 @@ import {
   packProblems,
   uncoveredPoints,
 } from '../src/domain/content/validate.ts'
+import {
+  clipHash,
+  readListeningSources,
+  readLock,
+  sourceAudioFile,
+} from '../scripts/lib/listening.ts'
 
 describe('the content in this repository', () => {
   const dir = new URL('./reading/', import.meta.url)
@@ -25,5 +31,19 @@ describe('the content in this repository', () => {
       p.startsWith('lyssna-lasa.'),
     )
     expect(missing).toEqual([])
+  })
+})
+
+describe('the listening content in this repository', () => {
+  it('parses, has no problems, and has up-to-date audio for every clip', async () => {
+    const { packs, problems } = await readListeningSources()
+    expect(problems).toEqual([])
+    expect(packs.length).toBeGreaterThan(0)
+    expect(packProblems(packs)).toEqual([])
+    const lock = await readLock()
+    for (const clip of packs.flatMap((p) => p.clips)) {
+      expect(existsSync(sourceAudioFile(clip.id)), clip.id).toBe(true)
+      expect(lock[clip.id], clip.id).toBe(clipHash(clip))
+    }
   })
 })

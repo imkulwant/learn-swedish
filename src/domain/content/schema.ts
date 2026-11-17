@@ -107,6 +107,62 @@ export const ReadingPack = z
   .strict()
 export type ReadingPack = z.infer<typeof ReadingPack>
 
+/** The text-to-speech voices audio is made with (see docs/DECISIONS.md). */
+export const VOICES = ['nst', 'alma'] as const
+export type Voice = (typeof VOICES)[number]
+
+export const CLIP_KINDS = ['monolog', 'dialog', 'utrop', 'nyhet'] as const
+
+const Line = z
+  .object({
+    voice: z.enum(VOICES),
+    /** Who speaks, shown in the transcript. */
+    speaker: text.optional(),
+    /** What the transcript shows. */
+    text,
+    /** What the voice reads, when it must differ, for example "kvart över nio" for 9.15. */
+    say: text.optional(),
+  })
+  .strict()
+export type Line = z.infer<typeof Line>
+
+export const ListeningClip = z
+  .object({
+    id,
+    ...reviewFields,
+    kp27: z.array(z.enum(KP27_POINT_IDS)).min(1),
+    theme: text,
+    kind: z.enum(CLIP_KINDS),
+    instruction: text,
+    title: text,
+    lines: z.array(Line).min(1),
+    items: z.array(Item).min(1),
+  })
+  .strict()
+export type ListeningClip = z.infer<typeof ListeningClip>
+
+export const ListeningPack = z
+  .object({
+    id,
+    version: z.number().int().min(1),
+    level: z.enum(LEVELS),
+    skill: z.literal('hora'),
+    title: text,
+    clips: z.array(ListeningClip).min(1),
+  })
+  .strict()
+export type ListeningPack = z.infer<typeof ListeningPack>
+
+/**
+ * A listening pack as the app receives it: the build adds where each clip's
+ * audio is served. The file name carries a fingerprint of the audio, so a
+ * changed clip gets a new address and no cache can serve the old one.
+ */
+export const CompiledListeningPack = ListeningPack.extend({
+  audio: z.record(z.string(), z.string().regex(/^audio\/[a-z0-9-]+\.m4a$/)),
+}).strict()
+export type CompiledListeningPack = z.infer<typeof CompiledListeningPack>
+
 export const PackSummary = z
   .object({
     id,
@@ -114,11 +170,17 @@ export const PackSummary = z
     level: z.enum(LEVELS),
     skill: z.enum(SKILLS),
     title: text,
-    textCount: z.number().int(),
+    /** Texts in a reading pack, clips in a listening pack. */
+    unitCount: z.number().int(),
     itemCount: z.number().int(),
     /** True when the pack holds items no reviewer has approved yet. */
     hasDrafts: z.boolean(),
     file: z.string(),
+    /** Listening packs: the audio files of their clips, and their total size. */
+    audio: z
+      .object({ files: z.array(z.string()), bytes: z.number().int() })
+      .strict()
+      .optional(),
   })
   .strict()
 export type PackSummary = z.infer<typeof PackSummary>

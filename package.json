@@ -16,7 +16,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "verify": "npm run lint && npm run typecheck && npm run test && npm run build && node scripts/check-bundle-size.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "audio": "node scripts/build-audio.ts"
   },
   "dependencies": {
     "dexie": "^4.4.7",

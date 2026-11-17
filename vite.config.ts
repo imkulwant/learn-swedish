@@ -116,6 +116,24 @@ export default defineConfig(({ command, isPreview }) => {
           // Relative to the service worker, so it follows the base.
           navigateFallback: 'index.html',
           cleanupOutdatedCaches: true,
+          // Clip audio is too large to precache. It is stored once played or
+          // downloaded, by src/platform/audioCache.ts, in this cache. Playing asks for
+          // byte ranges (206), which are not cached but answered from the stored file.
+          runtimeCaching: [
+            {
+              // A RegExp, not a function: the service worker gets a copy of
+              // this option without the variables around it, such as `base`.
+              urlPattern: new RegExp(
+                `${base.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}audio/[^/]+\\.m4a$`,
+              ),
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'sfi-audio-v1',
+                rangeRequests: true,
+                cacheableResponse: { statuses: [200] },
+              },
+            },
+          ],
         },
       }),
       spaFallback404(),
@@ -124,6 +142,11 @@ export default defineConfig(({ command, isPreview }) => {
     build: {
       // The CSP allows no data: URIs, so never inline assets into CSS or JS.
       assetsInlineLimit: 0,
+      // The budget that matters is 250 KB of gzipped JavaScript, checked by
+      // scripts/check-bundle-size.mjs in `verify`. Vite's own warning counts
+      // minified bytes before compression, so it is set above where that
+      // budget would bite first.
+      chunkSizeWarningLimit: 900,
     },
   }
 })

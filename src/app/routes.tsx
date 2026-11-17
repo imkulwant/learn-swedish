@@ -1,6 +1,7 @@
 import { Link, Route, Routes } from 'react-router'
 import { ExamScreen } from '../features/exam/ExamScreen'
-import { LasaScreen } from '../features/exam/LasaScreen'
+import { ListeningDrillScreen } from '../features/exam/ListeningDrillScreen'
+import { PartScreen } from '../features/exam/PartScreen'
 import { ReadingDrillScreen } from '../features/exam/ReadingDrillScreen'
 import { ComingSoonScreen } from '../features/placeholder/ComingSoonScreen'
 import { SettingsScreen } from '../features/settings/SettingsScreen'
@@ -31,8 +32,10 @@ export function AppRoutes() {
       <Route element={<AppShell />}>
         <Route index element={<TodayScreen />} />
         <Route path="exam" element={<ExamScreen />} />
-        <Route path="exam/lasa" element={<LasaScreen />} />
+        <Route path="exam/lasa" element={<PartScreen skill="lasa" />} />
         <Route path="exam/lasa/:packId" element={<ReadingDrillScreen />} />
+        <Route path="exam/hora" element={<PartScreen skill="hora" />} />
+        <Route path="exam/hora/:packId" element={<ListeningDrillScreen />} />
         <Route
           path="learn"
           element={

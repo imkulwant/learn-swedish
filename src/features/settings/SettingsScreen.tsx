@@ -26,6 +26,12 @@ export function SettingsScreen() {
           national test. They are not real test questions, which are
           confidential. Readiness is an estimate, not an official score.
         </p>
+        <p className="text-muted">
+          Listening audio is made with Piper text-to-speech and two Swedish
+          voices from the rhasspy/piper-voices collection: “nst” (CC0) and
+          “alma” (CC BY 4.0). Both are trained on the NST Swedish speech
+          database from Språkbanken.
+        </p>
       </section>
     </Screen>
   )

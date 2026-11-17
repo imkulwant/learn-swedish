@@ -31,7 +31,7 @@ export function Switch({
       </span>
       <span
         aria-hidden="true"
-        className={`flex h-8 w-14 shrink-0 items-center rounded-full p-1 transition-colors ${
+        className={`flex h-8 w-14 shrink-0 items-center rounded-full p-1 transition-colors motion-reduce:transition-none ${
           checked ? 'bg-accent' : 'bg-surface-2'
         }`}
       >

@@ -14,7 +14,14 @@ npm run test:e2e     # Playwright (WebKit, iPhone profile) against a Pages-like 
 npm run content      # validate content/ and compile it into public/content/
 ```
 
-Content lives in `content/` as YAML. Drafts appear only in dev and test builds, until a reviewer marks them `reviewed`.
+Content lives in `content/` as YAML. Listening audio is generated, then committed:
+
+```sh
+scripts/setup-audio.sh   # once, on a Mac: Piper and two Swedish voices into .tools/
+npm run audio            # make or update public/audio/*.m4a after editing content/listening/
+```
+
+ Drafts appear only in dev and test builds, until a reviewer marks them `reviewed`.
 
 ## Deployment
 

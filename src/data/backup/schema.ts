@@ -58,6 +58,11 @@ const setting = z.discriminatedUnion('key', [
     value: epochMs.nullable(),
     updatedAt: epochMs,
   }),
+  z.strictObject({
+    key: z.literal('playbackRate'),
+    value: z.union([z.literal(0.75), z.literal(1)]),
+    updatedAt: epochMs,
+  }),
 ])
 
 export const backupSchema = z.strictObject({

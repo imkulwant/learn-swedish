@@ -12,6 +12,8 @@ const SCREENS: [string, string][] = [
   ['exam', 'Exam'],
   ['exam/lasa', 'Läsa – reading'],
   ['exam/lasa/d-lasa-1', 'Läsa D – paket 1'],
+  ['exam/hora', 'Höra – listening'],
+  ['exam/hora/d-hora-1', 'Höra D – paket 1'],
   ['learn', 'Learn'],
 ]
 

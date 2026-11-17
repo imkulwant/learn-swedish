@@ -1,0 +1,360 @@
+# D listening pack 1. Original clips in the official kinds: announcement,
+# dialogues, news and a monologue. Audio is made by `npm run audio`.
+# Approved by Anna on 2026-11-18 (docs/CONTENT.md).
+id: d-hora-1
+version: 1
+level: D
+skill: hora
+title: Höra D – paket 1
+clips:
+  - id: d-hora-1-tag
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27: [lyssna-lasa.berattelser-nyheter-instruktioner]
+    theme: trafik
+    kind: utrop
+    instruction: Du står på en tågstation och hör ett meddelande i högtalarna. Lyssna och svara på frågorna.
+    title: Ett meddelande på stationen
+    lines:
+      - voice: nst
+        text: Information om tåg 517 till Uppsala, avgång 14.32. Tåget är försenat cirka tjugo minuter på grund av ett signalfel. Tåget avgår från spår 5 i stället för spår 3. Vi ber om ursäkt för förseningen.
+        say: Information om tåg femhundrasjutton till Uppsala, avgång fjorton och trettiotvå. Tåget är försenat cirka tjugo minuter på grund av ett signalfel. Tåget avgår från spår fem i stället för spår tre. Vi ber om ursäkt för förseningen.
+    items:
+      - type: mc
+        id: d-hora-1-tag-sen
+        prompt: Hur mycket är tåget försenat?
+        options:
+          [
+            Cirka tio minuter,
+            Cirka tjugo minuter,
+            Cirka trettio minuter,
+            En timme,
+          ]
+        answer: 1
+        explain: '"Tåget är försenat cirka tjugo minuter" – about twenty minutes.'
+      - type: mc
+        id: d-hora-1-tag-varfor
+        prompt: Varför är tåget försenat?
+        options:
+          [
+            Det ligger snö på spåret,
+            Det är fel på en signal,
+            Personalen är sjuk,
+            Det är fel på tåget,
+          ]
+        answer: 1
+        explain: '"På grund av ett signalfel" – because of a signal fault.'
+      - type: short
+        id: d-hora-1-tag-spar
+        prompt: Från vilket spår avgår tåget nu?
+        accept: [spår 5, '5', spår fem, fem]
+        model: Spår 5.
+        explain: '"Tåget avgår från spår 5 i stället för spår 3." "I stället för" means "instead of", so 3 was the old track.'
+
+  - id: d-hora-1-vardcentral
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27:
+      [
+        lyssna-lasa.berattelser-nyheter-instruktioner,
+        samtala.fragor-vagledning-intervju,
+      ]
+    theme: hälsa
+    kind: dialog
+    instruction: Ali ringer till vårdcentralen. Lyssna på samtalet och svara på frågorna.
+    title: Ett samtal till vårdcentralen
+    lines:
+      - voice: alma
+        speaker: Maria
+        text: Lindviks vårdcentral, du pratar med Maria. Vad gäller det?
+      - voice: nst
+        speaker: Ali
+        text: Hej, jag heter Ali Hassan. Jag har haft ont i ryggen i snart två veckor, och det blir inte bättre.
+      - voice: alma
+        speaker: Maria
+        text: Okej. Har du tagit någon värktablett?
+      - voice: nst
+        speaker: Ali
+        text: Ja, men den hjälper bara några timmar. Jag kan inte sova ordentligt.
+      - voice: alma
+        speaker: Maria
+        text: Då tycker jag att du ska träffa en fysioterapeut. Hon har en ledig tid på torsdag klockan 9.15. Passar det?
+        say: Då tycker jag att du ska träffa en fysioterapeut. Hon har en ledig tid på torsdag klockan kvart över nio. Passar det?
+      - voice: nst
+        speaker: Ali
+        text: Torsdag går bra, men jag jobbar på förmiddagen. Finns det något på eftermiddagen?
+      - voice: alma
+        speaker: Maria
+        text: Ja, klockan 14.40 samma dag.
+        say: Ja, klockan fjorton och fyrtio samma dag.
+      - voice: nst
+        speaker: Ali
+        text: Perfekt, då tar jag den.
+      - voice: alma
+        speaker: Maria
+        text: Bra. Kom gärna tio minuter innan och ta med legitimation. Om du inte kan komma måste du avboka senast dagen innan, annars får du betala för besöket.
+    items:
+      - type: mc
+        id: d-hora-1-vardcentral-varfor
+        prompt: Varför ringer Ali?
+        options:
+          [
+            Han har ont i ryggen,
+            Han vill förnya ett recept,
+            Han har feber,
+            Han vill avboka en tid,
+          ]
+        answer: 0
+        explain: '"Jag har haft ont i ryggen i snart två veckor" – his back has hurt for almost two weeks.'
+      - type: mc
+        id: d-hora-1-vardcentral-nar
+        prompt: När ska Ali träffa fysioterapeuten?
+        options:
+          [
+            På torsdag kl. 9.15,
+            På torsdag kl. 14.40,
+            På fredag kl. 9.15,
+            På fredag kl. 14.40,
+          ]
+        answer: 1
+        explain: Maria first offers 9.15, but Ali works in the morning, so he takes 14.40 "samma dag" – the same day, Thursday.
+      - type: mc
+        id: d-hora-1-vardcentral-avboka
+        prompt: Vad händer om Ali inte avbokar i tid?
+        options:
+          [
+            Han får en ny tid automatiskt,
+            Han måste betala för besöket,
+            Han får inte komma tillbaka,
+            Ingenting händer,
+          ]
+        answer: 1
+        explain: '"Annars får du betala för besöket" – otherwise you pay for the visit.'
+      - type: short
+        id: d-hora-1-vardcentral-ta-med
+        prompt: Vad ska Ali ta med sig till besöket?
+        accept:
+          [
+            legitimation,
+            sin legitimation,
+            en legitimation,
+            legitimationen,
+            leg,
+            id-kort,
+            ett id-kort,
+          ]
+        model: Legitimation.
+        explain: '"Ta med legitimation" – bring ID.'
+
+  - id: d-hora-1-pass
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27:
+      [
+        lyssna-lasa.strategier,
+        samtala.samtal-diskussioner,
+        samtala.onskemal-asikter,
+      ]
+    theme: arbete
+    kind: dialog
+    instruction: Sara pratar med sin chef Stefan. Lyssna på samtalet och svara på frågorna.
+    title: Sara vill byta pass
+    lines:
+      - voice: alma
+        speaker: Sara
+        text: Stefan, har du en minut? Jag undrar om jag kan byta pass nästa fredag.
+      - voice: nst
+        speaker: Stefan
+        text: Det beror på. Vad är det som händer?
+      - voice: alma
+        speaker: Sara
+        text: Min dotter har avslutning i skolan klockan tio, och jag vill gärna vara med.
+      - voice: nst
+        speaker: Stefan
+        text: Det förstår jag. Problemet är att två av kollegorna redan är lediga den dagen. Kan du jobba på eftermiddagen i stället? Då kan du gå på avslutningen och komma hit vid ett.
+      - voice: alma
+        speaker: Sara
+        text: Ja, det fungerar. Men då måste någon ta mitt morgonpass.
+      - voice: nst
+        speaker: Stefan
+        text: Fråga Jonas. Han sa förra veckan att han behöver fler timmar. Om han säger ja, så skriver jag in det i schemat.
+    items:
+      - type: mc
+        id: d-hora-1-pass-vill
+        prompt: Vad vill Sara?
+        options:
+          [
+            Ta semester en vecka,
+            Byta pass nästa fredag,
+            Sluta tidigare varje dag,
+            Få fler timmar,
+          ]
+        answer: 1
+        explain: '"Jag undrar om jag kan byta pass nästa fredag" – she asks to swap her shift next Friday.'
+      - type: mc
+        id: d-hora-1-pass-problem
+        prompt: Varför kan Stefan inte ge Sara ledigt hela fredagen?
+        options:
+          [
+            Det kommer många kunder på fredagar,
+            Två kollegor är redan lediga,
+            Sara har inga semesterdagar kvar,
+            Jonas är sjuk,
+          ]
+        answer: 1
+        explain: '"Två av kollegorna redan är lediga den dagen" – two colleagues are already off that day.'
+      - type: mc
+        id: d-hora-1-pass-forslag
+        prompt: Vad föreslår Stefan?
+        options:
+          [
+            Att Sara jobbar på eftermiddagen,
+            Att Sara tar med sin dotter till jobbet,
+            Att Sara jobbar på lördagen i stället,
+            Att Sara pratar med dotterns lärare,
+          ]
+        answer: 0
+        explain: '"Kan du jobba på eftermiddagen i stället?"'
+      - type: mc
+        id: d-hora-1-pass-jonas
+        prompt: Varför tror Stefan att Jonas kan ta morgonpasset?
+        options:
+          [
+            Jonas vill jobba mer,
+            Jonas har inga barn,
+            Jonas bor nära jobbet,
+            Jonas brukar jobba på fredagar,
+          ]
+        answer: 0
+        explain: Jonas said he "behöver fler timmar" – he needs more hours, so he probably wants the extra shift. You have to draw that conclusion yourself.
+
+  - id: d-hora-1-simhall
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27:
+      [lyssna-lasa.berattelser-nyheter-instruktioner, samtala.sammanfattningar]
+    theme: samhälle
+    kind: nyhet
+    instruction: Du hör ett nyhetsinslag på den lokala radion. Lyssna och svara på frågorna.
+    title: Nyheter från Lindvik
+    lines:
+      - voice: alma
+        text: Simhallen i Lindvik stänger på måndag för en stor renovering. Taket läcker, och flera av rören måste bytas. Enligt kommunen ska simhallen vara stängd till mitten av augusti.
+      - voice: alma
+        text: Under tiden kan skolklasserna och simklubben träna i badhuset i grannkommunen Norrby. Kommunen sätter in en extra buss dit på eftermiddagarna. Renoveringen beräknas kosta ungefär fyrtio miljoner kronor.
+    items:
+      - type: mc
+        id: d-hora-1-simhall-varfor
+        prompt: Varför stänger simhallen?
+        options:
+          [
+            Den ska renoveras,
+            Den har för få besökare,
+            Personalen strejkar,
+            Den ska rivas,
+          ]
+        answer: 0
+        explain: '"Stänger … för en stor renovering" – the roof leaks and pipes must be replaced.'
+      - type: short
+        id: d-hora-1-simhall-hur-lange
+        prompt: Hur länge ska simhallen vara stängd?
+        accept:
+          [
+            till mitten av augusti,
+            mitten av augusti,
+            till augusti,
+            augusti,
+            till i mitten av augusti,
+          ]
+        model: Till mitten av augusti.
+        explain: '"Till mitten av augusti" – until mid-August.'
+      - type: mc
+        id: d-hora-1-simhall-under-tiden
+        prompt: Vad gör kommunen för simklubben under tiden?
+        options:
+          [
+            Sätter in en extra buss till Norrby,
+            Bygger en tillfällig simhall,
+            Betalar för träning på ett gym,
+            Ingenting,
+          ]
+        answer: 0
+        explain: '"Kommunen sätter in en extra buss dit" – an extra bus to the pool in Norrby.'
+
+  - id: d-hora-1-rostmeddelande
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27:
+      [
+        lyssna-lasa.berattelser-nyheter-instruktioner,
+        samtala.fragor-vagledning-intervju,
+      ]
+    theme: utbildning
+    kind: monolog
+    instruction: Du har fått ett röstmeddelande på telefonen. Lyssna och svara på frågorna.
+    title: Ett röstmeddelande
+    lines:
+      - voice: nst
+        speaker: Johan
+        text: Hej, det här är Johan Ek, studie- och yrkesvägledare på Lindviks vuxenutbildning. Jag ringer om vårt möte på tisdag. Tyvärr måste jag flytta det, eftersom jag ska gå på en utbildning den dagen. Kan vi ses på onsdag i stället, samma tid?
+      - voice: nst
+        speaker: Johan
+        text: Ta gärna med dina betyg från hemlandet, så kan vi prata om vilka kurser du kan läsa efter sfi. Om onsdag inte passar, skicka ett sms till mig. Mitt nummer är 070-174 06 50. Hej då!
+        say: Ta gärna med dina betyg från hemlandet, så kan vi prata om vilka kurser du kan läsa efter sfi. Om onsdag inte passar, skicka ett sms till mig. Mitt nummer är noll sju noll, ett sju fyra, noll sex, femtio. Hej då!
+    items:
+      - type: mc
+        id: d-hora-1-rostmeddelande-varfor
+        prompt: Varför ringer Johan?
+        options:
+          [
+            Han vill flytta ett möte,
+            Han vill ställa in en kurs,
+            Han behöver dina betyg i dag,
+            Han vill att du ringer skolan,
+          ]
+        answer: 0
+        explain: '"Tyvärr måste jag flytta det" – he has to move your meeting.'
+      - type: mc
+        id: d-hora-1-rostmeddelande-nar
+        prompt: När vill Johan träffas i stället?
+        options:
+          [
+            På tisdag vid samma tid,
+            På onsdag vid samma tid,
+            På onsdag eftermiddag,
+            Nästa vecka,
+          ]
+        answer: 1
+        explain: '"Kan vi ses på onsdag i stället, samma tid?"'
+      - type: short
+        id: d-hora-1-rostmeddelande-ta-med
+        prompt: Vad ska du ta med till mötet?
+        accept:
+          [
+            betyg,
+            dina betyg,
+            mina betyg,
+            betygen,
+            betyg från hemlandet,
+            mina betyg från hemlandet,
+            dina betyg från hemlandet,
+          ]
+        model: Mina betyg från hemlandet.
+        explain: '"Ta gärna med dina betyg från hemlandet" – bring your grades from your home country.'
+      - type: mc
+        id: d-hora-1-rostmeddelande-passar-inte
+        prompt: Vad ska du göra om onsdag inte passar?
+        options:
+          [
+            Ringa receptionen,
+            Skicka ett sms till Johan,
+            Skicka ett mejl till skolan,
+            Komma på tisdag ändå,
+          ]
+        answer: 1
+        explain: '"Om onsdag inte passar, skicka ett sms till mig."'
