@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import { Screen } from '../../ui/Screen'
+import { MockList } from '../mock/MockScreen'
 
 const PARTS = [
   { to: 'lasa', name: 'Läsa – reading', ready: true },
@@ -37,6 +38,7 @@ export function ExamScreen() {
           ),
         )}
       </ul>
+      <MockList />
     </Screen>
   )
 }

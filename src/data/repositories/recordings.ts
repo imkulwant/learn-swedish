@@ -37,6 +37,8 @@ export async function getAudio(id: string): Promise<ArrayBuffer | null> {
   return (await db.audio.get(id))?.audio ?? null
 }
 
+export const getRecording = (id: string) => db.recordings.get(id)
+
 /** The recordings of one task, newest first. */
 export async function listRecordings(taskId: string): Promise<Recording[]> {
   const rows = await db.recordings.where('taskId').equals(taskId).toArray()

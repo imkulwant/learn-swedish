@@ -1,0 +1,463 @@
+# Mock exam 1, level D. Everything here is written for this mock only: no
+# item is used in a drill, so a remembered answer cannot inflate a score.
+# The parts follow the test: Läsa, Höra, Skriva (two tasks, one formal) and
+# Tala (a solo task and a pair discussion). Places and firms are fictional.
+id: d-prov-1
+version: 1
+level: D
+skill: prov
+title: Provövning D – 1
+lasa:
+  - id: m1-bibliotek
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27: [lyssna-lasa.berattelser-nyheter-instruktioner]
+    theme: kultur och fritid
+    instruction: Läs informationen och svara på frågorna.
+    title: Ekdala bibliotek i november
+    blocks:
+      - heading: Öppettider
+        lines:
+          - Måndag–torsdag 10–20. Fredag 10–17. Lördag 11–15. Söndag stängt.
+      - heading: Språkcafé
+        lines:
+          - Varje tisdag klockan 17–19 kan du träffa andra och prata svenska över en kopp kaffe. Ingen anmälan behövs. Kaffet är gratis.
+      - heading: Läxhjälp
+        lines:
+          - Elever i årskurs 4–9 kan få hjälp med läxorna på onsdagar klockan 15–17. Anmäl dig i informationsdisken senast dagen innan.
+      - heading: Låna dator
+        lines:
+          - Du kan låna en dator i en timme i taget. Du behöver ett lånekort. Ta med legitimation när du skaffar lånekort.
+    items:
+      - type: mc
+        id: m1-bibliotek-1
+        prompt: När kan man prata svenska på biblioteket?
+        options:
+          - På tisdagar klockan 17–19
+          - På onsdagar klockan 15–17
+          - På lördagar klockan 11–15
+        answer: 0
+        explain: The language café, "Språkcafé", is every Tuesday 17–19.
+      - type: mc
+        id: m1-bibliotek-2
+        prompt: Vad måste man göra för att få läxhjälp?
+        options:
+          - Betala i informationsdisken
+          - Anmäla sig senast dagen innan
+          - Ta med legitimation
+        answer: 1
+        explain: '"Anmäl dig i informationsdisken senast dagen innan."'
+      - type: short
+        id: m1-bibliotek-3
+        prompt: Vad behöver man för att låna en dator?
+        accept: [ett lånekort, lånekort, ett lånekort på biblioteket]
+        model: Ett lånekort.
+        explain: '"Du behöver ett lånekort."'
+
+  - id: m1-granne
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27: [lyssna-lasa.strategier]
+    theme: boende
+    instruction: Läs meddelandet och svara på frågorna.
+    title: Lapp i trappuppgången
+    blocks:
+      - lines:
+          - Hej alla grannar!
+          - På lördag den 22 november fyller vår dotter fem år, och vi har kalas hemma hos oss från klockan 14 till 18. Det kommer att vara tolv barn här, så det kan bli lite högljutt. Vi ber om ursäkt redan nu!
+          - Om ni har frågor eller om det blir för mycket ljud, knacka gärna på hos oss.
+          - Hälsningar Familjen Nilsson, lägenhet 1201
+    items:
+      - type: mc
+        id: m1-granne-1
+        prompt: Varför har familjen Nilsson skrivit lappen?
+        options:
+          - De vill bjuda grannarna på kalas.
+          - De vill varna för att det kan bli högt ljud.
+          - De klagar på att grannarna är högljudda.
+        answer: 1
+        explain: They say there will be twelve children, "så det kan bli lite högljutt", and apologise in advance.
+      - type: mc
+        id: m1-granne-2
+        prompt: Vad ska grannarna göra om ljudet stör dem?
+        options:
+          - Ringa hyresvärden
+          - Skriva en lapp
+          - Knacka på hos familjen Nilsson
+        answer: 2
+        explain: '"Knacka gärna på hos oss."'
+
+  - id: m1-hemifran
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27: [lyssna-lasa.skonlitteratur-sakprosa]
+    theme: arbete
+    instruction: Läs inläggen. Vem tycker vad? Para ihop påståendena med rätt person.
+    title: Forum – Jobba hemifrån?
+    blocks:
+      - author: Leila
+        lines:
+          - Jag jobbar hemma två dagar i veckan. Jag slipper resa en timme, och jag hinner hämta barnen tidigare. För mig är det perfekt.
+      - author: Tomas
+        lines:
+          - Hemma blir jag ensam. Jag saknar kollegorna och fikat. Därför åker jag till kontoret varje dag, fast det tar tid.
+      - author: Maja
+        lines:
+          - Det beror på uppgiften. När jag ska skriva behöver jag lugn och ro hemma, men möten fungerar bättre på jobbet.
+      - author: Erik
+        lines:
+          - Jag är busschaufför, så jag kan inte jobba hemifrån. Men jag tycker att alla som kan borde få göra det.
+    items:
+      - type: match
+        id: m1-hemifran-1
+        prompt: Vem tycker vad?
+        pairs:
+          - q: Det är bäst att välja plats efter vad man ska göra.
+            answer: 2
+          - q: Att jobba hemma gör det lättare att få ihop livet med barn.
+            answer: 0
+          - q: Det sociala på jobbet är viktigast.
+            answer: 1
+          - q: Fler borde få chansen att jobba hemma.
+            answer: 3
+        options: [Leila, Tomas, Maja, Erik]
+        explain: Leila can pick up the children earlier, Tomas misses colleagues and fika, Maja chooses by task, and Erik thinks everyone who can should be allowed to.
+
+  - id: m1-cykel
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27: [lyssna-lasa.skonlitteratur-sakprosa, lyssna-lasa.strategier]
+    theme: trafik och miljö
+    instruction: Läs artikeln och svara på frågorna.
+    title: Fler cyklar till jobbet i Ekdala
+    blocks:
+      - lines:
+          - Antalet personer som cyklar till jobbet i Ekdala har ökat med nästan en tredjedel på två år. Det visar en ny undersökning från kommunen.
+          - En viktig orsak är den nya cykelbanan mellan centrum och industriområdet i norr, som öppnade förra våren. Tidigare fick cyklisterna dela väg med bilar och lastbilar.
+          - – Förut tog jag bilen varje dag eftersom jag tyckte att det var för farligt att cykla, säger Samir Aziz, som jobbar på ett lager i industriområdet. Nu cyklar jag från april till oktober, och jag mår mycket bättre.
+          - Kommunen har också satt upp nya cykelställ vid busstationen, så att fler kan cykla en bit och ta bussen resten av vägen.
+          - Alla är dock inte nöjda. Flera bilister tycker att det har blivit svårare att parkera i centrum, eftersom en del parkeringsplatser har tagits bort för att ge plats åt cykelbanan.
+          - Kommunen planerar nu en ny cykelbana till sjukhuset. Den ska vara klar om tre år.
+    items:
+      - type: mc
+        id: m1-cykel-1
+        prompt: Varför cyklar fler till jobbet nu, enligt artikeln?
+        options:
+          - Bensinen har blivit dyrare.
+          - Det finns en ny cykelbana.
+          - Bussarna går mer sällan.
+        answer: 1
+        explain: '"En viktig orsak är den nya cykelbanan".'
+      - type: mc
+        id: m1-cykel-2
+        prompt: Vad kan man förstå om Samir Aziz?
+        options:
+          - Han cyklar hela året.
+          - Han slutade köra bil helt förra våren.
+          - Han kör troligen bil på vintern.
+        answer: 2
+        explain: 'He cycles "från april till oktober", so he probably uses the car in winter. The text does not say so: you have to read between the lines.'
+      - type: short
+        id: m1-cykel-3
+        prompt: Varför är en del bilister missnöjda?
+        accept:
+          - det är svårare att parkera
+          - det har blivit svårare att parkera i centrum
+          - svårare att parkera
+          - det finns färre parkeringsplatser
+          - parkeringsplatser har tagits bort
+        model: Det har blivit svårare att parkera i centrum, eftersom parkeringsplatser har tagits bort.
+        explain: The article says some parking spaces were removed to make room for the cycle path.
+      - type: mc
+        id: m1-cykel-4
+        prompt: Vad vill artikeln främst berätta?
+        options:
+          - Att cykling har ökat och vad det beror på
+          - Att kommunen har för lite pengar
+          - Att Samir Aziz har bytt jobb
+        answer: 0
+        explain: The article is about the increase in cycling and its causes, with one view against it.
+
+hora:
+  - id: m1-tag
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27: [lyssna-lasa.berattelser-nyheter-instruktioner]
+    theme: trafik
+    kind: utrop
+    instruction: Lyssna på utropet och svara på frågorna.
+    title: Utrop på stationen
+    lines:
+      - voice: nst
+        text: Information till resenärer med regionaltåget mot Lindö, med avgång 14.20. Tåget är försenat cirka 25 minuter på grund av ett signalfel. Tåget avgår från spår 3 i stället för spår 5. Vi ber om ursäkt för förseningen.
+        say: Information till resenärer med regionaltåget mot Lindö, med avgång fjorton och tjugo. Tåget är försenat cirka tjugofem minuter på grund av ett signalfel. Tåget avgår från spår tre i stället för spår fem. Vi ber om ursäkt för förseningen.
+    items:
+      - type: mc
+        id: m1-tag-1
+        prompt: Hur sent är tåget?
+        options:
+          - Cirka 5 minuter
+          - Cirka 20 minuter
+          - Cirka 25 minuter
+        answer: 2
+        explain: The train is "försenat cirka tjugofem minuter".
+      - type: mc
+        id: m1-tag-2
+        prompt: Vilket spår avgår tåget från?
+        options:
+          - Spår 3
+          - Spår 5
+          - Spår 14
+        answer: 0
+        explain: '"Tåget avgår från spår tre i stället för spår fem."'
+
+  - id: m1-mote
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27:
+      [lyssna-lasa.berattelser-nyheter-instruktioner, lyssna-lasa.strategier]
+    theme: arbete
+    kind: dialog
+    instruction: Lyssna på samtalet och svara på frågorna.
+    title: Två kollegor planerar
+    lines:
+      - voice: alma
+        speaker: Hanna
+        text: Du, mötet med kunden på torsdag, kan vi flytta det till fredag?
+      - voice: nst
+        speaker: Omar
+        text: Fredag förmiddag går inte, då är jag på kurs. Men efter lunch går bra.
+      - voice: alma
+        speaker: Hanna
+        text: Klockan ett, då? Jag bokar det stora mötesrummet.
+      - voice: nst
+        speaker: Omar
+        text: Bra. Ska jag ta med något?
+      - voice: alma
+        speaker: Hanna
+        text: Ja, kan du skriva ut offerten? Jag beställer kaffe och smörgåsar.
+      - voice: nst
+        speaker: Omar
+        text: Visst. Då skriver jag ut den på torsdag eftermiddag.
+    items:
+      - type: mc
+        id: m1-mote-1
+        prompt: När blir mötet med kunden?
+        options:
+          - På torsdag förmiddag
+          - På fredag förmiddag
+          - På fredag klockan ett
+        answer: 2
+        explain: Omar cannot on Friday morning, so they choose "klockan ett" on Friday.
+      - type: mc
+        id: m1-mote-2
+        prompt: Varför kan Omar inte på fredag förmiddag?
+        options:
+          - Han ska gå på kurs.
+          - Han har ett annat möte.
+          - Han är ledig.
+        answer: 0
+        explain: '"Då är jag på kurs."'
+      - type: short
+        id: m1-mote-3
+        prompt: Vad ska Omar göra före mötet?
+        accept:
+          - skriva ut offerten
+          - han ska skriva ut offerten
+          - skriva ut offerten på torsdag
+        model: Skriva ut offerten.
+        explain: Hanna asks him to print the quote, "skriva ut offerten".
+
+  - id: m1-simhall
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27: [lyssna-lasa.berattelser-nyheter-instruktioner]
+    theme: samhälle
+    kind: nyhet
+    instruction: Lyssna på nyheten och svara på frågorna.
+    title: Nyheter från Ekdala
+    lines:
+      - voice: alma
+        text: Ekdalas nya simhall öppnar i december, två månader senare än planerat. Orsaken är problem med ventilationen. Simhallen får en stor bassäng, en undervisningsbassäng för barn och ett gym.
+      - voice: alma
+        text: Under den första veckan är entrén gratis för alla som bor i kommunen. Den gamla simhallen stänger samtidigt och ska rivas nästa år.
+    items:
+      - type: mc
+        id: m1-simhall-1
+        prompt: Varför öppnar simhallen senare än planerat?
+        options:
+          - Det har varit problem med ventilationen.
+          - Kommunen har inte haft pengar.
+          - Det har saknats personal.
+        answer: 0
+        explain: '"Orsaken är problem med ventilationen."'
+      - type: mc
+        id: m1-simhall-2
+        prompt: Vad händer med den gamla simhallen?
+        options:
+          - Den blir ett gym.
+          - Den ska rivas.
+          - Den används för barn.
+        answer: 1
+        explain: The old swimming hall closes and "ska rivas nästa år".
+
+skriva:
+  - id: m1-skriv-kalas
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27:
+      [
+        samtala.berattelser-presentationer,
+        samtala.anpassning,
+        sprak.textstruktur,
+      ]
+    theme: familj och vänner
+    register: informal
+    title: Mejl till en vän
+    en: An informal email declining an invitation
+    task:
+      - Din vän Sofia har bjudit dig på middag på lördag, men du kan inte komma. Skriv ett mejl till henne.
+    points:
+      - Tacka för inbjudan.
+      - Förklara varför du inte kan komma.
+      - Föreslå en annan dag och något ni kan göra.
+    model:
+      lines:
+        - Hej Sofia!
+        - Tack så mycket för inbjudan till middagen på lördag. Det låter jättetrevligt, men tyvärr kan jag inte komma. Min mamma kommer på besök från Irak samma helg, och jag har inte träffat henne på två år.
+        - Kan vi ses en annan dag i stället? Nästa söndag är jag ledig. Om du vill kan vi gå en promenad runt sjön och sedan fika på kaféet i hamnen. Jag bjuder!
+        - Hör av dig när du vet om det passar.
+        - Kram
+        - Nadia
+      notes:
+        - quote: Tack så mycket för inbjudan
+          note: Thanks for the invitation first, as the task asks.
+        - quote: men tyvärr kan jag inte komma
+          note: Men and tyvärr say no in a polite way.
+        - quote: Min mamma kommer på besök från Irak samma helg
+          note: A concrete reason makes the answer friendly.
+        - quote: Om du vill kan vi gå en promenad
+          note: After the om clause, the verb kan comes first.
+        - quote: Kram
+          note: A warm closing that fits a friend.
+  - id: m1-skriv-gatlampa
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27: [samtala.anpassning, samtala.onskemal-asikter, sprak.textstruktur]
+    theme: samhälle
+    register: formal
+    title: Mejl till kommunen
+    en: A formal email to the municipality about a broken street light
+    task:
+      - Gatlampan vid gångvägen mellan din gata och skolan har varit trasig i flera veckor. Det är mörkt när barnen går till skolan. Skriv ett mejl till Ekdala kommun.
+    points:
+      - Beskriv var problemet finns och hur länge det har funnits.
+      - Förklara varför det är ett problem.
+      - Skriv vad du vill att kommunen ska göra.
+    model:
+      lines:
+        - Hej,
+        - Jag vill anmäla en trasig gatlampa på gångvägen mellan Björkgatan och Ekdalaskolan. Lampan har inte fungerat sedan början av oktober, alltså i över fyra veckor.
+        - Det är ett problem eftersom många barn går den vägen till skolan. På morgonen är det nu helt mörkt, och flera föräldrar är oroliga för att något ska hända.
+        - Jag skulle vilja att kommunen lagar lampan så snart som möjligt. Jag vill också gärna få veta när den kommer att lagas.
+        - Med vänliga hälsningar
+        - Karim Osman
+        - Björkgatan 7
+      notes:
+        - quote: Jag vill anmäla en trasig gatlampa
+          note: States the purpose in the first sentence.
+        - quote: sedan början av oktober, alltså i över fyra veckor
+          note: Says how long, as the task asks. Alltså makes it clearer.
+        - quote: Det är ett problem eftersom många barn går den vägen
+          note: Eftersom gives the reason.
+        - quote: Jag skulle vilja att kommunen lagar lampan
+          note: A polite, formal way to ask.
+        - quote: Med vänliga hälsningar
+          note: The usual formal closing, with full name and address.
+
+tala:
+  tasks:
+    - id: m1-tala-fritid
+      status: reviewed
+      reviewedBy: Anna
+      reviewedAt: '2026-11-18'
+      kp27:
+        [
+          samtala.berattelser-presentationer,
+          samtala.onskemal-asikter,
+          samtala.anpassning,
+          sprak.uttal,
+        ]
+      theme: fritid
+      title: Fritid i Sverige
+      en: Free time in Sweden – tell and give advice
+      task:
+        - En ny granne har just flyttat till Sverige och undrar vad man kan göra på fritiden.
+      points:
+        - Berätta vad du själv gör på fritiden.
+        - Berätta om en aktivitet som har betytt mycket för dig.
+        - Ge råd till grannen.
+      phrases:
+        - På fritiden brukar jag …
+        - Det bästa med det är …
+        - Jag tycker att du ska …
+        - Om jag var du skulle jag …
+      model:
+        - voice: alma
+          text: Jag ska berätta om vad jag gör på fritiden. På vardagarna har jag inte så mycket tid, men på helgerna brukar jag spela fotboll i en förening. Vi tränar varje lördag förmiddag. Ibland går jag också på bio med min familj.
+        - voice: alma
+          text: Fotbollen har betytt mycket för mig. När jag kom till Sverige kände jag ingen. I laget träffade jag nya vänner, och vi pratade svenska hela tiden. Därför lärde jag mig språket snabbare.
+        - voice: alma
+          text: Nu vill jag ge dig några råd. Mitt första råd är att gå med i en förening. Det finns föreningar för nästan allt, till exempel sport, musik och matlagning. Du kan fråga på biblioteket eller titta på kommunens webbplats.
+        - voice: alma
+          text: Mitt andra råd är att gå ut i naturen. I Sverige har alla rätt att vara i skogen, och det kostar ingenting. Om jag var du skulle jag också gå på språkcafé. Där kan man träffa både svenskar och andra som lär sig svenska. Lycka till!
+  pairs:
+    - id: m1-par-boende
+      status: reviewed
+      reviewedBy: Anna
+      reviewedAt: '2026-11-18'
+      kp27: [samtala.samtal-diskussioner, samtala.onskemal-asikter, sprak.uttal]
+      theme: boende
+      title: Att bo bra
+      en: What matters most for a good home?
+      question: Vad är viktigast för att trivas där man bor?
+      mindmap:
+        - hyran
+        - grannarna
+        - närhet till jobb eller skola
+        - natur och parker
+        - kommunikationer
+        - lägenhetens storlek
+      goal: Kom överens om vilka två saker som är viktigast.
+      partner:
+        - voice: nst
+          text: Ska vi börja? Jag tycker att hyran är viktigast. Om hyran är för hög, har man inga pengar kvar till annat. Vad tycker du?
+        - voice: nst
+          text: Det förstår jag. Hur viktiga är grannarna för dig?
+        - voice: nst
+          text: För mig betyder naturen mycket. Jag vill kunna gå en promenad i skogen efter jobbet. Håller du med?
+        - voice: nst
+          text: Vilken sak i tankekartan tycker du är minst viktig?
+        - voice: nst
+          text: Okej. Nu måste vi komma överens. Vilka två saker väljer vi?
+      closing:
+        voice: nst
+        text: Bra, då är vi överens. Tack för samtalet!
+  phraseCards:
+    - title: Ask for an opinion
+      phrases: [Vad tycker du?, Håller du med?]
+    - title: Give your opinion
+      phrases: [Jag tycker att …, Jag tror att … eftersom …]
+    - title: Agree or disagree
+      phrases: [Jag håller med., Jag förstår vad du menar, men …]
+    - title: Agree on a choice
+      phrases: [Ska vi välja … och …?, Då är vi överens.]

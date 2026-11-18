@@ -23,6 +23,7 @@ const SCREENS: [string, string][] = [
   ['exam/tala/par/p-trivas-jobbet', 'Att trivas på jobbet'],
   ['everyday', 'Everyday'],
   ['everyday/v-apoteket', 'På apoteket'],
+  ['exam/prov/d-prov-1', 'Provövning D – 1'],
   ['exam/skriva/s-felanmalan', 'Mejl till hyresvärden'],
   ['learn/grammatik/g-v2', 'Verbet på plats två'],
 ]
@@ -94,6 +95,27 @@ test('a handed-in text with its checks and rubric stays accessible', async ({
     .click()
   await expect(
     page.getByRole('heading', { name: 'Assess your answer' }),
+  ).toBeVisible()
+  ;({ violations } = await new AxeBuilder({ page }).analyze())
+  expect(violations.map((v) => `${v.id}: ${v.help}`)).toEqual([])
+})
+
+test('a running mock part and the break before the next stay accessible', async ({
+  page,
+}) => {
+  await page.goto('exam/prov/d-prov-1')
+  await page.getByRole('button', { name: 'Start the mock' }).click()
+  await page.getByRole('button', { name: 'Start Läsa – reading' }).click()
+  await expect(page.getByRole('timer', { name: 'Time left' })).toBeVisible()
+  let { violations } = await new AxeBuilder({ page }).analyze()
+  expect(violations.map((v) => `${v.id}: ${v.help}`)).toEqual([])
+  await page.getByRole('button', { name: 'Hand in this part' }).click()
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Hand in' })
+    .click()
+  await expect(
+    page.getByRole('button', { name: 'Start Höra – listening' }),
   ).toBeVisible()
   ;({ violations } = await new AxeBuilder({ page }).analyze())
   expect(violations.map((v) => `${v.id}: ${v.help}`)).toEqual([])

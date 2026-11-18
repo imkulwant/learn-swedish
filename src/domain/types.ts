@@ -1,4 +1,5 @@
-import type { AttemptSkill, Level } from './content/schema.ts'
+import type { AttemptSkill, Level, Skill } from './content/schema.ts'
+import type { MockPartState, MockResponse } from './mock.ts'
 import type { PairRubric, SpeakingRubric } from './speaking.ts'
 import type { Rubric } from './writing.ts'
 
@@ -147,4 +148,34 @@ export interface PairSession {
   starred: boolean
   rubric: PairRubric | null
   assessedAt: EpochMs | null
+}
+
+/**
+ * One sitting of a mock exam. Everything the learner does is stored here as
+ * it happens, so a mock resumes where it was after iOS closes the app. The
+ * answers become attempts (mode "mock") only when the results are final.
+ */
+export interface MockRun {
+  id: Id
+  /** The mock pack. */
+  examId: string
+  packVersion: number
+  level: Level
+  status: 'running' | 'finished'
+  startedAt: EpochMs
+  finishedAt: EpochMs | null
+  parts: Record<Skill, MockPartState>
+  responses: Record<string, MockResponse>
+  /** Plays used per clip. */
+  plays: Record<string, number>
+  /** Writing texts by prompt id. */
+  texts: Record<string, string>
+  /** The solo recording and the pair session, by task or topic id. */
+  speaking: Record<string, string>
+  /** The learner's own marks for open answers that matched nothing. */
+  marks: Record<string, boolean>
+  /** Self-assessments of texts and speaking, by prompt, task or topic id. */
+  assessments: Record<string, Record<string, 0 | 1 | 2>>
+  /** Set once the answers have been stored as attempts. */
+  recordedAt: EpochMs | null
 }

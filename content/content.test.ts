@@ -38,7 +38,7 @@ describe('the content in this repository', () => {
 
 describe('the listening and word content in this repository', () => {
   it('parses, has no problems, and has up-to-date audio for every clip and word', async () => {
-    const { sources, listening, vocab, speaking, everyday, problems } =
+    const { sources, listening, vocab, speaking, everyday, mocks, problems } =
       await readAudioSources()
     expect(problems).toEqual([])
     expect(listening.length).toBeGreaterThan(0)
@@ -46,7 +46,13 @@ describe('the listening and word content in this repository', () => {
     expect(speaking.length).toBeGreaterThan(0)
     expect(everyday.length).toBeGreaterThan(0)
     expect(
-      packProblems([...listening, ...vocab, ...speaking, ...everyday]),
+      packProblems([
+        ...listening,
+        ...vocab,
+        ...speaking,
+        ...everyday,
+        ...mocks,
+      ]),
     ).toEqual([])
     const lock = await readLock()
     for (const source of sources) {

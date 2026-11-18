@@ -13,6 +13,7 @@ Every pack is drafted, checked by `npm run content`, and reviewed by a native sp
 | `d-tala-1` | D | Tala | 3 solo tasks | – | Reviewed by Anna, 2026-11-18 |
 | `d-tala-2` | D | Tala, pairs | 2 discussions | – | Reviewed by Anna, 2026-11-18 |
 | `vardag-1` | all | Everyday | 3 scenarios | 12 | Reviewed by Anna, 2026-11-18 |
+| `d-prov-1` | D | Mock exam | 4 texts, 3 clips, 2 writing tasks, 1 solo, 1 pair | 17 | Reviewed by Anna, 2026-11-18 |
 | `check-sentences` | – | Sentences the writing checks are tested with | 35 sentences | – | Reviewed by Anna, 2026-11-18 |
 
 ## How to review a pack
@@ -85,4 +86,8 @@ Scenarios are in `content/everyday/`. Try them in the app (Everyday tab). For ea
 - Facts about real services (1177, the pharmacy, Försäkringskassan) must be general and true.
 
 After a change to any spoken line, run `npm run audio`.
+
+## Reviewing a mock exam
+
+Mocks are in `content/mocks/`. A mock has the four parts of the test, in order, written only for the mock. Please review each part as for its drills (see the sections above). Also check that the mock as a whole is about as hard as the real test. A mock ships only when every part is approved. Try it in the app under Exam → Mock exams. The timings are the app's estimates.
 

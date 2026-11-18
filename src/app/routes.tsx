@@ -1,6 +1,7 @@
 import { Link, Route, Routes } from 'react-router'
 import { EverydayScreen } from '../features/everyday/EverydayScreen'
 import { ScenarioScreen } from '../features/everyday/ScenarioScreen'
+import { MockScreen } from '../features/mock/MockScreen'
 import { ExamScreen } from '../features/exam/ExamScreen'
 import { ListeningDrillScreen } from '../features/exam/ListeningDrillScreen'
 import { PartScreen } from '../features/exam/PartScreen'
@@ -52,6 +53,7 @@ export function AppRoutes() {
         <Route path="exam/tala" element={<SpeakingPartScreen />} />
         <Route path="exam/tala/:taskId" element={<SpeakingTaskScreen />} />
         <Route path="exam/tala/par/:topicId" element={<PairScreen />} />
+        <Route path="exam/prov/:examId" element={<MockScreen />} />
         <Route path="learn" element={<LearnScreen />} />
         <Route path="learn/ord" element={<VocabScreen />} />
         <Route path="learn/grammatik" element={<GrammarScreen />} />

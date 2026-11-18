@@ -8,6 +8,7 @@ import { parse } from 'yaml'
 import {
   GrammarPack,
   ListeningPack,
+  MockPack,
   ScenarioPack,
   SpeakingPack,
   VocabPack,
@@ -28,6 +29,7 @@ export const GRAMMAR_SOURCES = join(ROOT, 'content/grammar')
 export const WRITING_SOURCES = join(ROOT, 'content/writing')
 export const SPEAKING_SOURCES = join(ROOT, 'content/speaking')
 export const SCENARIO_SOURCES = join(ROOT, 'content/everyday')
+export const MOCK_SOURCES = join(ROOT, 'content/mocks')
 /** Where the made audio is kept, committed: one `<clip id>.m4a` per clip. */
 export const AUDIO_DIR = join(ROOT, 'content/audio')
 /** Where the build publishes the audio of shipped clips (generated). */
@@ -175,6 +177,17 @@ export const readGrammarSources = () =>
 export const readWritingSources = () =>
   readPacks<WritingPack>(WRITING_SOURCES, WritingPack)
 
+/** The audio of a mock: its clips, model answers and partner lines, keyed. */
+export const mockAudio = (
+  mock: MockPack,
+): { key: string; source: AudioSource }[] => [
+  ...mock.hora.map((c) => ({ key: c.id, source: clipSource(c) })),
+  ...mock.tala.tasks.map((t) => ({ key: t.id, source: speakingSource(t) })),
+  ...mock.tala.pairs.flatMap(pairAudio),
+]
+
+export const readMockSources = () => readPacks<MockPack>(MOCK_SOURCES, MockPack)
+
 export const readScenarioSources = () =>
   readPacks<ScenarioPack>(SCENARIO_SOURCES, ScenarioPack)
 
@@ -188,12 +201,14 @@ export async function readAudioSources(): Promise<{
   vocab: VocabPack[]
   speaking: SpeakingPack[]
   everyday: ScenarioPack[]
+  mocks: MockPack[]
   problems: string[]
 }> {
   const l = await readListeningSources()
   const v = await readVocabSources()
   const t = await readSpeakingSources()
   const e = await readScenarioSources()
+  const m = await readMockSources()
   const sources = [
     ...l.packs.flatMap((p) => p.clips.map(clipSource)),
     ...v.packs.flatMap((p) => p.words.map(wordSource)),
@@ -204,8 +219,15 @@ export async function readAudioSources(): Promise<{
     ...e.packs.flatMap((p) =>
       p.scenarios.flatMap((s) => scenarioAudio(s).map((a) => a.source)),
     ),
+    ...m.packs.flatMap((p) => mockAudio(p).map((a) => a.source)),
   ]
-  const problems = [...l.problems, ...v.problems, ...t.problems, ...e.problems]
+  const problems = [
+    ...l.problems,
+    ...v.problems,
+    ...t.problems,
+    ...e.problems,
+    ...m.problems,
+  ]
   // Clip ids and word and speaking audio ids ("ord-…", "tala-…") share one
   // folder of files.
   const seen = new Set<string>()
@@ -219,6 +241,7 @@ export async function readAudioSources(): Promise<{
     vocab: v.packs,
     speaking: t.packs,
     everyday: e.packs,
+    mocks: m.packs,
     problems,
   }
 }

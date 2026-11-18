@@ -100,3 +100,26 @@ describe('attempts', () => {
     })
   })
 })
+
+describe('hasProgress', () => {
+  it('counts a started mock and a pair discussion as progress', async () => {
+    const { hasProgress } = await import('./attempts')
+    const { startMock } = await import('./mocks')
+    const { addPairTurn } = await import('./pairs')
+    expect(await hasProgress()).toBe(false)
+    await startMock({ examId: 'd-prov-1', packVersion: 1, level: 'D' })
+    expect(await hasProgress()).toBe(true)
+    await resetDb()
+    await addPairTurn(
+      { topicId: 'p', packId: 'd-tala-2', packVersion: 1, level: 'D' },
+      null,
+      {
+        turn: 0,
+        audio: new ArrayBuffer(1),
+        mimeType: 'audio/mp4',
+        durationMs: 1,
+      },
+    )
+    expect(await hasProgress()).toBe(true)
+  })
+})

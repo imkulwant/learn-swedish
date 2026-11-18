@@ -1,6 +1,7 @@
 import Dexie, { type EntityTable } from 'dexie'
 import type {
   Attempt,
+  MockRun,
   PairSession,
   Recording,
   Setting,
@@ -23,6 +24,7 @@ export class SfiDb extends Dexie {
   recordings!: EntityTable<Recording, 'id'>
   pairSessions!: EntityTable<PairSession, 'id'>
   audio!: EntityTable<StoredAudio, 'id'>
+  mocks!: EntityTable<MockRun, 'id'>
   settings!: EntityTable<Setting, 'key'>
 
   constructor(name: string = DB_NAME) {

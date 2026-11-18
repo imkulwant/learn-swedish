@@ -87,20 +87,34 @@ type Stage =
   | { name: 'saving' }
 
 /** Planning, then speaking, then the recording is stored. */
-function Speak({
+export function Speak({
   offered,
   onRecorded,
+  saveOnLeave = false,
 }: {
   offered: OfferedTask
   onRecorded: (id: string) => void
+  /** Keep a recording in progress when the screen goes, as when a mock's time runs out. */
+  saveOnLeave?: boolean
 }) {
   const [stage, setStage] = useState<Stage>({ name: 'ready' })
   const [error, setError] = useState<string | null>(null)
   const now = useNow(250)
   const active = useRef<ActiveRecording | null>(null)
 
-  // Leaving the screen while recording stops the microphone.
-  useEffect(() => () => active.current?.cancel(), [])
+  // Leaving the screen while recording stops the microphone, and keeps or
+  // throws away what was recorded.
+  useEffect(
+    () => () => {
+      const recording = active.current
+      if (!recording) return
+      if (saveOnLeave) void stop(recording)
+      else recording.cancel()
+    },
+    // The first render's props are the ones the screen was opened with.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   async function record() {
     setError(null)

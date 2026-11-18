@@ -51,9 +51,12 @@ function Hint({ script, turn }: { script: PartnerScript; turn: number }) {
 export function ScriptedPartner({
   script,
   onFinished,
+  onStarted,
 }: {
   script: PartnerScript
   onFinished: (sessionId: string) => void
+  /** Called once the first answer is stored, so a mock can link the session at once. */
+  onStarted?: (sessionId: string) => void
 }) {
   const { pack } = script
   const [phase, setPhase] = useState<Phase>({ name: 'idle' })
@@ -128,6 +131,7 @@ export function ScriptedPartner({
     active.current = null
     try {
       const recorded = await recording.stop()
+      const first = session.current === null
       session.current = await addPairTurn(
         {
           topicId: script.id,
@@ -144,6 +148,7 @@ export function ScriptedPartner({
         },
       )
       dataMarker.mark()
+      if (first) onStarted?.(session.current)
       speak(
         turn < last ? { name: 'partner', turn: turn + 1 } : { name: 'closing' },
       )

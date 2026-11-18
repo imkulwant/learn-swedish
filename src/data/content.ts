@@ -1,5 +1,6 @@
 import {
   CompiledListeningPack,
+  CompiledMockPack,
   CompiledScenarioPack,
   CompiledSpeakingPack,
   CompiledVocabPack,
@@ -65,7 +66,7 @@ export async function listPacks(
 
 async function packFile(
   id: string,
-  skill: Skill | 'ord' | 'grammatik' | 'vardag',
+  skill: Skill | 'ord' | 'grammatik' | 'vardag' | 'prov',
 ): Promise<unknown> {
   const summary = (await loadManifest()).packs.find(
     (p) => p.id === id && p.skill === skill,
@@ -112,6 +113,46 @@ export async function loadSpeakingTasks(level: Level): Promise<OfferedTask[]> {
       audioPath: pack.audio[task.id]!,
     })),
   )
+}
+
+export interface OfferedMock {
+  mock: CompiledMockPack
+  /** The speaking parts, shaped like the drills' so their screens fit. */
+  tasks: OfferedTask[]
+  pairs: OfferedPair[]
+}
+
+/** Every mock exam the app has, of any level. */
+export async function listMocks(): Promise<PackSummary[]> {
+  return (await loadManifest()).packs.filter((p) => p.skill === 'prov')
+}
+
+export async function loadMock(id: string): Promise<OfferedMock> {
+  const mock = CompiledMockPack.parse(await packFile(id, 'prov'))
+  const pack = { id: mock.id, version: mock.version, level: mock.level }
+  return {
+    mock,
+    tasks: mock.tala.tasks.map((task) => ({
+      task,
+      pack,
+      audioPath: mock.audio[task.id]!,
+    })),
+    pairs: mock.tala.pairs.map((topic) => ({
+      topic,
+      pack,
+      phraseCards: mock.tala.phraseCards,
+      script: {
+        id: topic.id,
+        partner: topic.partner,
+        closing: topic.closing,
+        turnAudio: topic.partner.map(
+          (_, i) => mock.audio[`${topic.id}-${i + 1}`]!,
+        ),
+        closingAudio: mock.audio[`${topic.id}-slut`]!,
+        pack,
+      },
+    })),
+  }
 }
 
 export interface OfferedScenario {

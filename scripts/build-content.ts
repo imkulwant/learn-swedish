@@ -38,6 +38,7 @@ import {
   speakingSource,
   pairAudio,
   scenarioAudio,
+  mockAudio,
   readLock,
   sourceAudioFile,
   wordSource,
@@ -69,6 +70,7 @@ packs.push(
   ...audio.vocab,
   ...audio.speaking,
   ...audio.everyday,
+  ...audio.mocks,
 )
 problems.push(...audio.problems)
 for (const read of [readGrammarSources, readWritingSources]) {
@@ -160,7 +162,11 @@ for (const pack of shipped) {
                   })),
                 ),
               )
-            : null
+            : pack.skill === 'prov'
+              ? await publishAudio(
+                  mockAudio(pack).map((a) => ({ id: a.key, source: a.source })),
+                )
+              : null
   await writeFile(
     join(OUT, file),
     JSON.stringify(published ? { ...pack, audio: published.paths } : pack),

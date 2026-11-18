@@ -3,6 +3,7 @@ import type {
   GrammarItem,
   GrammarPack,
   ListeningPack,
+  MockPack,
   ReadingPack,
   ScenarioPack,
 } from './schema.ts'
@@ -368,5 +369,139 @@ describe('everyday scenarios', () => {
   it('ships draft scenarios only in previews', () => {
     expect(publishable([pack()], false)).toEqual([])
     expect(publishable([pack()], true)).toHaveLength(1)
+  })
+})
+
+describe('mock exams', () => {
+  const text = pack().texts[0]!
+  const prompt = (id: string, register: 'informal' | 'formal') => ({
+    id,
+    status: 'draft' as const,
+    kp27: ['sprak.textstruktur' as const],
+    theme: 't',
+    register,
+    title: 'T',
+    en: 'T',
+    task: ['Skriv.'],
+    points: ['Något.'],
+    model: {
+      lines: [
+        'Hej! ' + 'Det här är en mening med några ord i sig. '.repeat(9),
+        'Kram',
+      ],
+      notes: [{ quote: 'Hej!', note: 'A greeting.' }],
+    },
+  })
+  const line = {
+    voice: 'alma' as const,
+    text: 'Jag ska berätta om något viktigt. '.repeat(30),
+  }
+  const mock = (overrides: Partial<MockPack> = {}): MockPack => ({
+    id: 'm',
+    version: 1,
+    level: 'D',
+    skill: 'prov',
+    title: 'M',
+    lasa: [{ ...text, id: 'm-t', items: [{ ...text.items[0]!, id: 'm-i' }] }],
+    hora: [
+      {
+        id: 'm-c',
+        status: 'draft',
+        kp27: ['lyssna-lasa.strategier'],
+        theme: 't',
+        kind: 'utrop',
+        instruction: 'Lyssna.',
+        title: 'C',
+        lines: [
+          {
+            voice: 'nst',
+            text: 'Tåget mot Lindö är försenat i ungefär tjugo minuter i dag.',
+          },
+          {
+            voice: 'nst',
+            text: 'Vi ber om ursäkt för förseningen och tackar för ert tålamod.',
+          },
+        ],
+        items: [{ ...text.items[0]!, id: 'm-ci' }],
+      },
+    ],
+    skriva: [prompt('m-s1', 'informal'), prompt('m-s2', 'formal')],
+    tala: {
+      tasks: [
+        {
+          id: 'm-tt',
+          status: 'draft',
+          kp27: ['sprak.uttal'],
+          theme: 't',
+          title: 'T',
+          en: 'T',
+          task: ['Berätta.'],
+          points: ['Något.'],
+          phrases: ['Jag tycker …'],
+          model: [line],
+        },
+      ],
+      pairs: [
+        {
+          id: 'm-p',
+          status: 'draft',
+          kp27: ['samtala.samtal-diskussioner'],
+          theme: 't',
+          title: 'P',
+          en: 'P',
+          question: 'Vad?',
+          mindmap: ['a', 'b', 'c', 'd'],
+          goal: 'Kom överens.',
+          partner: [line, line],
+          closing: line,
+        },
+      ],
+      phraseCards: [{ title: 'Agree', phrases: ['Ja.'] }],
+    },
+    ...overrides,
+  })
+
+  it('passes a valid mock, checked as its four parts', () => {
+    expect(packProblems([mock()])).toEqual([])
+  })
+
+  it("needs the level's writing tasks, one of them formal at D", () => {
+    expect(
+      packProblems([mock({ skriva: [prompt('m-s1', 'informal')] })]).join(),
+    ).toMatch(/a D mock has 2 writing task\(s\), not 1/)
+    expect(
+      packProblems([
+        mock({
+          skriva: [prompt('m-s1', 'informal'), prompt('m-s2', 'informal')],
+        }),
+      ]).join(),
+    ).toMatch(/needs a formal writing task/)
+  })
+
+  it('refuses a mock item that a drill also uses', () => {
+    const drill = pack()
+    drill.texts[0]!.items[0]!.id = 'm-i'
+    expect(packProblems([mock(), drill]).join()).toMatch(/id m-i is used twice/)
+  })
+
+  it('ships a mock only when every part is reviewed', () => {
+    const reviewed = {
+      status: 'reviewed' as const,
+      reviewedBy: 'A',
+      reviewedAt: '2026-11-18',
+    }
+    const m = mock()
+    const all = (x: MockPack) => [
+      ...x.lasa,
+      ...x.hora,
+      ...x.skriva,
+      ...x.tala.tasks,
+      ...x.tala.pairs,
+    ]
+    all(m).forEach((u) => Object.assign(u, reviewed))
+    expect(publishable([m], false)).toHaveLength(1)
+    m.hora[0]!.status = 'draft'
+    expect(publishable([m], false)).toEqual([])
+    expect(publishable([m], true)).toHaveLength(1)
   })
 })

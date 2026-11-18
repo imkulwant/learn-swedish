@@ -501,7 +501,7 @@ export const PackSummary = z
     id,
     version: z.number().int(),
     level: z.enum(LEVELS),
-    skill: z.enum([...SKILLS, 'ord', 'grammatik', 'vardag']),
+    skill: z.enum([...SKILLS, 'ord', 'grammatik', 'vardag', 'prov']),
     title: text,
     /** Texts, clips, words or lessons, by the kind of pack. */
     unitCount: z.number().int(),
@@ -526,3 +526,34 @@ export const ContentManifest = z
   })
   .strict()
 export type ContentManifest = z.infer<typeof ContentManifest>
+
+/**
+ * A mock exam: all four parts in the test's order, with content written for
+ * it alone. Ids are unique across every pack, so no mock item is ever seen in
+ * a drill. A mock ships only when every part of it is reviewed.
+ */
+export const MockPack = z
+  .object({
+    id,
+    version: z.number().int().min(1),
+    level: z.enum(LEVELS),
+    skill: z.literal('prov'),
+    title: text,
+    lasa: z.array(ReadingText).min(1),
+    hora: z.array(ListeningClip).min(1),
+    skriva: z.array(WritingPrompt).min(1),
+    tala: z
+      .object({
+        tasks: z.array(SpeakingTask).min(1),
+        pairs: z.array(PairTopic).min(1),
+        phraseCards: z.array(PhraseCard).min(1),
+      })
+      .strict(),
+  })
+  .strict()
+export type MockPack = z.infer<typeof MockPack>
+
+export const CompiledMockPack = MockPack.extend({
+  audio: z.record(z.string(), z.string().regex(/^audio\/[a-z0-9-]+\.m4a$/)),
+}).strict()
+export type CompiledMockPack = z.infer<typeof CompiledMockPack>

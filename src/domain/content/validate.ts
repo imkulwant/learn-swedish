@@ -7,6 +7,7 @@ import {
   type Item,
   type Level,
   type ListeningPack,
+  type MockPack,
   type ReadingPack,
   type ReadingText,
   type ScenarioPack,
@@ -18,6 +19,7 @@ import {
 import { normalizeAnswer } from '../answerCheck.ts'
 import { acceptedOrders, shuffledChunks, wordBag } from '../grammar.ts'
 import { parseLesson } from '../lessonText.ts'
+import { WRITING_TASKS } from '../examFormat.ts'
 import { MODEL_WORDS } from '../speaking.ts'
 import { WRITING_WORDS } from '../writing.ts'
 import { countWords as countTextWords } from '../writingChecks.ts'
@@ -31,6 +33,7 @@ export type Pack =
   | WritingPack
   | SpeakingPack
   | ScenarioPack
+  | MockPack
 
 /**
  * Word-count range of one reading text per level. C texts stay short; D allows
@@ -72,7 +75,24 @@ interface Unit {
   range: { min: number; max: number } | null
 }
 
+/**
+ * A mock as the packs of its four parts, so every part is checked by the
+ * same rules as drills of that part.
+ */
+export function mockParts(
+  mock: MockPack,
+): [ReadingPack, ListeningPack, WritingPack, SpeakingPack] {
+  const base = { version: mock.version, level: mock.level, title: mock.title }
+  return [
+    { ...base, id: `${mock.id}-lasa`, skill: 'lasa', texts: mock.lasa },
+    { ...base, id: `${mock.id}-hora`, skill: 'hora', clips: mock.hora },
+    { ...base, id: `${mock.id}-skriva`, skill: 'skriva', prompts: mock.skriva },
+    { ...base, id: `${mock.id}-tala`, skill: 'tala', ...mock.tala },
+  ]
+}
+
 export function packUnits(pack: Pack): Unit[] {
+  if (pack.skill === 'prov') return mockParts(pack).flatMap(packUnits)
   if (pack.skill === 'lasa')
     return pack.texts.map((t) => ({
       ...t,
@@ -200,14 +220,31 @@ function itemProblems(item: Item | GrammarItem): string[] {
 }
 
 /** Problems that Zod cannot see. An empty list means the packs are valid. */
-export function packProblems(packs: Pack[]): string[] {
+export function packProblems(given: Pack[]): string[] {
   const problems: string[] = []
+  for (const mock of given)
+    if (mock.skill === 'prov') {
+      const needed = WRITING_TASKS[mock.level]
+      if (mock.skriva.length !== needed)
+        problems.push(
+          `${mock.id}: a ${mock.level} mock has ${needed} writing task(s), not ${mock.skriva.length}`,
+        )
+      if (
+        mock.level === 'D' &&
+        !mock.skriva.some((p) => p.register === 'formal')
+      )
+        problems.push(`${mock.id}: a D mock needs a formal writing task`)
+    }
+  // A mock is checked as the packs of its parts; its own id is claimed too.
+  const packs = given.flatMap((p) => (p.skill === 'prov' ? mockParts(p) : [p]))
   const seen = new Map<string, string>()
   const claim = (id: string, where: string) => {
     const before = seen.get(id)
     if (before) problems.push(`id ${id} is used twice: ${before} and ${where}`)
     else seen.set(id, where)
   }
+  for (const mock of given)
+    if (mock.skill === 'prov') claim(mock.id, `mock ${mock.id}`)
 
   const headwords = new Map<string, string>()
   for (const pack of packs) {
@@ -291,23 +328,34 @@ export function publishable<P extends Pack>(
 ): P[] {
   return packs
     .map((pack) =>
-      pack.skill === 'lasa'
-        ? { ...pack, texts: keep(pack.texts, includeDrafts) }
-        : pack.skill === 'hora'
-          ? { ...pack, clips: keep(pack.clips, includeDrafts) }
-          : pack.skill === 'grammatik'
-            ? { ...pack, lessons: keep(pack.lessons, includeDrafts) }
-            : pack.skill === 'skriva'
-              ? { ...pack, prompts: keep(pack.prompts, includeDrafts) }
-              : pack.skill === 'vardag'
-                ? { ...pack, scenarios: keep(pack.scenarios, includeDrafts) }
-                : pack.skill === 'tala'
-                  ? {
-                      ...pack,
-                      tasks: keep(pack.tasks, includeDrafts),
-                      pairs: keep(pack.pairs, includeDrafts),
-                    }
-                  : { ...pack, words: keep(pack.words, includeDrafts) },
+      // A mock is all or nothing: half a test is no test.
+      pack.skill === 'prov'
+        ? includeDrafts || packUnits(pack).every((u) => u.status === 'reviewed')
+          ? pack
+          : {
+              ...pack,
+              lasa: [],
+              hora: [],
+              skriva: [],
+              tala: { tasks: [], pairs: [], phraseCards: [] },
+            }
+        : pack.skill === 'lasa'
+          ? { ...pack, texts: keep(pack.texts, includeDrafts) }
+          : pack.skill === 'hora'
+            ? { ...pack, clips: keep(pack.clips, includeDrafts) }
+            : pack.skill === 'grammatik'
+              ? { ...pack, lessons: keep(pack.lessons, includeDrafts) }
+              : pack.skill === 'skriva'
+                ? { ...pack, prompts: keep(pack.prompts, includeDrafts) }
+                : pack.skill === 'vardag'
+                  ? { ...pack, scenarios: keep(pack.scenarios, includeDrafts) }
+                  : pack.skill === 'tala'
+                    ? {
+                        ...pack,
+                        tasks: keep(pack.tasks, includeDrafts),
+                        pairs: keep(pack.pairs, includeDrafts),
+                      }
+                    : { ...pack, words: keep(pack.words, includeDrafts) },
     )
     .filter((pack) => packUnits(pack).length > 0) as P[]
 }

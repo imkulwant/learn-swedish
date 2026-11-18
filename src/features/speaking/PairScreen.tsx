@@ -27,7 +27,7 @@ import { ConversationPlayer, PairSessionList } from './Conversation'
 import { ScriptedPartner } from './ScriptedPartner'
 
 /** The question in the middle, the ideas around it, and the goal. */
-function MindMap({ offered: { topic } }: { offered: OfferedPair }) {
+export function MindMap({ offered: { topic } }: { offered: OfferedPair }) {
   return (
     <section
       aria-label="Mind map"
@@ -61,7 +61,7 @@ function MindMap({ offered: { topic } }: { offered: OfferedPair }) {
   )
 }
 
-function PhraseCards({ offered }: { offered: OfferedPair }) {
+export function PhraseCards({ offered }: { offered: OfferedPair }) {
   return (
     <details className="rounded-card border border-border bg-surface p-4">
       <summary className="tap-target flex items-center font-semibold text-accent">

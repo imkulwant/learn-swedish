@@ -23,11 +23,28 @@ const errorName = (error: unknown) =>
  * remembered; the number of plays is shown so the learner can practise with
  * two, as a habit. A play counts once audio actually starts.
  */
-export function AudioPlayer({ src, label }: { src: string; label: string }) {
+/** Exam conditions: speed 1, no pausing, and a fixed number of plays. */
+export interface PlayLimit {
+  max: number
+  /** Plays already used, kept by the caller so a resumed mock keeps them. */
+  used: number
+  onPlayed: () => void
+}
+
+export function AudioPlayer({
+  src,
+  label,
+  limit,
+}: {
+  src: string
+  label: string
+  limit?: PlayLimit
+}) {
   const audio = useRef<HTMLAudioElement>(null)
   // Set when a play starts from the beginning, and counted once audio flows.
   const fresh = useRef(false)
-  const speed = useLiveQuery(() => getSetting('playbackRate')) ?? 1
+  const chosenSpeed = useLiveQuery(() => getSetting('playbackRate')) ?? 1
+  const speed = limit ? 1 : chosenSpeed
   const [playing, setPlaying] = useState(false)
   const [position, setPosition] = useState<'start' | 'middle' | 'end'>('start')
   const [plays, setPlays] = useState(0)
@@ -68,6 +85,11 @@ export function AudioPlayer({ src, label }: { src: string; label: string }) {
   // Follows what the learner hears, not `element.paused`: after a failed
   // play the element still claims not to be paused.
   function toggle() {
+    if (limit) {
+      // On the test a clip is heard from the start and cannot be paused.
+      if (!playing && limit.used < limit.max) void play(true)
+      return
+    }
     if (playing) audio.current?.pause()
     else void play(false)
   }
@@ -91,6 +113,7 @@ export function AudioPlayer({ src, label }: { src: string; label: string }) {
           if (fresh.current) {
             fresh.current = false
             setPlays((n) => n + 1)
+            limit?.onPlayed()
           }
         }}
         onPause={(e) => {
@@ -114,16 +137,31 @@ export function AudioPlayer({ src, label }: { src: string; label: string }) {
         }}
       />
       <div className="flex items-center gap-2">
-        <Button onClick={toggle}>
-          {playing
-            ? 'Pause'
-            : position === 'middle'
-              ? 'Resume'
-              : plays === 0
-                ? 'Play'
-                : 'Play again'}
-        </Button>
-        {plays > 0 && (
+        {limit ? (
+          <Button
+            onClick={toggle}
+            disabled={playing || limit.used >= limit.max}
+          >
+            {playing
+              ? 'Playing…'
+              : limit.used >= limit.max
+                ? 'No plays left'
+                : limit.used === 0
+                  ? 'Play'
+                  : 'Play again'}
+          </Button>
+        ) : (
+          <Button onClick={toggle}>
+            {playing
+              ? 'Pause'
+              : position === 'middle'
+                ? 'Resume'
+                : plays === 0
+                  ? 'Play'
+                  : 'Play again'}
+          </Button>
+        )}
+        {plays > 0 && !limit && (
           <Button variant="secondary" onClick={() => void play(true)}>
             From the start
           </Button>
@@ -137,27 +175,31 @@ export function AudioPlayer({ src, label }: { src: string; label: string }) {
       />
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm text-muted">
-          {plays === 0
-            ? 'Not played yet'
-            : `Played ${plays} ${plays === 1 ? 'time' : 'times'}`}
+          {limit
+            ? `${limit.used} of ${limit.max} plays used`
+            : plays === 0
+              ? 'Not played yet'
+              : `Played ${plays} ${plays === 1 ? 'time' : 'times'}`}
         </p>
-        <div role="group" aria-label="Speed" className="flex gap-2">
-          {PLAYBACK_RATES.map((rate) => (
-            <Chip
-              key={rate}
-              selected={speed === rate}
-              onClick={() => chooseSpeed(rate)}
-            >
-              {rate}×
-            </Chip>
-          ))}
-        </div>
+        {!limit && (
+          <div role="group" aria-label="Speed" className="flex gap-2">
+            {PLAYBACK_RATES.map((rate) => (
+              <Chip
+                key={rate}
+                selected={speed === rate}
+                onClick={() => chooseSpeed(rate)}
+              >
+                {rate}×
+              </Chip>
+            ))}
+          </div>
+        )}
       </div>
       {problem === 'unavailable' && (
         <p role="alert" className="text-danger">
           The audio could not be loaded. Check the connection, then reload the
-          page. To listen without internet, download the audio on the Höra
-          screen first.
+          page. To listen without internet, download the audio first: on the
+          Höra screen, or on a mock's start screen.
         </p>
       )}
       {problem === 'unavailable' && (

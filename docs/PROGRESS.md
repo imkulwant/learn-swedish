@@ -11,7 +11,8 @@
 - **Slice 7 (Tala, solo task: recorder, planning timer, model answers with audio, self-assessment, recordings and their clean-up):** done. Pack `d-tala-1` reviewed by Anna.
 - **Slice 7b (Tala pair discussion: scripted partner, with a friend, phrase cards, database version 3):** done. Pack `d-tala-2` reviewed by Anna.
 - **Slice 8 (everyday scenarios: phrases, dialogue with questions, role-play with hints):** done. Pack `vardag-1` (3 scenarios) reviewed by Anna.
-- Next slice: 9, mock exams with Today and Progress.
+- **Slice 9a (mock exams: runner with resumable timers, results with review, first D mock):** done. Mock `d-prov-1` reviewed by Anna.
+- Next slice: 9b, Today plan and Progress screen.
 
 ## Known issues and open items
 
@@ -21,4 +22,4 @@
 - Not yet tested on a real iPhone. That waits for Kul to push and enable Pages.
 - **[HUMAN]** Enable GitHub Pages on `imkulwant/learn-swedish` (Settings → Pages → Source: GitHub Actions). The site will be at `https://imkulwant.github.io/learn-swedish/`.
 - **[HUMAN]** Listen to the five clips of `d-hora-1` on the iPhone and judge whether the voices are good enough for practice. The reviewer checks the Swedish and pronunciation.
-- The `examFormat` constants (durations, audio plays, aids) are still unconfirmed and are not yet in the code. They arrive with mocks.
+- The `examFormat` constants are the app's estimates (decision 71), shown as such. Replace them if Skolverket or SU publish part times.

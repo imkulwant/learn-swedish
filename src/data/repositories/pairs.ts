@@ -61,6 +61,8 @@ export async function finishPairSession(
   await db.pairSessions.update(id, { finishedAt: now })
 }
 
+export const getPairSession = (id: string) => db.pairSessions.get(id)
+
 /** The discussions of one topic, newest first. */
 export async function listPairSessions(
   topicId: string,

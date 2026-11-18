@@ -63,12 +63,18 @@ export async function oldestAttemptSince(
   return first?.answeredAt ?? null
 }
 
-/** Whether this device holds any progress: answers, words started or texts written. */
+/** Whether this device holds any progress of any kind. */
 export async function hasProgress(): Promise<boolean> {
-  return (
-    (await db.attempts.count()) +
-      (await db.cards.count()) +
-      (await db.writings.count()) >
-    0
-  )
+  // Every table the app marks the device for, or a launch after a pair
+  // discussion or a started mock would look like lost progress.
+  const tables = [
+    db.attempts,
+    db.cards,
+    db.writings,
+    db.recordings,
+    db.pairSessions,
+    db.mocks,
+  ]
+  for (const table of tables) if ((await table.count()) > 0) return true
+  return false
 }
