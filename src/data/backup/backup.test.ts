@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { resetDb } from '../../test/db'
 import { db } from '../db'
 import { recordAttempt, type NewAttempt } from '../repositories/attempts'
+import { answerCard, startWord } from '../repositories/vocab'
 import {
   completeOnboarding,
   getSetting,
@@ -151,6 +152,41 @@ describe('backup', () => {
     expect(await getSetting('lastBackupAt')).toBe(5)
   })
 
+  it('carries word cards and study days through a round trip', async () => {
+    const card = await startWord(
+      { wordId: 'lon', packId: 'd-ord-arbete' },
+      Date.now(),
+    )
+    await answerCard(card, 'good', Date.now())
+    const before = {
+      cards: await db.cards.toArray(),
+      days: await db.studyDays.toArray(),
+    }
+    const backup = await roundTrip()
+    expect(backup.schemaVersion).toBe(2)
+    await resetDb()
+    await replaceWithBackup(backup)
+    expect(await db.cards.toArray()).toEqual(before.cards)
+    expect(await db.studyDays.toArray()).toEqual(before.days)
+  })
+
+  it('merge keeps the word card with more answers and the larger day counts', async () => {
+    const card = await startWord({ wordId: 'lon', packId: 'p' }, Date.now())
+    const backup = await roundTrip()
+    await answerCard(card, 'good', Date.now())
+    const here = (await db.cards.get('lon:sv-en'))!
+    backup.data.studyDays = backup.data.studyDays.map((d) => ({
+      ...d,
+      newWords: 9,
+    }))
+
+    await mergeBackup(backup)
+
+    expect((await db.cards.get('lon:sv-en'))!.reps).toBe(here.reps)
+    const day = (await db.studyDays.toArray())[0]!
+    expect(day).toMatchObject({ newWords: 9, reviews: 1 })
+  })
+
   it('names files after the local date', () => {
     expect(backupFileName(new Date(2026, 10, 17, 23, 30).getTime())).toBe(
       'sfi-prep-2026-11-17.json',
@@ -161,12 +197,17 @@ describe('backup', () => {
 describe('parseBackup', () => {
   const valid = (): Record<string, unknown> => ({
     format: 'sfi-prep-backup',
-    schemaVersion: 1,
+    schemaVersion: 2,
     exportedAt: 1,
     appVersion: '1.0.0',
-    data: { attempts: [], settings: [] },
+    data: { attempts: [], settings: [], cards: [], studyDays: [] },
   })
-  const parse = (value: unknown) => parseBackup(JSON.stringify(value))
+  // Test files name only the tables they are about; the rest are empty.
+  const parse = (value: unknown) => {
+    const v = value as { data?: Record<string, unknown> }
+    const data = v.data && { cards: [], studyDays: [], ...v.data }
+    return parseBackup(JSON.stringify(v.data ? { ...v, data } : v))
+  }
 
   it('accepts the listening speed setting, and only the speeds the app offers', () => {
     const withRate = (value: number) =>
@@ -179,6 +220,42 @@ describe('parseBackup', () => {
       })
     expect(withRate(0.75).ok).toBe(true)
     expect(withRate(3).ok).toBe(false)
+  })
+
+  it('imports a version 1 file, which has no word cards', () => {
+    const v1 = {
+      ...valid(),
+      schemaVersion: 1,
+      data: { attempts: [], settings: [] },
+    }
+    const result = parseBackup(JSON.stringify(v1))
+    expect(result).toMatchObject({
+      ok: true,
+      backup: { schemaVersion: 2, data: { cards: [], studyDays: [] } },
+    })
+  })
+
+  it('refuses a word card whose id or memory does not hold together', async () => {
+    const card = await startWord({ wordId: 'lon', packId: 'p' }, Date.now())
+    const backup = await roundTrip()
+    const withCard = (c: unknown) =>
+      parseBackup(
+        JSON.stringify({ ...backup, data: { ...backup.data, cards: [c] } }),
+      )
+    expect(withCard(backup.data.cards[0]).ok).toBe(true)
+    expect(withCard({ ...card, id: 'lon:en-sv' })).toMatchObject({
+      ok: false,
+      error: /does not match/,
+    })
+    expect(withCard({ ...card, memory: {} })).toMatchObject({
+      ok: false,
+      error: /incomplete/,
+    })
+  })
+
+  it('refuses a version 2 file without its word cards', () => {
+    const noCards = { ...valid(), data: { attempts: [], settings: [] } }
+    expect(parseBackup(JSON.stringify(noCards)).ok).toBe(false)
   })
 
   it('accepts an empty backup', () => {

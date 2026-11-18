@@ -5,7 +5,8 @@
 - **Slice 1 (one D reading drill, offline):** done.
 - **Slice 2 (welcome screen, Settings, exam countdown, backup and restore):** done.
 - **Slice 3 (Höra: Piper audio pipeline, player, listening drill, offline audio):** done. Pack `d-hora-1` reviewed by Anna.
-- Next slice: 4, vocabulary and spaced repetition.
+- **Slice 4 (vocabulary: two word packs, FSRS scheduling, three card types, backup version 2):** done. Both word packs reviewed by Anna.
+- Next slice: 5, grammar lessons and exercises.
 
 ## Known issues and open items
 

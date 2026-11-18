@@ -1,5 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie'
-import type { Attempt, Setting } from '../domain/types'
+import type { Attempt, Setting, StudyDay, VocabCard } from '../domain/types'
 
 // The name of the database inside the browser. GitHub Pages serves every one
 // of the owner's project sites from one origin, so this name must not clash
@@ -8,6 +8,8 @@ export const DB_NAME = 'learn-swedish'
 
 export class SfiDb extends Dexie {
   attempts!: EntityTable<Attempt, 'id'>
+  cards!: EntityTable<VocabCard, 'id'>
+  studyDays!: EntityTable<StudyDay, 'date'>
   settings!: EntityTable<Setting, 'key'>
 
   constructor(name: string = DB_NAME) {
@@ -22,6 +24,11 @@ export class SfiDb extends Dexie {
       mocks: 'id, examId, status, startedAt',
       studyDays: 'date',
       settings: 'key',
+    })
+    // Version 2: cards are indexed by `dueAt`, the name the card rows use.
+    // Version 1 never stored a card, so nothing needs copying.
+    this.version(2).stores({
+      cards: 'id, wordId, dueAt',
     })
   }
 }

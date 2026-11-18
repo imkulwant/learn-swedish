@@ -75,6 +75,7 @@ test.describe('Content-Security-Policy', () => {
       'exam/hora',
       'exam/hora/d-hora-1',
       'learn',
+      'learn/ord',
       'everyday',
       'progress',
       'settings',

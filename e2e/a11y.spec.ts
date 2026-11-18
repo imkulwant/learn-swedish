@@ -15,6 +15,7 @@ const SCREENS: [string, string][] = [
   ['exam/hora', 'Höra – listening'],
   ['exam/hora/d-hora-1', 'Höra D – paket 1'],
   ['learn', 'Learn'],
+  ['learn/ord', 'Words'],
 ]
 
 for (const [path, title] of SCREENS) {

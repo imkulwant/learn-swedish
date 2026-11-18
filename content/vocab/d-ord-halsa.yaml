@@ -1,0 +1,340 @@
+# Vocabulary: health and care. Forms follow FORM_COUNT in src/domain/content/schema.ts.
+# Approved by Anna on 2026-11-18 (docs/CONTENT.md).
+id: d-ord-halsa
+version: 1
+level: D
+skill: ord
+title: Ord – hälsa och vård
+theme: hälsa
+words:
+  - id: vardcentral
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en vårdcentral, vårdcentralen, vårdcentraler, vårdcentralerna]
+    en: health centre
+    example:
+      {
+        sv: 'Ring vårdcentralen när de öppnar.',
+        en: 'Call the health centre when they open.',
+      }
+  - id: lakare
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en läkare, läkaren, läkare, läkarna]
+    en: doctor
+    example:
+      {
+        sv: 'Läkaren skrev ut medicin.',
+        en: 'The doctor prescribed medicine.',
+      }
+  - id: sjukskoterska
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en sjuksköterska, sjuksköterskan, sjuksköterskor, sjuksköterskorna]
+    en: nurse
+    example:
+      {
+        sv: 'Först pratar du med en sjuksköterska.',
+        en: 'First you talk to a nurse.',
+      }
+  - id: tandlakare
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en tandläkare, tandläkaren, tandläkare, tandläkarna]
+    en: dentist
+    example:
+      {
+        sv: 'Jag har en tid hos tandläkaren i morgon.',
+        en: 'I have an appointment at the dentist tomorrow.',
+      }
+  - id: recept
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [ett recept, receptet, recept, recepten]
+    en: prescription; also recipe
+    example:
+      {
+        sv: 'Du hämtar ut receptet på apoteket.',
+        en: 'You collect the prescription at the pharmacy.',
+      }
+  - id: apotek
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [ett apotek, apoteket, apotek, apoteken]
+    en: pharmacy
+    example:
+      {
+        sv: 'Apoteket stänger klockan åtta.',
+        en: 'The pharmacy closes at eight.',
+      }
+  - id: tid
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en tid, tiden, tider, tiderna]
+    en: appointment; also time
+    example:
+      {
+        sv: 'Jag vill boka en tid hos läkaren.',
+        en: 'I would like to book an appointment with the doctor.',
+      }
+  - id: besok
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [ett besök, besöket, besök, besöken]
+    en: visit
+    example:
+      { sv: 'Besöket kostar 200 kronor.', en: 'The visit costs 200 kronor.' }
+  - id: sjukdom
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en sjukdom, sjukdomen, sjukdomar, sjukdomarna]
+    en: illness, disease
+    example:
+      {
+        sv: 'Diabetes är en vanlig sjukdom.',
+        en: 'Diabetes is a common disease.',
+      }
+  - id: symtom
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [ett symtom, symtomet, symtom, symtomen]
+    en: symptom
+    example: { sv: 'Vilka symtom har du?', en: 'What symptoms do you have?' }
+  - id: forkylning
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en förkylning, förkylningen, förkylningar, förkylningarna]
+    en: a cold
+    example:
+      {
+        sv: 'Jag har fått en förkylning och stannar hemma.',
+        en: 'I have caught a cold and am staying at home.',
+      }
+  - id: smarta
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en smärta, smärtan, smärtor, smärtorna]
+    en: pain
+    example:
+      { sv: 'Smärtan sitter i höger knä.', en: 'The pain is in my right knee.' }
+  - id: skada
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en skada, skadan, skador, skadorna]
+    en: injury; damage
+    example:
+      { sv: 'Skadan var inte allvarlig.', en: 'The injury was not serious.' }
+  - id: remiss
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en remiss, remissen, remisser, remisserna]
+    en: referral
+    example:
+      {
+        sv: 'Läkaren skickar en remiss till sjukhuset.',
+        en: 'The doctor sends a referral to the hospital.',
+      }
+  - id: akutmottagning
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms:
+      [
+        en akutmottagning,
+        akutmottagningen,
+        akutmottagningar,
+        akutmottagningarna,
+      ]
+    en: emergency department
+    example:
+      {
+        sv: 'Vid allvarliga skador ska du åka till akutmottagningen.',
+        en: 'With serious injuries you should go to the emergency department.',
+      }
+  - id: vaccination
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en vaccination, vaccinationen, vaccinationer, vaccinationerna]
+    en: vaccination
+    example:
+      {
+        sv: 'Barnen får sina vaccinationer i skolan.',
+        en: 'The children get their vaccinations at school.',
+      }
+  - id: legitimation
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en legitimation, legitimationen, legitimationer, legitimationerna]
+    en: identification (ID)
+    example:
+      { sv: 'Ta med legitimation till besöket.', en: 'Bring ID to the visit.' }
+  - id: frikort
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [ett frikort, frikortet, frikort, frikorten]
+    en: exemption card (no more patient fees for the rest of the year)
+    example:
+      {
+        sv: 'När du har betalat tillräckligt mycket får du ett frikort.',
+        en: 'When you have paid enough, you get an exemption card.',
+      }
+  - id: boka
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: verb
+    forms: [att boka, bokar, bokade, bokat, boka]
+    en: to book
+    example:
+      {
+        sv: 'Jag bokade en tid via appen.',
+        en: 'I booked an appointment through the app.',
+      }
+  - id: avboka
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: verb
+    forms: [att avboka, avbokar, avbokade, avbokat, avboka]
+    en: to cancel (a booking)
+    example:
+      {
+        sv: 'Om du inte kan komma måste du avboka.',
+        en: 'If you cannot come, you must cancel.',
+      }
+  - id: undersoka
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: verb
+    forms: [att undersöka, undersöker, undersökte, undersökt, undersök]
+    en: to examine
+    example:
+      { sv: 'Läkaren undersökte min rygg.', en: 'The doctor examined my back.' }
+  - id: ma
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: verb
+    forms: [att må, mår, mådde, mått, må]
+    en: to feel (well or ill)
+    example: { sv: 'Hur mår du i dag?', en: 'How are you feeling today?' }
+  - id: vila
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: verb
+    forms: [att vila, vilar, vilade, vilat, vila]
+    en: to rest
+    example:
+      {
+        sv: 'Du behöver vila några dagar.',
+        en: 'You need to rest for a few days.',
+      }
+  - id: hosta
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: verb
+    forms: [att hosta, hostar, hostade, hostat, hosta]
+    en: to cough
+    example:
+      {
+        sv: 'Jag har hostat hela natten.',
+        en: 'I have been coughing all night.',
+      }
+  - id: sjuk
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: adjective
+    forms: [sjuk, sjukt, sjuka]
+    en: ill, sick
+    example:
+      {
+        sv: 'Min son är sjuk och kan inte gå till skolan.',
+        en: 'My son is ill and cannot go to school.',
+      }
+  - id: frisk
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: adjective
+    forms: [frisk, friskt, friska]
+    en: healthy, well
+    example:
+      {
+        sv: 'Hon är frisk igen efter en vecka.',
+        en: 'She is well again after a week.',
+      }
+  - id: allvarlig
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: adjective
+    forms: [allvarlig, allvarligt, allvarliga]
+    en: serious
+    example: { sv: 'Det är inget allvarligt.', en: 'It is nothing serious.' }
+  - id: akut
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: adjective
+    forms: [akut, akut, akuta]
+    en: urgent, acute
+    example: { sv: 'Ring 112 om det är akut.', en: 'Call 112 if it is urgent.' }
+  - id: gravid
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: adjective
+    forms: [gravid, gravitt, gravida]
+    en: pregnant
+    example:
+      {
+        sv: 'Hon är gravid i femte månaden.',
+        en: 'She is five months pregnant.',
+      }
+  - id: ha-ont-i
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: phrase
+    forms: [ha ont i]
+    en: to have a pain in, to hurt
+    example: { sv: 'Jag har ont i ryggen.', en: 'My back hurts.' }

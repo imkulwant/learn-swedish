@@ -3,6 +3,8 @@ import type { Backup } from './schema'
 
 export interface BackupSummary {
   answers: number
+  /** Words started. */
+  words: number
   /** First and last day an answer was given, or null with none. */
   firstAt: number | null
   lastAt: number | null
@@ -17,6 +19,7 @@ export function summariseBackup(backup: Backup): BackupSummary {
     .sort((a, b) => a - b)
   return {
     answers: times.length,
+    words: new Set(backup.data.cards.map((c) => c.wordId)).size,
     firstAt: times[0] ?? null,
     lastAt: times[times.length - 1] ?? null,
     exportedAt: backup.exportedAt,
@@ -32,8 +35,9 @@ export function summariseBackup(backup: Backup): BackupSummary {
  * nothing changes. Returns how many records were written.
  */
 export async function mergeBackup(backup: Backup): Promise<number> {
-  return db.transaction('rw', [db.attempts, db.settings], async () => {
-    const { attempts, settings } = backup.data
+  const tables = [db.attempts, db.settings, db.cards, db.studyDays]
+  return db.transaction('rw', tables, async () => {
+    const { attempts, settings, cards, studyDays } = backup.data
     const stored = await db.attempts.bulkGet(attempts.map((a) => a.id))
     const missing = attempts.filter((_, i) => !stored[i])
     await db.attempts.bulkAdd(missing)
@@ -47,16 +51,39 @@ export async function mergeBackup(backup: Backup): Promise<number> {
         !storedSettings[i] || s.updatedAt > storedSettings[i]!.updatedAt,
     )
     await db.settings.bulkPut(newer)
-    return missing.length + newer.length
+
+    // A word card with more answers knows more; a tie keeps the stored one.
+    const storedCards = await db.cards.bulkGet(cards.map((c) => c.id))
+    const moreAnswered = cards.filter(
+      (c, i) => !storedCards[i] || c.reps > storedCards[i]!.reps,
+    )
+    await db.cards.bulkPut(moreAnswered)
+
+    // Study days keep the larger count of each, so no day loses practice.
+    const storedDays = await db.studyDays.bulkGet(studyDays.map((d) => d.date))
+    const days = studyDays.map((d, i) => {
+      const here = storedDays[i]
+      return here
+        ? {
+            date: d.date,
+            reviews: Math.max(d.reviews, here.reviews),
+            newWords: Math.max(d.newWords, here.newWords),
+          }
+        : d
+    })
+    await db.studyDays.bulkPut(days)
+    return missing.length + newer.length + moreAnswered.length
   })
 }
 
 /** Swaps everything stored for the contents of a backup, in one transaction. */
 export async function replaceWithBackup(backup: Backup): Promise<void> {
-  await db.transaction('rw', [db.attempts, db.settings], async () => {
-    await db.attempts.clear()
-    await db.settings.clear()
+  const tables = [db.attempts, db.settings, db.cards, db.studyDays]
+  await db.transaction('rw', tables, async () => {
+    for (const table of tables) await table.clear()
     await db.attempts.bulkAdd(backup.data.attempts)
     await db.settings.bulkPut(backup.data.settings)
+    await db.cards.bulkAdd(backup.data.cards)
+    await db.studyDays.bulkAdd(backup.data.studyDays)
   })
 }

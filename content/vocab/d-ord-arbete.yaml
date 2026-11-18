@@ -1,0 +1,363 @@
+# Vocabulary: work. Forms follow FORM_COUNT in src/domain/content/schema.ts.
+# Approved by Anna on 2026-11-18 (docs/CONTENT.md).
+id: d-ord-arbete
+version: 1
+level: D
+skill: ord
+title: Ord – arbete
+theme: arbete
+words:
+  - id: arbetsgivare
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en arbetsgivare, arbetsgivaren, arbetsgivare, arbetsgivarna]
+    en: employer
+    example:
+      {
+        sv: 'Min arbetsgivare betalar för kursen.',
+        en: 'My employer pays for the course.',
+      }
+  - id: anstallning
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en anställning, anställningen, anställningar, anställningarna]
+    en: employment, a job
+    example:
+      {
+        sv: 'Hon har fått en fast anställning.',
+        en: 'She has got a permanent job.',
+      }
+  - id: lon
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en lön, lönen, löner, lönerna]
+    en: salary, wages
+    example:
+      {
+        sv: 'Lönen kommer den 25:e varje månad.',
+        en: 'The salary comes on the 25th every month.',
+      }
+  - id: schema
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [ett schema, schemat, scheman, schemana]
+    en: schedule, timetable
+    example:
+      {
+        sv: 'Jag tittar på schemat för nästa vecka.',
+        en: "I am looking at next week's schedule.",
+      }
+  - id: kollega
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en kollega, kollegan, kollegor, kollegorna]
+    en: colleague
+    example:
+      {
+        sv: 'Mina kollegor fikar klockan tre.',
+        en: 'My colleagues have a coffee break at three.',
+      }
+  - id: chef
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en chef, chefen, chefer, cheferna]
+    en: boss, manager
+    example:
+      {
+        sv: 'Jag måste fråga min chef först.',
+        en: 'I have to ask my boss first.',
+      }
+  - id: ansokan
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en ansökan, ansökan, ansökningar, ansökningarna]
+    en: application
+    example:
+      {
+        sv: 'Skicka din ansökan senast på fredag.',
+        en: 'Send your application by Friday at the latest.',
+      }
+  - id: intervju
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en intervju, intervjun, intervjuer, intervjuerna]
+    en: interview
+    example:
+      {
+        sv: 'Jag är nervös inför intervjun i morgon.',
+        en: 'I am nervous about the interview tomorrow.',
+      }
+  - id: erfarenhet
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en erfarenhet, erfarenheten, erfarenheter, erfarenheterna]
+    en: experience
+    example:
+      {
+        sv: 'Har du erfarenhet av att arbeta med barn?',
+        en: 'Do you have experience of working with children?',
+      }
+  - id: utbildning
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en utbildning, utbildningen, utbildningar, utbildningarna]
+    en: education, training
+    example:
+      { sv: 'Utbildningen tar två år.', en: 'The training takes two years.' }
+  - id: arbetsplats
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en arbetsplats, arbetsplatsen, arbetsplatser, arbetsplatserna]
+    en: workplace
+    example:
+      {
+        sv: 'Det är förbjudet att röka på arbetsplatsen.',
+        en: 'Smoking is forbidden at the workplace.',
+      }
+  - id: semester
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [en semester, semestern, semestrar, semestrarna]
+    en: holiday, vacation
+    example:
+      { sv: 'Vi tar semester i juli.', en: 'We take our holiday in July.' }
+  - id: pass
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [ett pass, passet, pass, passen]
+    en: shift (at work); also passport
+    example:
+      {
+        sv: 'Jag jobbar kvällspass hela veckan.',
+        en: 'I work evening shifts all week.',
+      }
+  - id: avtal
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [ett avtal, avtalet, avtal, avtalen]
+    en: agreement, contract
+    example:
+      {
+        sv: 'Läs avtalet noga innan du skriver under.',
+        en: 'Read the contract carefully before you sign.',
+      }
+  - id: fackforbund
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [ett fackförbund, fackförbundet, fackförbund, fackförbunden]
+    en: trade union
+    example:
+      {
+        sv: 'Många i Sverige är med i ett fackförbund.',
+        en: 'Many people in Sweden belong to a trade union.',
+      }
+  - id: yrke
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: noun
+    forms: [ett yrke, yrket, yrken, yrkena]
+    en: profession, occupation
+    example:
+      {
+        sv: 'Vilket yrke hade du i ditt hemland?',
+        en: 'What was your profession in your home country?',
+      }
+  - id: soka
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: verb
+    forms: [att söka, söker, sökte, sökt, sök]
+    en: to apply (for), to look for
+    example:
+      {
+        sv: 'Jag har sökt tre jobb den här veckan.',
+        en: 'I have applied for three jobs this week.',
+      }
+  - id: anstalla
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: verb
+    forms: [att anställa, anställer, anställde, anställt, anställ]
+    en: to employ, to hire
+    example:
+      {
+        sv: 'Företaget ska anställa tio personer.',
+        en: 'The company is going to hire ten people.',
+      }
+  - id: saga-upp
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: verb
+    forms: [att säga upp, säger upp, sa upp, sagt upp, säg upp]
+    en: to dismiss, to give notice (to resign, with sig)
+    example:
+      {
+        sv: 'Han sa upp sig för att han fick ett bättre jobb.',
+        en: 'He resigned because he got a better job.',
+      }
+  - id: tjana
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: verb
+    forms: [att tjäna, tjänar, tjänade, tjänat, tjäna]
+    en: to earn
+    example:
+      {
+        sv: 'Hon tjänar mer nu än förut.',
+        en: 'She earns more now than before.',
+      }
+  - id: jobba
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: verb
+    forms: [att jobba, jobbar, jobbade, jobbat, jobba]
+    en: to work (informal)
+    example:
+      { sv: 'Jag jobbar extra på helgerna.', en: 'I work extra at weekends.' }
+  - id: sjukanmala-sig
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: verb
+    forms:
+      [
+        att sjukanmäla sig,
+        sjukanmäler sig,
+        sjukanmälde sig,
+        sjukanmält sig,
+        sjukanmäl dig,
+      ]
+    en: to call in sick
+    example:
+      {
+        sv: 'Du måste sjukanmäla dig före klockan sju.',
+        en: "You must call in sick before seven o'clock.",
+      }
+  - id: byta
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: verb
+    forms: [att byta, byter, bytte, bytt, byt]
+    en: to change, to swap
+    example:
+      {
+        sv: 'Kan jag byta pass med dig på fredag?',
+        en: 'Can I swap shifts with you on Friday?',
+      }
+  - id: ansvara
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: verb
+    forms: [att ansvara, ansvarar, ansvarade, ansvarat, ansvara]
+    en: to be responsible (for)
+    example:
+      {
+        sv: 'Jag ansvarar för kassan på kvällarna.',
+        en: 'I am responsible for the till in the evenings.',
+      }
+  - id: ledig
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: adjective
+    forms: [ledig, ledigt, lediga]
+    en: free, off (work); vacant
+    example: { sv: 'Jag är ledig på måndag.', en: 'I am off on Monday.' }
+  - id: erfaren
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: adjective
+    forms: [erfaren, erfaret, erfarna]
+    en: experienced
+    example:
+      {
+        sv: 'Vi söker en erfaren kock.',
+        en: 'We are looking for an experienced cook.',
+      }
+  - id: stressig
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: adjective
+    forms: [stressig, stressigt, stressiga]
+    en: stressful
+    example:
+      {
+        sv: 'Det var en stressig dag på jobbet.',
+        en: 'It was a stressful day at work.',
+      }
+  - id: noggrann
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: adjective
+    forms: [noggrann, noggrant, noggranna]
+    en: careful, thorough
+    example:
+      {
+        sv: 'I det här jobbet måste man vara noggrann.',
+        en: 'In this job you have to be careful.',
+      }
+  - id: flexibel
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: adjective
+    forms: [flexibel, flexibelt, flexibla]
+    en: flexible
+    example:
+      {
+        sv: 'Jag har flexibla arbetstider.',
+        en: 'I have flexible working hours.',
+      }
+  - id: arbetslos
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    pos: adjective
+    forms: [arbetslös, arbetslöst, arbetslösa]
+    en: unemployed
+    example:
+      {
+        sv: 'Han var arbetslös i ett halvår.',
+        en: 'He was unemployed for six months.',
+      }

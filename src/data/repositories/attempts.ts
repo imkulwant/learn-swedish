@@ -50,3 +50,8 @@ export async function oldestAttemptSince(
     .first()
   return first?.answeredAt ?? null
 }
+
+/** Whether this device holds any progress: answers or words started. */
+export async function hasProgress(): Promise<boolean> {
+  return (await db.attempts.count()) + (await db.cards.count()) > 0
+}

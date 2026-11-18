@@ -1,5 +1,5 @@
-// Turns every listening clip into speech with Piper and keeps it as
-// content/audio/<clip id>.m4a, committed. Runs on the author's Mac only (it
+// Turns every listening clip and every word into speech with Piper and keeps
+// it as content/audio/<id>.m4a, committed. Runs on the author's Mac only (it
 // needs Piper in .tools/ and macOS afconvert), so CI and the content build
 // never need it. Run scripts/setup-audio.sh once first.
 //
@@ -19,20 +19,21 @@ import {
 } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import type { ListeningClip, Voice } from '../src/domain/content/schema.ts'
+import type { Voice } from '../src/domain/content/schema.ts'
 import { packProblems } from '../src/domain/content/validate.ts'
 import {
   AUDIO_DIR,
   AUDIO_LOCK,
   ROOT,
-  clipHash,
-  readListeningSources,
+  audioHash,
+  readAudioSources,
   readLock,
   readWav,
   silence,
   sourceAudioFile,
   writeWav,
   type AudioLock,
+  type AudioSource,
 } from './lib/listening.ts'
 
 const PIPER = join(ROOT, '.tools/piper-venv/bin/piper')
@@ -53,8 +54,8 @@ function run(command: string, args: string[], input?: string) {
     )
 }
 
-/** Makes the clip's audio in `work`, then moves it into place in one step. */
-async function synthesize(clip: ListeningClip, work: string): Promise<void> {
+/** Makes the source's audio in `work`, then moves it into place in one step. */
+async function synthesize(clip: AudioSource, work: string): Promise<void> {
   const parts: Buffer[] = []
   let rate = 0
   for (const [i, line] of clip.lines.entries()) {
@@ -108,21 +109,19 @@ if (!existsSync(PIPER)) {
   process.exit(1)
 }
 
-const { packs, problems } = await readListeningSources()
-problems.push(...packProblems(packs))
+const { sources, listening, vocab, problems } = await readAudioSources()
+problems.push(...packProblems([...listening, ...vocab]))
 if (problems.length) {
-  console.error(
-    `Listening content has problems:\n  - ${problems.join('\n  - ')}`,
-  )
+  console.error(`Content has problems:\n  - ${problems.join('\n  - ')}`)
   process.exit(1)
 }
 
 await mkdir(AUDIO_DIR, { recursive: true })
 const lock = await readLock()
-const clips = packs.flatMap((p) => p.clips)
+const clips = sources
 let made = 0
 for (const clip of clips) {
-  const hash = clipHash(clip)
+  const hash = audioHash(clip)
   if (lock[clip.id] === hash && existsSync(sourceAudioFile(clip.id))) continue
   // The old entry goes first: if this clip fails, it is not taken as current.
   delete lock[clip.id]

@@ -3,6 +3,8 @@ import { ExamScreen } from '../features/exam/ExamScreen'
 import { ListeningDrillScreen } from '../features/exam/ListeningDrillScreen'
 import { PartScreen } from '../features/exam/PartScreen'
 import { ReadingDrillScreen } from '../features/exam/ReadingDrillScreen'
+import { LearnScreen } from '../features/learn/LearnScreen'
+import { VocabScreen } from '../features/learn/VocabScreen'
 import { ComingSoonScreen } from '../features/placeholder/ComingSoonScreen'
 import { SettingsScreen } from '../features/settings/SettingsScreen'
 import { TodayScreen } from '../features/today/TodayScreen'
@@ -36,15 +38,8 @@ export function AppRoutes() {
         <Route path="exam/lasa/:packId" element={<ReadingDrillScreen />} />
         <Route path="exam/hora" element={<PartScreen skill="hora" />} />
         <Route path="exam/hora/:packId" element={<ListeningDrillScreen />} />
-        <Route
-          path="learn"
-          element={
-            <ComingSoonScreen
-              title="Learn"
-              description="Vocabulary with spaced repetition, grammar lessons and pronunciation."
-            />
-          }
-        />
+        <Route path="learn" element={<LearnScreen />} />
+        <Route path="learn/ord" element={<VocabScreen />} />
         <Route
           path="everyday"
           element={

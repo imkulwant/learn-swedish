@@ -83,7 +83,7 @@ export function ImportBackup({
       }
       // The marker says "this device held progress". After a replace with an
       // empty backup it holds none, so an empty database is not a loss.
-      if (summary && summary.answers > 0) dataMarker.mark()
+      if (summary && summary.answers + summary.words > 0) dataMarker.mark()
       else if (mode === 'replace') dataMarker.clear()
       close()
       onImported?.()
@@ -128,6 +128,7 @@ export function ImportBackup({
           <div className="flex flex-col gap-3">
             <dl className="grid grid-cols-2 gap-2">
               <Count label="Answers" value={summary.answers} />
+              <Count label="Words" value={summary.words} />
             </dl>
             <p className="text-muted">
               {summary.firstAt !== null && summary.lastAt !== null

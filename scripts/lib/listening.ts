@@ -7,11 +7,16 @@ import { fileURLToPath } from 'node:url'
 import { parse } from 'yaml'
 import {
   ListeningPack,
+  VocabPack,
+  type Line,
   type ListeningClip,
+  type Voice,
+  type Word,
 } from '../../src/domain/content/schema.ts'
 
 export const ROOT = fileURLToPath(new URL('../../', import.meta.url))
 export const LISTENING_SOURCES = join(ROOT, 'content/listening')
+export const VOCAB_SOURCES = join(ROOT, 'content/vocab')
 /** Where the made audio is kept, committed: one `<clip id>.m4a` per clip. */
 export const AUDIO_DIR = join(ROOT, 'content/audio')
 /** Where the build publishes the audio of shipped clips (generated). */
@@ -21,17 +26,40 @@ export const AUDIO_LOCK = join(ROOT, 'content/audio.lock.json')
 /** Bump when the voices, encoding or pauses change, so all audio is remade. */
 export const SYNTH_VERSION = 'piper-1.8.0/medium/aac-48k-mono/v1'
 
-/** The fingerprint of what a clip's audio says and how it was made. */
-export function clipHash(clip: ListeningClip): string {
-  const spoken = clip.lines.map((l) => ({
+/** Something that gets audio: a listening clip, or a word. */
+export interface AudioSource {
+  /** The audio file's name without `.m4a`, unique across all sources. */
+  id: string
+  kind: string
+  lines: Line[]
+}
+
+export const clipSource = (clip: ListeningClip): AudioSource => clip
+
+/** The voice that reads single words. */
+export const WORD_VOICE: Voice = 'alma'
+
+/** A word is read once, in the form its card shows (or its `say`). */
+export const wordSource = (word: Word): AudioSource => ({
+  id: `ord-${word.id}`,
+  kind: 'ord',
+  lines: [{ voice: WORD_VOICE, text: word.forms[0]!, say: word.say }],
+})
+
+/** The fingerprint of what a source's audio says and how it was made. */
+export function audioHash(source: Pick<AudioSource, 'kind' | 'lines'>): string {
+  const spoken = source.lines.map((l) => ({
     voice: l.voice,
     say: l.say ?? l.text,
   }))
   return createHash('sha256')
-    .update(JSON.stringify({ synth: SYNTH_VERSION, kind: clip.kind, spoken }))
+    .update(JSON.stringify({ synth: SYNTH_VERSION, kind: source.kind, spoken }))
     .digest('hex')
     .slice(0, 16)
 }
+
+/** A listening clip's fingerprint, which is its source's. */
+export const clipHash = (clip: ListeningClip) => audioHash(clip)
 
 export type AudioLock = Record<string, string>
 
@@ -43,32 +71,66 @@ export async function readLock(): Promise<AudioLock> {
   }
 }
 
-/** Every listening source, parsed; problems are returned, not thrown. */
-export async function readListeningSources(): Promise<{
-  packs: ListeningPack[]
-  problems: string[]
-}> {
-  const packs: ListeningPack[] = []
+interface Parser<T> {
+  safeParse(raw: unknown):
+    | { success: true; data: T }
+    | {
+        success: false
+        error: { issues: { path: PropertyKey[]; message: string }[] }
+      }
+}
+
+/** Every YAML pack in a folder, parsed; problems are returned, not thrown. */
+async function readPacks<T>(
+  dir: string,
+  schema: Parser<T>,
+): Promise<{ packs: T[]; problems: string[] }> {
+  const packs: T[] = []
   const problems: string[] = []
   let files: string[]
   try {
-    files = (await readdir(LISTENING_SOURCES))
-      .filter((f) => f.endsWith('.yaml'))
-      .sort()
+    files = (await readdir(dir)).filter((f) => f.endsWith('.yaml')).sort()
   } catch {
     return { packs, problems }
   }
   for (const file of files) {
-    const raw: unknown = parse(
-      await readFile(join(LISTENING_SOURCES, file), 'utf8'),
-    )
-    const result = ListeningPack.safeParse(raw)
+    const raw: unknown = parse(await readFile(join(dir, file), 'utf8'))
+    const result = schema.safeParse(raw)
     if (result.success) packs.push(result.data)
     else
       for (const issue of result.error.issues)
         problems.push(`${file}: ${issue.path.join('.')}: ${issue.message}`)
   }
   return { packs, problems }
+}
+
+export const readListeningSources = () =>
+  readPacks<ListeningPack>(LISTENING_SOURCES, ListeningPack)
+
+export const readVocabSources = () =>
+  readPacks<VocabPack>(VOCAB_SOURCES, VocabPack)
+
+/** Every audio source of every pack, drafts included. */
+export async function readAudioSources(): Promise<{
+  sources: AudioSource[]
+  listening: ListeningPack[]
+  vocab: VocabPack[]
+  problems: string[]
+}> {
+  const l = await readListeningSources()
+  const v = await readVocabSources()
+  const sources = [
+    ...l.packs.flatMap((p) => p.clips.map(clipSource)),
+    ...v.packs.flatMap((p) => p.words.map(wordSource)),
+  ]
+  const problems = [...l.problems, ...v.problems]
+  // Clip ids and word audio ids ("ord-…") share one folder of files.
+  const seen = new Set<string>()
+  for (const s of sources) {
+    if (seen.has(s.id)) problems.push(`audio ${s.id} is made by two sources`)
+    seen.add(s.id)
+  }
+  return { sources, listening: l.packs, vocab: v.packs, problems }
 }
 
 /** The made audio of a clip, in content/audio/. */

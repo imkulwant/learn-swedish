@@ -18,6 +18,15 @@ export async function countCached(urls: string[]): Promise<number> {
   return found.filter(Boolean).length
 }
 
+/** Which of these addresses are stored; empty when nothing can be stored. */
+export async function cachedSet(urls: string[]): Promise<Set<string>> {
+  const api = cachesApi()
+  if (!api) return new Set()
+  const cache = await api.open(AUDIO_CACHE)
+  const found = await Promise.all(urls.map((url) => cache.match(url)))
+  return new Set(urls.filter((_, i) => found[i]))
+}
+
 export interface StoreResult {
   /** Files that could not be fetched. */
   failed: number

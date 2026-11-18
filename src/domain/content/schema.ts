@@ -163,14 +163,66 @@ export const CompiledListeningPack = ListeningPack.extend({
 }).strict()
 export type CompiledListeningPack = z.infer<typeof CompiledListeningPack>
 
+export const PARTS_OF_SPEECH = ['noun', 'verb', 'adjective', 'phrase'] as const
+export type PartOfSpeech = (typeof PARTS_OF_SPEECH)[number]
+
+/**
+ * How many forms each part of speech lists, in this order:
+ * noun: en/ett form, definite, plural, definite plural ("en lön, lönen, löner, lönerna");
+ * verb: infinitive with att, present, past, supine, imperative;
+ * adjective: en form, ett form, plural/definite ("ledig, ledigt, lediga");
+ * phrase: the phrase itself.
+ */
+export const FORM_COUNT: Record<PartOfSpeech, number> = {
+  noun: 4,
+  verb: 5,
+  adjective: 3,
+  phrase: 1,
+}
+
+export const Word = z
+  .object({
+    id,
+    ...reviewFields,
+    pos: z.enum(PARTS_OF_SPEECH),
+    /** The forms, as FORM_COUNT describes. The first is what a card shows. */
+    forms: z.array(text).min(1),
+    /** The meaning in English. */
+    en: text,
+    example: z.object({ sv: text, en: text }).strict(),
+    /** What the voice reads, when it must differ from the first form. */
+    say: text.optional(),
+  })
+  .strict()
+export type Word = z.infer<typeof Word>
+
+export const VocabPack = z
+  .object({
+    id,
+    version: z.number().int().min(1),
+    level: z.enum(LEVELS),
+    skill: z.literal('ord'),
+    title: text,
+    theme: text,
+    words: z.array(Word).min(1),
+  })
+  .strict()
+export type VocabPack = z.infer<typeof VocabPack>
+
+/** A vocabulary pack as the app receives it, with where each word's audio is. */
+export const CompiledVocabPack = VocabPack.extend({
+  audio: z.record(z.string(), z.string().regex(/^audio\/[a-z0-9-]+\.m4a$/)),
+}).strict()
+export type CompiledVocabPack = z.infer<typeof CompiledVocabPack>
+
 export const PackSummary = z
   .object({
     id,
     version: z.number().int(),
     level: z.enum(LEVELS),
-    skill: z.enum(SKILLS),
+    skill: z.enum([...SKILLS, 'ord']),
     title: text,
-    /** Texts in a reading pack, clips in a listening pack. */
+    /** Texts in a reading pack, clips in a listening pack, words in a vocabulary pack. */
     unitCount: z.number().int(),
     itemCount: z.number().int(),
     /** True when the pack holds items no reviewer has approved yet. */

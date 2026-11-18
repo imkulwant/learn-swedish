@@ -1,11 +1,14 @@
 import {
   CompiledListeningPack,
+  CompiledVocabPack,
   ContentManifest,
   ReadingPack,
   type Level,
   type PackSummary,
   type Skill,
+  type Word,
 } from '../domain/content/schema'
+import type { QueueWord } from '../domain/srs'
 import { pruneAudio } from '../platform/audioCache'
 
 // Content is static JSON next to the app, cached by the service worker. It is
@@ -49,7 +52,7 @@ export async function listPacks(
   return packs.filter((p) => p.level === level && p.skill === skill)
 }
 
-async function packFile(id: string, skill: Skill): Promise<unknown> {
+async function packFile(id: string, skill: Skill | 'ord'): Promise<unknown> {
   const summary = (await loadManifest()).packs.find(
     (p) => p.id === id && p.skill === skill,
   )
@@ -65,4 +68,47 @@ export async function loadListeningPack(
   id: string,
 ): Promise<CompiledListeningPack> {
   return CompiledListeningPack.parse(await packFile(id, 'hora'))
+}
+
+export async function loadVocabPack(id: string): Promise<CompiledVocabPack> {
+  return CompiledVocabPack.parse(await packFile(id, 'ord'))
+}
+
+/** Levels whose words someone preparing for `level` practises: C before D. */
+const vocabLevels = (level: Level): Level[] =>
+  level === 'D' ? ['C', 'D'] : ['C']
+
+export interface OfferedWord extends QueueWord {
+  word: Word
+  /** Where the word's audio is served, relative to the base. */
+  audioPath: string
+}
+
+export interface OfferedVocab {
+  packs: PackSummary[]
+  /** Every word to practise, in pack order. */
+  words: OfferedWord[]
+  byId: Map<string, OfferedWord>
+}
+
+/** The words a learner preparing for `level` practises, C words first. */
+export async function loadOfferedVocab(level: Level): Promise<OfferedVocab> {
+  const levels = vocabLevels(level)
+  const summaries = (await loadManifest()).packs
+    .filter((p) => p.skill === 'ord' && levels.includes(p.level))
+    .sort((a, b) => levels.indexOf(a.level) - levels.indexOf(b.level))
+  const packs = await Promise.all(summaries.map((p) => loadVocabPack(p.id)))
+  const words = packs.flatMap((pack) =>
+    pack.words.map((word) => ({
+      wordId: word.id,
+      packId: pack.id,
+      word,
+      audioPath: pack.audio[word.id]!,
+    })),
+  )
+  return {
+    packs: summaries,
+    words,
+    byId: new Map(words.map((w) => [w.wordId, w])),
+  }
 }

@@ -122,7 +122,7 @@ test.describe('backup', () => {
     const backup = JSON.parse(text)
     expect(backup).toMatchObject({
       format: 'sfi-prep-backup',
-      schemaVersion: 1,
+      schemaVersion: 2,
     })
     expect(backup.data.attempts).toEqual([
       expect.objectContaining({ itemId: 'd-lasa-1-kurser-ganger', score: 1 }),

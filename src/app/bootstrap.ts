@@ -1,4 +1,4 @@
-import { countAttempts } from '../data/repositories/attempts'
+import { hasProgress } from '../data/repositories/attempts'
 import { openDatabase } from '../data/repositories/database'
 import { dataMarker } from '../platform/dataMarker'
 import { requestPersistence } from '../platform/storage'
@@ -18,7 +18,7 @@ export async function bootstrap(): Promise<BootResult> {
   // Never throws.
   await requestPersistence()
   await openDatabase()
-  if (await countAttempts()) dataMarker.mark()
+  if (await hasProgress()) dataMarker.mark()
   else if (dataMarker.isSet()) return { needsRestore: true }
   return { needsRestore: false }
 }

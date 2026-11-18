@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { getSetting } from '../../data/repositories/settings'
 import { Screen } from '../../ui/Screen'
 import { ReadinessCard } from '../exam/ReadinessCard'
+import { VocabStatusCard } from '../learn/VocabStatusCard'
 import { Welcome } from '../onboarding/Welcome'
 import { UpdateBanner } from '../updates/UpdateBanner'
 import { BackupReminder } from './BackupReminder'
@@ -54,6 +55,7 @@ export function TodayScreen() {
       <ExamCountdown examDate={settings.examDate} />
       <ReadinessCard level={settings.level} skill="lasa" />
       <ReadinessCard level={settings.level} skill="hora" />
+      <VocabStatusCard />
       <div className="flex gap-2">
         <Link
           to="/exam/lasa"
