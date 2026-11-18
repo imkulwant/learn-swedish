@@ -9,7 +9,8 @@
 - **Slice 5 (grammar: lesson renderer, four exercise types, pack `c-grammatik-1` with 5 lessons):** done. Pack reviewed by Anna.
 - **Slice 6 (Skriva: writing prompts, editor that saves as you type, check panel, model answers, self-assessment, backup version 3):** done. Pack `d-skriva-1` and the check sentences reviewed by Anna, who also accepted the suggested lengths.
 - **Slice 7 (Tala, solo task: recorder, planning timer, model answers with audio, self-assessment, recordings and their clean-up):** done. Pack `d-tala-1` reviewed by Anna.
-- Next slice: 7b, Tala pair discussion.
+- **Slice 7b (Tala pair discussion: scripted partner, with a friend, phrase cards, database version 3):** done. Pack `d-tala-2` reviewed by Anna.
+- Next slice: 8, everyday scenarios.
 
 ## Known issues and open items
 

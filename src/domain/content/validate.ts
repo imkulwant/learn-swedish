@@ -88,12 +88,15 @@ export function packUnits(pack: Pack): Unit[] {
   // A speaking task has no questions; its model answer is about three
   // minutes of speech.
   if (pack.skill === 'tala')
-    return pack.tasks.map((t) => ({
-      ...t,
-      items: [],
-      words: t.model.reduce((n, l) => n + countWords(l.say ?? l.text), 0),
-      range: MODEL_WORDS,
-    }))
+    return [
+      ...pack.tasks.map((t) => ({
+        ...t,
+        items: [],
+        words: t.model.reduce((n, l) => n + countWords(l.say ?? l.text), 0),
+        range: MODEL_WORDS,
+      })),
+      ...pack.pairs.map((p) => ({ ...p, items: [], words: 0, range: null })),
+    ]
   // A writing prompt has no questions; its model answer must fit the length
   // the app suggests to the learner.
   if (pack.skill === 'skriva')
@@ -216,6 +219,12 @@ export function packProblems(packs: Pack[]): string[] {
               `${pack.id}/${prompt.id}: the note on "${quote}" quotes nothing in the model answer`,
             )
       }
+    if (pack.skill === 'tala') {
+      if (!pack.tasks.length && !pack.pairs.length)
+        problems.push(`${pack.id}: a speaking pack needs tasks or pairs`)
+      if (pack.pairs.length && !pack.phraseCards.length)
+        problems.push(`${pack.id}: pair discussions need phraseCards`)
+    }
     if (pack.skill === 'grammatik')
       for (const lesson of pack.lessons)
         problems.push(
@@ -264,7 +273,11 @@ export function publishable<P extends Pack>(
             : pack.skill === 'skriva'
               ? { ...pack, prompts: keep(pack.prompts, includeDrafts) }
               : pack.skill === 'tala'
-                ? { ...pack, tasks: keep(pack.tasks, includeDrafts) }
+                ? {
+                    ...pack,
+                    tasks: keep(pack.tasks, includeDrafts),
+                    pairs: keep(pack.pairs, includeDrafts),
+                  }
                 : { ...pack, words: keep(pack.words, includeDrafts) },
     )
     .filter((pack) => packUnits(pack).length > 0) as P[]

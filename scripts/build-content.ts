@@ -36,6 +36,7 @@ import {
   readGrammarSources,
   readWritingSources,
   speakingSource,
+  pairAudio,
   readLock,
   sourceAudioFile,
   wordSource,
@@ -135,9 +136,15 @@ for (const pack of shipped) {
             pack.words.map((w) => ({ id: w.id, source: wordSource(w) })),
           )
         : pack.skill === 'tala'
-          ? await publishAudio(
-              pack.tasks.map((t) => ({ id: t.id, source: speakingSource(t) })),
-            )
+          ? await publishAudio([
+              ...pack.tasks.map((t) => ({
+                id: t.id,
+                source: speakingSource(t),
+              })),
+              ...pack.pairs.flatMap((topic) =>
+                pairAudio(topic).map((a) => ({ id: a.key, source: a.source })),
+              ),
+            ])
           : null
   await writeFile(
     join(OUT, file),

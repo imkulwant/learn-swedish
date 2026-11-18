@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   formatDuration,
+  rubricShare,
   speakingPercent,
   type SpeakingRubric,
 } from './speaking.ts'
@@ -28,5 +29,12 @@ describe('formatDuration', () => {
     [-5, '0:00'],
   ])('%i ms is %s', (ms, text) => {
     expect(formatDuration(ms)).toBe(text)
+  })
+})
+
+describe('rubricShare', () => {
+  it('works for any rubric of 0–2 scores', () => {
+    expect(rubricShare({ a: 2, b: 2 })).toBe(100)
+    expect(rubricShare({ a: 1, b: 0, c: 0 })).toBe(16)
   })
 })

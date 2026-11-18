@@ -72,8 +72,8 @@ describe('vocabulary', () => {
   })
 })
 
-describe('database version 2', () => {
-  it('opens a version 1 database and keeps its answers', async () => {
+describe('database upgrades', () => {
+  it('opens a version 1 database at the current version and keeps its answers', async () => {
     db.close()
     await Dexie.delete(DB_NAME)
     const v1 = new Dexie(DB_NAME)
@@ -91,12 +91,13 @@ describe('database version 2', () => {
       .add({ id: 'a1', itemId: 'i', level: 'D', skill: 'lasa', answeredAt: 1 })
     v1.close()
 
-    const v2 = new SfiDb()
-    await v2.open()
-    expect(v2.verno).toBe(2)
-    expect(await v2.attempts.get('a1')).toMatchObject({ itemId: 'i' })
-    expect(await v2.cards.where('dueAt').below(1).count()).toBe(0)
-    v2.close()
+    const current = new SfiDb()
+    await current.open()
+    expect(current.verno).toBe(3)
+    expect(await current.attempts.get('a1')).toMatchObject({ itemId: 'i' })
+    expect(await current.cards.where('dueAt').below(1).count()).toBe(0)
+    expect(await current.pairSessions.count()).toBe(0)
+    current.close()
     await db.open()
   })
 })

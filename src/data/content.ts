@@ -8,6 +8,8 @@ import {
   WritingPack,
   type WritingPrompt,
   type GrammarLesson,
+  type PairTopic,
+  type PhraseCard,
   type SpeakingTask,
   type Level,
   type PackSummary,
@@ -105,6 +107,38 @@ export async function loadSpeakingTasks(level: Level): Promise<OfferedTask[]> {
       task,
       pack: { id: pack.id, version: pack.version, level: pack.level },
       audioPath: pack.audio[task.id]!,
+    })),
+  )
+}
+
+export interface OfferedPair {
+  topic: PairTopic
+  pack: Pick<CompiledSpeakingPack, 'id' | 'version' | 'level'>
+  phraseCards: PhraseCard[]
+  /** The audio of each partner line, in order, then of the closing line. */
+  turnAudio: string[]
+  closingAudio: string
+}
+
+/** Every pair discussion topic of one level, in pack order. */
+export async function loadPairTopics(level: Level): Promise<OfferedPair[]> {
+  const summaries = (await loadManifest()).packs.filter(
+    (p) => p.skill === 'tala' && p.level === level,
+  )
+  const packs = await Promise.all(
+    summaries.map(async (p) =>
+      CompiledSpeakingPack.parse(await packFile(p.id, 'tala')),
+    ),
+  )
+  return packs.flatMap((pack) =>
+    pack.pairs.map((topic) => ({
+      topic,
+      pack: { id: pack.id, version: pack.version, level: pack.level },
+      phraseCards: pack.phraseCards,
+      turnAudio: topic.partner.map(
+        (_, i) => pack.audio[`${topic.id}-${i + 1}`]!,
+      ),
+      closingAudio: pack.audio[`${topic.id}-slut`]!,
     })),
   )
 }

@@ -1,6 +1,7 @@
 import Dexie, { type EntityTable } from 'dexie'
 import type {
   Attempt,
+  PairSession,
   Recording,
   Setting,
   StudyDay,
@@ -19,6 +20,7 @@ export class SfiDb extends Dexie {
   studyDays!: EntityTable<StudyDay, 'date'>
   writings!: EntityTable<Writing, 'id'>
   recordings!: EntityTable<Recording, 'id'>
+  pairSessions!: EntityTable<PairSession, 'id'>
   settings!: EntityTable<Setting, 'key'>
 
   constructor(name: string = DB_NAME) {
@@ -38,6 +40,11 @@ export class SfiDb extends Dexie {
     // Version 1 never stored a card, so nothing needs copying.
     this.version(2).stores({
       cards: 'id, wordId, dueAt',
+    })
+    // Version 3 adds pair discussions with the scripted partner. A new
+    // table, so nothing stored before changes.
+    this.version(3).stores({
+      pairSessions: 'id, topicId, createdAt',
     })
   }
 }

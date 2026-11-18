@@ -9,6 +9,7 @@ import { LearnScreen } from '../features/learn/LearnScreen'
 import { VocabScreen } from '../features/learn/VocabScreen'
 import { ComingSoonScreen } from '../features/placeholder/ComingSoonScreen'
 import { SettingsScreen } from '../features/settings/SettingsScreen'
+import { PairScreen } from '../features/speaking/PairScreen'
 import { SpeakingPartScreen } from '../features/speaking/SpeakingPartScreen'
 import { SpeakingTaskScreen } from '../features/speaking/SpeakingTaskScreen'
 import { TodayScreen } from '../features/today/TodayScreen'
@@ -48,6 +49,7 @@ export function AppRoutes() {
         <Route path="exam/skriva/:promptId" element={<WritingScreen />} />
         <Route path="exam/tala" element={<SpeakingPartScreen />} />
         <Route path="exam/tala/:taskId" element={<SpeakingTaskScreen />} />
+        <Route path="exam/tala/par/:topicId" element={<PairScreen />} />
         <Route path="learn" element={<LearnScreen />} />
         <Route path="learn/ord" element={<VocabScreen />} />
         <Route path="learn/grammatik" element={<GrammarScreen />} />

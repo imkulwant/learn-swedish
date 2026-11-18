@@ -58,12 +58,62 @@ export const SPEAKING_RUBRIC = [
 export type SpeakingCriterion = (typeof SPEAKING_RUBRIC)[number]['id']
 export type SpeakingRubric = Record<SpeakingCriterion, 0 | 1 | 2>
 
-export const speakingPercent = (rubric: SpeakingRubric): number =>
-  Math.floor(
-    (SPEAKING_RUBRIC.reduce((n, c) => n + rubric[c.id], 0) /
-      (SPEAKING_RUBRIC.length * 2)) *
-      100,
+/** The pair discussion with a friend runs this long, as on the test. */
+export const PAIR_MINUTES = 10
+
+/**
+ * The self-assessment of a pair discussion, from the KP27 D criteria: keeps
+ * the conversation going, asks for and gives information, states and answers
+ * opinions with simple arguments.
+ */
+export const PAIR_RUBRIC = [
+  {
+    id: 'answers',
+    name: 'Answering',
+    question: 'Did you answer what your partner asked?',
+  },
+  {
+    id: 'opinions',
+    name: 'Opinions',
+    question: 'Did you say what you think, with a reason (eftersom, för att)?',
+  },
+  {
+    id: 'asks',
+    name: 'Asking',
+    question: 'Did you ask your partner questions, such as "Vad tycker du?"',
+  },
+  {
+    id: 'forward',
+    name: 'Moving on',
+    question:
+      'Did you bring in new ideas from the mind map and agree or disagree?',
+  },
+  {
+    id: 'agreement',
+    name: 'Agreeing',
+    question: 'Did you help the two of you agree on what matters most?',
+  },
+  {
+    id: 'language',
+    name: 'Language',
+    question:
+      'Were you understandable, with word order and words mostly right?',
+  },
+] as const
+
+export type PairCriterion = (typeof PAIR_RUBRIC)[number]['id']
+export type PairRubric = Record<PairCriterion, 0 | 1 | 2>
+
+/** The share of points of any 0–2 rubric, as a percent rounded down. */
+export const rubricShare = (scores: Record<string, 0 | 1 | 2>): number => {
+  const values = Object.values(scores)
+  return Math.floor(
+    (values.reduce<number>((n, v) => n + v, 0) / (values.length * 2)) * 100,
   )
+}
+
+export const speakingPercent = (rubric: SpeakingRubric): number =>
+  rubricShare(rubric)
 
 /** "3:05" from milliseconds, for timers and recording lengths. */
 export function formatDuration(ms: number): string {

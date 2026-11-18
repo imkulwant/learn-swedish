@@ -1,8 +1,9 @@
 import type { Level, Skill } from '../../domain/content/schema'
 import { readiness, type Readiness } from '../../domain/readiness'
-import { speakingPercent } from '../../domain/speaking'
+import { rubricShare } from '../../domain/speaking'
 import { rubricPercent, selfAssessedReadiness } from '../../domain/writing'
 import { listAttempts } from './attempts'
+import { assessedPairSessions } from './pairs'
 import { assessedRecordings } from './recordings'
 import { assessedWritings } from './writings'
 
@@ -21,10 +22,14 @@ export async function getReadiness(
         assessedAt: w.assessedAt!,
       })),
     )
+  // Solo answers and pair discussions both count for Tala.
   if (skill === 'tala')
     return selfAssessedReadiness(
-      (await assessedRecordings(level)).map((r) => ({
-        percent: speakingPercent(r.rubric!),
+      [
+        ...(await assessedRecordings(level)),
+        ...(await assessedPairSessions(level)),
+      ].map((r) => ({
+        percent: rubricShare(r.rubric!),
         assessedAt: r.assessedAt!,
       })),
     )

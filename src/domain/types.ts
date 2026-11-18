@@ -1,5 +1,5 @@
 import type { AttemptSkill, Level } from './content/schema.ts'
-import type { SpeakingRubric } from './speaking.ts'
+import type { PairRubric, SpeakingRubric } from './speaking.ts'
 import type { Rubric } from './writing.ts'
 
 export type Id = string
@@ -107,5 +107,33 @@ export interface Recording {
   /** A starred recording is never deleted by the clean-up. */
   starred: boolean
   rubric: SpeakingRubric | null
+  assessedAt: EpochMs | null
+}
+
+/** One recorded answer in a pair discussion. */
+export interface PairTurn {
+  /** Which partner line it answers, from 0. */
+  turn: number
+  audio: ArrayBuffer
+  mimeType: string
+  durationMs: number
+}
+
+/**
+ * A pair discussion with the scripted partner: the learner's answers, saved
+ * one by one as they are given. On this device only, like recordings.
+ */
+export interface PairSession {
+  id: Id
+  topicId: string
+  packId: string
+  packVersion: number
+  level: Level
+  createdAt: EpochMs
+  turns: PairTurn[]
+  /** Set when the partner's last line has been reached. */
+  finishedAt: EpochMs | null
+  starred: boolean
+  rubric: PairRubric | null
   assessedAt: EpochMs | null
 }

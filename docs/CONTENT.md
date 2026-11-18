@@ -11,6 +11,7 @@ Every pack is drafted, checked by `npm run content`, and reviewed by a native sp
 | `c-grammatik-1` | C (also shown at D) | Grammar | 5 lessons | 31 exercises | Reviewed by Anna, 2026-11-18 |
 | `d-skriva-1` | D | Skriva | 4 tasks (2 informal, 2 formal) | – | Reviewed by Anna, 2026-11-18 |
 | `d-tala-1` | D | Tala | 3 solo tasks | – | Reviewed by Anna, 2026-11-18 |
+| `d-tala-2` | D | Tala, pairs | 2 discussions | – | Reviewed by Anna, 2026-11-18 |
 | `check-sentences` | – | Sentences the writing checks are tested with | 35 sentences | – | Reviewed by Anna, 2026-11-18 |
 
 ## How to review a pack
@@ -69,5 +70,7 @@ Speaking packs are in `content/speaking/`. Try them in the app (Exam → Tala). 
 - `phrases`: phrases that help with this task.
 - `model`: an answer that would **pass** at D, as the voice reads it. Please listen to it in the app as well (record anything to reach the review), and note words the voice says wrongly. `say` is what the voice reads when it differs from the transcript, for example "elva sjuttiosju" for 1177.
 
-After a change to `model`, run `npm run audio`, as for listening packs.
+For a pair discussion, please check the `question`, the `mindmap` ideas and the `goal`, and the partner's lines (`partner` and `closing`). The lines must make sense whatever the learner answers. Listen to them in the app (Exam → Tala → the discussion → Scripted partner). Please also check the pack's `phraseCards`.
+
+After a change to `model`, `partner` or `closing`, run `npm run audio`, as for listening packs.
 

@@ -20,6 +20,7 @@ const SCREENS: [string, string][] = [
   ['exam/skriva', 'Skriva – writing'],
   ['exam/tala', 'Tala – speaking'],
   ['exam/tala/t-nytt-jobb', 'Att börja på ett nytt jobb'],
+  ['exam/tala/par/p-trivas-jobbet', 'Att trivas på jobbet'],
   ['exam/skriva/s-felanmalan', 'Mejl till hyresvärden'],
   ['learn/grammatik/g-v2', 'Verbet på plats två'],
 ]

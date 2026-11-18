@@ -243,6 +243,40 @@ export const SpeakingTask = z
   .strict()
 export type SpeakingTask = z.infer<typeof SpeakingTask>
 
+/**
+ * The pair discussion: two learners talk about a question with a mind map and
+ * must agree on what matters most. In the app a scripted partner says its
+ * lines, and the learner answers after each one. The lines are general, so
+ * they work whatever the learner says.
+ */
+export const PairTopic = z
+  .object({
+    id,
+    ...reviewFields,
+    kp27: z.array(z.enum(KP27_POINT_IDS)).min(1),
+    theme: text,
+    title: text,
+    en: text,
+    /** The question in the middle of the mind map. */
+    question: text,
+    /** The ideas around it. */
+    mindmap: z.array(text).min(4).max(8),
+    /** What the pair must agree on, in Swedish. */
+    goal: text,
+    /** The partner's turns; the learner answers after each one. */
+    partner: z.array(Line).min(2),
+    /** The partner's last words, which need no answer. */
+    closing: Line,
+  })
+  .strict()
+export type PairTopic = z.infer<typeof PairTopic>
+
+/** A set of phrases for one job in a discussion, such as agreeing. */
+const PhraseCard = z
+  .object({ title: text, phrases: z.array(text).min(1) })
+  .strict()
+export type PhraseCard = z.infer<typeof PhraseCard>
+
 export const SpeakingPack = z
   .object({
     id,
@@ -250,7 +284,10 @@ export const SpeakingPack = z
     level: z.enum(LEVELS),
     skill: z.literal('tala'),
     title: text,
-    tasks: z.array(SpeakingTask).min(1),
+    tasks: z.array(SpeakingTask).default([]),
+    pairs: z.array(PairTopic).default([]),
+    /** Phrases for every pair discussion of the pack. */
+    phraseCards: z.array(PhraseCard).default([]),
   })
   .strict()
 export type SpeakingPack = z.infer<typeof SpeakingPack>

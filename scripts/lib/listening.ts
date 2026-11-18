@@ -13,6 +13,7 @@ import {
   WritingPack,
   type Line,
   type ListeningClip,
+  type PairTopic,
   type SpeakingTask,
   type Voice,
   type Word,
@@ -59,6 +60,21 @@ export const speakingSource = (task: SpeakingTask): AudioSource => ({
   kind: 'tala',
   lines: task.model,
 })
+
+/**
+ * The audio of a pair discussion: one file per partner turn, so the learner
+ * can answer in between. Keyed as the compiled pack lists them.
+ */
+export const pairAudio = (
+  topic: PairTopic,
+): { key: string; source: AudioSource }[] =>
+  [
+    ...topic.partner.map((line, i) => [`${i + 1}`, line] as const),
+    ['slut', topic.closing] as const,
+  ].map(([n, line]) => ({
+    key: `${topic.id}-${n}`,
+    source: { id: `par-${topic.id}-${n}`, kind: 'par', lines: [line] },
+  }))
 
 /** The fingerprint of what a source's audio says and how it was made. */
 export function audioHash(source: Pick<AudioSource, 'kind' | 'lines'>): string {
@@ -149,6 +165,9 @@ export async function readAudioSources(): Promise<{
     ...l.packs.flatMap((p) => p.clips.map(clipSource)),
     ...v.packs.flatMap((p) => p.words.map(wordSource)),
     ...t.packs.flatMap((p) => p.tasks.map(speakingSource)),
+    ...t.packs.flatMap((p) =>
+      p.pairs.flatMap((topic) => pairAudio(topic).map((a) => a.source)),
+    ),
   ]
   const problems = [...l.problems, ...v.problems, ...t.problems]
   // Clip ids and word and speaking audio ids ("ord-…", "tala-…") share one

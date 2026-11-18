@@ -1,0 +1,104 @@
+# Speaking pack 2, level D: the pair discussion.
+# The partner (nst voice) says one line at a time; the learner answers after
+# each line. The lines are general on purpose, so they fit any answer.
+# The phrase cards are shown with every topic of the pack.
+id: d-tala-2
+version: 1
+level: D
+skill: tala
+title: Tala D – samtal i par
+phraseCards:
+  - title: Ask for an opinion
+    phrases:
+      - Vad tycker du?
+      - Håller du med?
+      - Hur är det för dig?
+  - title: Give your opinion
+    phrases:
+      - Jag tycker att …
+      - Enligt mig …
+      - Jag tror att … eftersom …
+  - title: Agree
+    phrases:
+      - Jag håller med.
+      - Det tycker jag också.
+      - Precis!
+  - title: Disagree politely
+    phrases:
+      - Jag förstår vad du menar, men …
+      - Jag håller inte riktigt med.
+      - Jag ser det på ett annat sätt.
+  - title: Move the talk forward
+    phrases:
+      - Ska vi prata om … också?
+      - Vad säger du om …?
+      - Ett annat exempel är …
+  - title: Agree on a choice
+    phrases:
+      - Ska vi välja … och …?
+      - Kan vi komma överens om …?
+      - Då är vi överens.
+pairs:
+  - id: p-trivas-jobbet
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27: [samtala.samtal-diskussioner, samtala.onskemal-asikter, sprak.uttal]
+    theme: arbete
+    title: Att trivas på jobbet
+    en: What matters most to enjoy your job?
+    question: Vad är viktigast för att trivas på jobbet?
+    mindmap:
+      - lönen
+      - kollegorna
+      - chefen
+      - arbetstiderna
+      - att lära sig nya saker
+      - att jobbet ligger nära hemmet
+    goal: Kom överens om vilka två saker som är viktigast.
+    partner:
+      - voice: nst
+        text: Hej! Ska vi börja? Jag tycker att kollegorna är viktigast. Om man har trevliga kollegor, är det roligt att gå till jobbet. Vad tycker du?
+      - voice: nst
+        text: Jaha, det förstår jag. Men hur är det med lönen? Tycker du att den är viktig?
+      - voice: nst
+        text: Jag håller med dig delvis. För mig är arbetstiderna också viktiga, eftersom jag har små barn. Hur är det för dig?
+      - voice: nst
+        text: Intressant. Vilken sak i tankekartan tycker du är minst viktig, och varför?
+      - voice: nst
+        text: Okej. Nu behöver vi komma överens. Vilka två saker väljer vi?
+    closing:
+      voice: nst
+      text: Bra, då är vi överens. Tack för ett trevligt samtal!
+
+  - id: p-lara-svenska
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27: [samtala.samtal-diskussioner, samtala.onskemal-asikter, sprak.uttal]
+    theme: studier
+    title: Att lära sig svenska
+    en: What is the best way to learn Swedish?
+    question: Hur lär man sig svenska bäst?
+    mindmap:
+      - gå på SFI
+      - titta på tv och film
+      - prata med grannar
+      - läsa böcker
+      - använda appar
+      - jobba eller göra praktik
+    goal: Kom överens om de två bästa sätten.
+    partner:
+      - voice: nst
+        text: Ska vi börja? Jag tror att det bästa sättet är att prata med svenskar så mycket som möjligt. Vad tror du?
+      - voice: nst
+        text: Ja, kanske. Själv tittar jag mycket på svenska serier med svensk text. Brukar du göra det?
+      - voice: nst
+        text: Jag tycker inte att appar hjälper så mycket. Man lär sig ord, men man lär sig inte att prata. Håller du med?
+      - voice: nst
+        text: Vad har hjälpt dig mest hittills?
+      - voice: nst
+        text: Okej. Vi måste bestämma oss. Vilka två sätt tycker vi är bäst?
+    closing:
+      voice: nst
+      text: Bra, då säger vi det. Tack, det var ett bra samtal!

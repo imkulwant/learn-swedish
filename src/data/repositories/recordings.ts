@@ -79,6 +79,7 @@ export interface RecordingUsage {
   bytes: number
 }
 
+/** Solo recordings and pair discussions together. */
 export async function recordingUsage(): Promise<RecordingUsage> {
   let count = 0
   let bytes = 0
@@ -86,17 +87,29 @@ export async function recordingUsage(): Promise<RecordingUsage> {
     count++
     bytes += r.audio.byteLength
   })
+  await db.pairSessions.each((s) => {
+    count++
+    bytes += s.turns.reduce((n, t) => n + t.audio.byteLength, 0)
+  })
   return { count, bytes }
 }
 
 /**
- * Deletes recordings made before `before`, except starred ones, and says how
- * many went. Nothing else ever deletes a recording without being asked.
+ * Deletes recordings and pair discussions made before `before`, except
+ * starred ones, and says how many went. Nothing else ever deletes a recording without being asked.
  */
 export async function deleteOldRecordings(before: number): Promise<number> {
-  return db.recordings
-    .where('createdAt')
-    .below(before)
-    .filter((r) => !r.starred)
-    .delete()
+  return db.transaction('rw', db.recordings, db.pairSessions, async () => {
+    const solo = await db.recordings
+      .where('createdAt')
+      .below(before)
+      .filter((r) => !r.starred)
+      .delete()
+    const pairs = await db.pairSessions
+      .where('createdAt')
+      .below(before)
+      .filter((s) => !s.starred)
+      .delete()
+    return solo + pairs
+  })
 }
