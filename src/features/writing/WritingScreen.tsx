@@ -125,11 +125,13 @@ function Result({ writing }: { writing: Writing }) {
 function Prompt({ offered }: { offered: OfferedPrompt }) {
   const { prompt, pack } = offered
   const latest = useLatestWriting(prompt.id)
-  // "Write it again" starts a fresh editor, keyed so it starts empty.
-  const [round, setRound] = useState(0)
+  // "Write it again" remembers the assessed text it replaces. While that is
+  // still the latest text, an empty editor shows; once the new draft is
+  // stored it is the latest, and handing it in leads to its review.
+  const [replacing, setReplacing] = useState<string | null>(null)
   if (!latest) return <Loading />
   const writing = latest.writing
-  const fresh = round > 0 && writing?.submittedAt !== null
+  const fresh = writing !== undefined && writing.id === replacing
   const task = { register: prompt.register, words: WRITING_WORDS[pack.level] }
 
   if (!writing || writing.submittedAt === null || fresh)
@@ -137,14 +139,16 @@ function Prompt({ offered }: { offered: OfferedPrompt }) {
       <>
         <Task offered={offered} />
         <Editor
-          key={`${prompt.id}-${round}`}
+          key={`${prompt.id}-${replacing ?? 'first'}`}
           source={{
             promptId: prompt.id,
             packId: pack.id,
             packVersion: pack.version,
             level: pack.level,
           }}
-          draft={writing && writing.submittedAt === null ? writing : null}
+          draft={
+            writing && !fresh && writing.submittedAt === null ? writing : null
+          }
           task={task}
         />
       </>
@@ -164,7 +168,9 @@ function Prompt({ offered }: { offered: OfferedPrompt }) {
       {writing.rubric ? (
         <>
           <ShareText writing={writing} name={prompt.id} />
-          <Button onClick={() => setRound((r) => r + 1)}>Write it again</Button>
+          <Button onClick={() => setReplacing(writing.id)}>
+            Write it again
+          </Button>
         </>
       ) : (
         <RubricForm

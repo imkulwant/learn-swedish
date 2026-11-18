@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { deleteRecording, setStarred } from '../../data/repositories/recordings'
+import {
+  deleteRecording,
+  getAudio,
+  setStarred,
+} from '../../data/repositories/recordings'
 import { formatDayWithYear } from '../../domain/format'
 import { toLocalDate } from '../../domain/dates'
 import { formatDuration, speakingPercent } from '../../domain/speaking'
@@ -7,16 +11,23 @@ import type { Recording } from '../../domain/types'
 import { Button } from '../../ui/Button'
 import { Dialog } from '../../ui/Dialog'
 
-/** Plays a stored recording from its bytes. */
+/** Plays a stored recording, reading its sound only when shown. */
 export function RecordingPlayer({ recording }: { recording: Recording }) {
   const audio = useRef<HTMLAudioElement>(null)
+  const { id, mimeType } = recording
   useEffect(() => {
-    const url = URL.createObjectURL(
-      new Blob([recording.audio], { type: recording.mimeType }),
-    )
-    audio.current!.src = url
-    return () => URL.revokeObjectURL(url)
-  }, [recording.audio, recording.mimeType])
+    let url: string | null = null
+    let gone = false
+    void getAudio(id).then((bytes) => {
+      if (gone || !bytes || !audio.current) return
+      url = URL.createObjectURL(new Blob([bytes], { type: mimeType }))
+      audio.current.src = url
+    })
+    return () => {
+      gone = true
+      if (url) URL.revokeObjectURL(url)
+    }
+  }, [id, mimeType])
   return (
     <audio
       ref={audio}

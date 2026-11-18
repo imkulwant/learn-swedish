@@ -82,6 +82,7 @@ function TaskCard({ offered: { task } }: { offered: OfferedTask }) {
 type Stage =
   | { name: 'ready' }
   | { name: 'planning'; endsAt: number }
+  | { name: 'starting' }
   | { name: 'recording'; active: ActiveRecording }
   | { name: 'saving' }
 
@@ -103,6 +104,9 @@ function Speak({
 
   async function record() {
     setError(null)
+    // The buttons are gone until the microphone is ready, so a second tap
+    // cannot start a second recorder.
+    setStage({ name: 'starting' })
     try {
       const recording = await startRecording()
       active.current = recording
@@ -199,7 +203,7 @@ function Speak({
           </Button>
         </div>
       )}
-      {stage.name === 'saving' && <Loading />}
+      {(stage.name === 'saving' || stage.name === 'starting') && <Loading />}
     </section>
   )
 }

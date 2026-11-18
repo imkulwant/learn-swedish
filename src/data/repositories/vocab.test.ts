@@ -93,7 +93,7 @@ describe('database upgrades', () => {
 
     const current = new SfiDb()
     await current.open()
-    expect(current.verno).toBe(3)
+    expect(current.verno).toBe(4)
     expect(await current.attempts.get('a1')).toMatchObject({ itemId: 'i' })
     expect(await current.cards.where('dueAt').below(1).count()).toBe(0)
     expect(await current.pairSessions.count()).toBe(0)

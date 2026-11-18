@@ -16,6 +16,7 @@ type Phase =
   | { name: 'idle' }
   | { name: 'partner'; turn: number }
   | { name: 'answer'; turn: number }
+  | { name: 'starting'; turn: number }
   | { name: 'recording'; turn: number; active: ActiveRecording }
   | { name: 'saving'; turn: number }
   | { name: 'closing' }
@@ -45,6 +46,9 @@ export function ScriptedPartner({
   const [showText, setShowText] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [blocked, setBlocked] = useState(false)
+  // A line that cannot be loaded, for example offline before its audio was
+  // downloaded: its text is shown instead, and the discussion goes on.
+  const [unplayable, setUnplayable] = useState(false)
   const audio = useRef<HTMLAudioElement>(null)
   const session = useRef<string | null>(null)
   const active = useRef<ActiveRecording | null>(null)
@@ -69,6 +73,7 @@ export function ScriptedPartner({
     )
     setPhase(next)
     setBlocked(false)
+    setUnplayable(false)
     element.play().catch(() => setBlocked(true))
   }
 
@@ -82,6 +87,9 @@ export function ScriptedPartner({
 
   async function answer(turn: number) {
     setError(null)
+    // Until the microphone is ready the button is gone, so a second tap
+    // cannot start a second recorder.
+    setPhase({ name: 'starting', turn })
     try {
       const recording = await startRecording()
       active.current = recording
@@ -92,6 +100,7 @@ export function ScriptedPartner({
           caught instanceof RecorderFailure ? caught.reason : 'failed'
         ],
       )
+      setPhase({ name: 'answer', turn })
     }
   }
 
@@ -129,7 +138,15 @@ export function ScriptedPartner({
   const line = lineOf(phase)
   return (
     <section aria-label="Discussion" className="flex flex-col gap-3">
-      <audio ref={audio} onEnded={partnerDone} className="hidden" />
+      <audio
+        ref={audio}
+        onEnded={partnerDone}
+        onError={() => {
+          setUnplayable(true)
+          setShowText(true)
+        }}
+        className="hidden"
+      />
       {error && (
         <p role="alert" className="text-danger">
           {error}
@@ -153,7 +170,15 @@ export function ScriptedPartner({
               ? 'The partner ends the discussion'
               : `The partner speaks (${phase.turn + 1} of ${topic.partner.length})`}
           </p>
-          {blocked && (
+          {unplayable && (
+            <>
+              <p role="alert" className="text-danger">
+                This line could not be played. Read it below, then go on.
+              </p>
+              <Button onClick={partnerDone}>Go on</Button>
+            </>
+          )}
+          {blocked && !unplayable && (
             <Button onClick={() => void audio.current?.play()}>
               Play the partner
             </Button>
@@ -186,7 +211,11 @@ export function ScriptedPartner({
           </Button>
         </div>
       )}
-      {phase.name === 'saving' && <p className="text-muted">Saving…</p>}
+      {(phase.name === 'saving' || phase.name === 'starting') && (
+        <p className="text-muted">
+          {phase.name === 'saving' ? 'Saving…' : 'Starting the microphone…'}
+        </p>
+      )}
       {line && (
         <div className="flex flex-col gap-1">
           <Button variant="ghost" onClick={() => setShowText((s) => !s)}>

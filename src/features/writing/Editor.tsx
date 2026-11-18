@@ -129,6 +129,8 @@ export function Editor({
         onBlur={() => void flush()}
         aria-describedby={countId}
         rows={12}
+        // A backup holds texts of up to this length.
+        maxLength={20_000}
         autoCapitalize="sentences"
         spellCheck={false}
         className="min-h-64 rounded-control border border-border bg-surface p-3 text-text"

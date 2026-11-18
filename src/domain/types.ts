@@ -90,9 +90,18 @@ export interface Writing {
 }
 
 /**
+ * The sound of one recording, kept apart from what is known about it, so
+ * lists and readiness never read megabytes of audio. Bytes, not a Blob,
+ * because WebKit cannot store a Blob in IndexedDB in a private session.
+ */
+export interface StoredAudio {
+  id: Id
+  audio: ArrayBuffer
+}
+
+/**
  * One spoken answer to a speaking task, kept on this device only: recordings
- * are not in backups. The audio is stored as bytes, not as a Blob, because
- * WebKit cannot store a Blob in IndexedDB in a private session.
+ * are not in backups. Its sound is the StoredAudio with the same id.
  */
 export interface Recording {
   id: Id
@@ -103,7 +112,7 @@ export interface Recording {
   createdAt: EpochMs
   durationMs: number
   mimeType: string
-  audio: ArrayBuffer
+  byteLength: number
   /** A starred recording is never deleted by the clean-up. */
   starred: boolean
   rubric: SpeakingRubric | null
@@ -114,7 +123,9 @@ export interface Recording {
 export interface PairTurn {
   /** Which partner line it answers, from 0. */
   turn: number
-  audio: ArrayBuffer
+  /** The StoredAudio of the answer. */
+  audioId: Id
+  byteLength: number
   mimeType: string
   durationMs: number
 }

@@ -8,6 +8,7 @@ export type RecordingSource = Pick<
   'taskId' | 'packId' | 'packVersion' | 'level'
 >
 
+/** Stores a recording and its sound together. */
 export async function saveRecording(
   source: RecordingSource,
   audio: { bytes: ArrayBuffer; mimeType: string; durationMs: number },
@@ -19,13 +20,21 @@ export async function saveRecording(
     createdAt: now,
     durationMs: audio.durationMs,
     mimeType: audio.mimeType,
-    audio: audio.bytes,
+    byteLength: audio.bytes.byteLength,
     starred: false,
     rubric: null,
     assessedAt: null,
   }
-  await db.recordings.add(row)
+  await db.transaction('rw', db.recordings, db.audio, async () => {
+    await db.recordings.add(row)
+    await db.audio.add({ id: row.id, audio: audio.bytes })
+  })
   return row
+}
+
+/** The sound of a recording or a pair answer, or null when it is gone. */
+export async function getAudio(id: string): Promise<ArrayBuffer | null> {
+  return (await db.audio.get(id))?.audio ?? null
 }
 
 /** The recordings of one task, newest first. */
@@ -37,11 +46,10 @@ export async function listRecordings(taskId: string): Promise<Recording[]> {
 /** The latest recording of every task, by task id. */
 export async function latestRecordings(): Promise<Map<string, Recording>> {
   const latest = new Map<string, Recording>()
-  await db.recordings.each((row) => {
+  for (const row of await db.recordings.toArray()) {
     const before = latest.get(row.taskId)
-    if (!before || row.createdAt > before.createdAt)
-      latest.set(row.taskId, { ...row, audio: new ArrayBuffer(0) })
-  })
+    if (!before || row.createdAt > before.createdAt) latest.set(row.taskId, row)
+  }
   return latest
 }
 
@@ -50,7 +58,10 @@ export async function setStarred(id: string, starred: boolean): Promise<void> {
 }
 
 export async function deleteRecording(id: string): Promise<void> {
-  await db.recordings.delete(id)
+  await db.transaction('rw', db.recordings, db.audio, async () => {
+    await db.recordings.delete(id)
+    await db.audio.delete(id)
+  })
 }
 
 export async function assessRecording(
@@ -62,16 +73,13 @@ export async function assessRecording(
   if (!updated) throw new Error('This recording is no longer stored.')
 }
 
-/** Every assessed recording of one level, for readiness, without the audio. */
+/** Every assessed recording of one level, for readiness. */
 export async function assessedRecordings(
   level: Level,
 ): Promise<Pick<Recording, 'rubric' | 'assessedAt'>[]> {
-  const found: Pick<Recording, 'rubric' | 'assessedAt'>[] = []
-  await db.recordings.each((r) => {
-    if (r.level === level && r.rubric && r.assessedAt !== null)
-      found.push({ rubric: r.rubric, assessedAt: r.assessedAt })
-  })
-  return found
+  return (await db.recordings.toArray()).filter(
+    (r) => r.level === level && r.rubric && r.assessedAt !== null,
+  )
 }
 
 export interface RecordingUsage {
@@ -81,35 +89,46 @@ export interface RecordingUsage {
 
 /** Solo recordings and pair discussions together. */
 export async function recordingUsage(): Promise<RecordingUsage> {
-  let count = 0
-  let bytes = 0
-  await db.recordings.each((r) => {
-    count++
-    bytes += r.audio.byteLength
-  })
-  await db.pairSessions.each((s) => {
-    count++
-    bytes += s.turns.reduce((n, t) => n + t.audio.byteLength, 0)
-  })
-  return { count, bytes }
+  const solo = await db.recordings.toArray()
+  const pairs = await db.pairSessions.toArray()
+  return {
+    count: solo.length + pairs.length,
+    bytes:
+      solo.reduce((n, r) => n + r.byteLength, 0) +
+      pairs.reduce(
+        (n, s) => n + s.turns.reduce((m, t) => m + t.byteLength, 0),
+        0,
+      ),
+  }
 }
 
 /**
  * Deletes recordings and pair discussions made before `before`, except
- * starred ones, and says how many went. Nothing else ever deletes a recording without being asked.
+ * starred ones, with their sound, and says how many went. Nothing else ever
+ * deletes a recording without being asked.
  */
 export async function deleteOldRecordings(before: number): Promise<number> {
-  return db.transaction('rw', db.recordings, db.pairSessions, async () => {
-    const solo = await db.recordings
-      .where('createdAt')
-      .below(before)
-      .filter((r) => !r.starred)
-      .delete()
-    const pairs = await db.pairSessions
-      .where('createdAt')
-      .below(before)
-      .filter((s) => !s.starred)
-      .delete()
-    return solo + pairs
-  })
+  return db.transaction(
+    'rw',
+    [db.recordings, db.pairSessions, db.audio],
+    async () => {
+      const solo = await db.recordings
+        .where('createdAt')
+        .below(before)
+        .filter((r) => !r.starred)
+        .toArray()
+      const pairs = await db.pairSessions
+        .where('createdAt')
+        .below(before)
+        .filter((s) => !s.starred)
+        .toArray()
+      await db.recordings.bulkDelete(solo.map((r) => r.id))
+      await db.pairSessions.bulkDelete(pairs.map((s) => s.id))
+      await db.audio.bulkDelete([
+        ...solo.map((r) => r.id),
+        ...pairs.flatMap((s) => s.turns.map((t) => t.audioId)),
+      ])
+      return solo.length + pairs.length
+    },
+  )
 }

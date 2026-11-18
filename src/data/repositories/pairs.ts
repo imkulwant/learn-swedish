@@ -12,32 +12,46 @@ export type PairSource = Pick<
  * Stores one answer of a discussion at once, so a force-quit keeps every
  * answer given so far. The first answer creates the session.
  */
+export interface RecordedTurn {
+  turn: number
+  audio: ArrayBuffer
+  mimeType: string
+  durationMs: number
+}
+
 export async function addPairTurn(
   source: PairSource,
   sessionId: string | null,
-  turn: PairTurn,
+  recorded: RecordedTurn,
   now: number = Date.now(),
 ): Promise<string> {
-  if (sessionId) {
-    await db.transaction('rw', db.pairSessions, async () => {
+  const { audio, ...rest } = recorded
+  const turn: PairTurn = {
+    ...rest,
+    audioId: crypto.randomUUID(),
+    byteLength: audio.byteLength,
+  }
+  return db.transaction('rw', db.pairSessions, db.audio, async () => {
+    await db.audio.add({ id: turn.audioId, audio })
+    if (sessionId) {
       const row = await db.pairSessions.get(sessionId)
       if (!row) throw new Error('This discussion is no longer stored.')
       await db.pairSessions.update(sessionId, { turns: [...row.turns, turn] })
-    })
-    return sessionId
-  }
-  const row: PairSession = {
-    ...source,
-    id: crypto.randomUUID(),
-    createdAt: now,
-    turns: [turn],
-    finishedAt: null,
-    starred: false,
-    rubric: null,
-    assessedAt: null,
-  }
-  await db.pairSessions.add(row)
-  return row.id
+      return sessionId
+    }
+    const row: PairSession = {
+      ...source,
+      id: crypto.randomUUID(),
+      createdAt: now,
+      turns: [turn],
+      finishedAt: null,
+      starred: false,
+      rubric: null,
+      assessedAt: null,
+    }
+    await db.pairSessions.add(row)
+    return row.id
+  })
 }
 
 export async function finishPairSession(
@@ -55,16 +69,14 @@ export async function listPairSessions(
   return rows.sort((a, b) => b.createdAt - a.createdAt)
 }
 
-/** The latest discussion of every topic, without its audio. */
-export async function latestPairSessions(): Promise<
-  Map<string, Pick<PairSession, 'rubric' | 'finishedAt'>>
-> {
+/** The latest discussion of every topic. */
+export async function latestPairSessions(): Promise<Map<string, PairSession>> {
   const latest = new Map<string, PairSession>()
-  await db.pairSessions.each((row) => {
+  for (const row of await db.pairSessions.toArray()) {
     const before = latest.get(row.topicId)
     if (!before || row.createdAt > before.createdAt)
-      latest.set(row.topicId, { ...row, turns: [] })
-  })
+      latest.set(row.topicId, row)
+  }
   return latest
 }
 
@@ -76,7 +88,11 @@ export async function setPairStarred(
 }
 
 export async function deletePairSession(id: string): Promise<void> {
-  await db.pairSessions.delete(id)
+  await db.transaction('rw', db.pairSessions, db.audio, async () => {
+    const row = await db.pairSessions.get(id)
+    await db.pairSessions.delete(id)
+    if (row) await db.audio.bulkDelete(row.turns.map((t) => t.audioId))
+  })
 }
 
 export async function assessPairSession(
@@ -94,10 +110,7 @@ export async function assessPairSession(
 export async function assessedPairSessions(
   level: Level,
 ): Promise<Pick<PairSession, 'rubric' | 'assessedAt'>[]> {
-  const found: Pick<PairSession, 'rubric' | 'assessedAt'>[] = []
-  await db.pairSessions.each((s) => {
-    if (s.level === level && s.rubric && s.assessedAt !== null)
-      found.push({ rubric: s.rubric, assessedAt: s.assessedAt })
-  })
-  return found
+  return (await db.pairSessions.toArray()).filter(
+    (s) => s.level === level && s.rubric && s.assessedAt !== null,
+  )
 }

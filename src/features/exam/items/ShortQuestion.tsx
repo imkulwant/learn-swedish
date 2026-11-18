@@ -54,6 +54,8 @@ export function ShortQuestion({
         id={inputId}
         lang="sv"
         value={text}
+        // A backup holds answers of up to this length.
+        maxLength={2000}
         disabled={stage !== 'answering'}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={(e) =>

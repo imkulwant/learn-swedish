@@ -94,4 +94,56 @@ test('a text is kept across a reload, checked, handed in and self-assessed', asy
   await page.getByRole('link', { name: /Mejl till en kompis/ }).click()
   await page.getByRole('button', { name: 'Write it again' }).click()
   await expect(page.getByRole('textbox', { name: 'Your text' })).toHaveValue('')
+
+  // The second text is handed in and assessed like the first.
+  await page
+    .getByRole('textbox', { name: 'Your text' })
+    .fill('Hej Lina!\n\nVälkommen till SFI.\n\nKram\nSamira')
+  await page.getByRole('button', { name: 'Hand in' }).click()
+  await page
+    .getByRole('dialog', { name: 'Hand in your text?' })
+    .getByRole('button', { name: 'Hand in' })
+    .click()
+  await expect(
+    page.getByRole('heading', { name: 'Assess your answer' }),
+  ).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Result' })).toHaveCount(0)
+})
+
+test('the text is stored at once when the app is hidden, before the save timer', async ({
+  page,
+}) => {
+  await openToday(page)
+  await page.goto('exam/skriva/s-ny-lagenhet')
+  await page.getByRole('textbox', { name: 'Your text' }).fill('Hej Erik!')
+  // iOS hides the app before a force-quit. The timed save waits 400 ms, so a
+  // text found sooner was stored by the hide.
+  const stored = await page.evaluate(async () => {
+    Object.defineProperty(document, 'visibilityState', {
+      value: 'hidden',
+      configurable: true,
+    })
+    document.dispatchEvent(new Event('visibilitychange'))
+    const start = performance.now()
+    while (performance.now() - start < 250) {
+      const text = await new Promise<string | null>((resolve) => {
+        const open = indexedDB.open('learn-swedish')
+        open.onsuccess = () => {
+          const db = open.result
+          const all = db
+            .transaction('writings')
+            .objectStore('writings')
+            .getAll()
+          all.onsuccess = () => {
+            db.close()
+            resolve((all.result as { text: string }[])[0]?.text ?? null)
+          }
+        }
+      })
+      if (text) return text
+      await new Promise((r) => setTimeout(r, 20))
+    }
+    return null
+  })
+  expect(stored).toBe('Hej Erik!')
 })

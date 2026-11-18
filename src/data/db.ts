@@ -4,6 +4,7 @@ import type {
   PairSession,
   Recording,
   Setting,
+  StoredAudio,
   StudyDay,
   VocabCard,
   Writing,
@@ -21,6 +22,7 @@ export class SfiDb extends Dexie {
   writings!: EntityTable<Writing, 'id'>
   recordings!: EntityTable<Recording, 'id'>
   pairSessions!: EntityTable<PairSession, 'id'>
+  audio!: EntityTable<StoredAudio, 'id'>
   settings!: EntityTable<Setting, 'key'>
 
   constructor(name: string = DB_NAME) {
@@ -46,6 +48,35 @@ export class SfiDb extends Dexie {
     this.version(3).stores({
       pairSessions: 'id, topicId, createdAt',
     })
+    // Version 4 moves the sound of recordings and pair answers into its own
+    // table. Rows of version 3 carry their audio; it is moved, and each row
+    // keeps only its size.
+    this.version(4)
+      .stores({ audio: 'id' })
+      .upgrade(async (tx) => {
+        const moved: StoredAudio[] = []
+        await tx
+          .table('recordings')
+          .toCollection()
+          .modify((r: Record<string, unknown>) => {
+            const audio = r.audio as ArrayBuffer
+            moved.push({ id: r.id as string, audio })
+            r.byteLength = audio.byteLength
+            delete r.audio
+          })
+        await tx
+          .table('pairSessions')
+          .toCollection()
+          .modify((s: { id: string; turns: Record<string, unknown>[] }) => {
+            s.turns = s.turns.map((turn, i) => {
+              const { audio, ...rest } = turn as { audio: ArrayBuffer }
+              const audioId = `${s.id}:${i}`
+              moved.push({ id: audioId, audio })
+              return { ...rest, audioId, byteLength: audio.byteLength }
+            })
+          })
+        await tx.table('audio').bulkAdd(moved)
+      })
   }
 }
 

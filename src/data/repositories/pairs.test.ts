@@ -40,13 +40,19 @@ describe('pair sessions', () => {
     const reopened = new SfiDb()
     await reopened.open()
     const row = await reopened.pairSessions.get(id)
-    reopened.close()
-    expect(row?.turns.map((t) => [t.turn, new Uint8Array(t.audio)[0]])).toEqual(
-      [
-        [0, 0],
-        [1, 1],
-      ],
+    const sounds = await Promise.all(
+      row!.turns.map(async (t) => (await reopened.audio.get(t.audioId))!.audio),
     )
+    reopened.close()
+    expect(
+      row?.turns.map((t) => [
+        t.turn,
+        new Uint8Array(sounds[row!.turns.indexOf(t)]!)[0],
+      ]),
+    ).toEqual([
+      [0, 0],
+      [1, 1],
+    ])
     expect(row?.finishedAt).toBe(2000)
   })
 

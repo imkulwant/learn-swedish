@@ -4,6 +4,7 @@ import {
   deletePairSession,
   setPairStarred,
 } from '../../data/repositories/pairs'
+import { getAudio } from '../../data/repositories/recordings'
 import { toLocalDate } from '../../domain/dates'
 import { formatDayWithYear } from '../../domain/format'
 import { formatDuration, rubricShare } from '../../domain/speaking'
@@ -11,11 +12,14 @@ import type { PairSession } from '../../domain/types'
 import { Button } from '../../ui/Button'
 import { Dialog } from '../../ui/Dialog'
 
+const revoke = (url: string) =>
+  url.startsWith('blob:') && URL.revokeObjectURL(url)
+
 interface Part {
   who: 'partner' | 'you'
   text: string
-  /** A served file, or the bytes of a recorded answer. */
-  src: string | { audio: ArrayBuffer; mimeType: string }
+  /** A served file, or the stored sound of a recorded answer. */
+  src: string | { audioId: string; mimeType: string }
 }
 
 /** The discussion in order: each partner line, then the answer to it. */
@@ -54,32 +58,45 @@ export function ConversationPlayer({
 }) {
   const parts = partsOf(offered, session)
   const audio = useRef<HTMLAudioElement>(null)
-  const urls = useRef<string[]>([])
+  const urlsRef = useRef<string[]>([])
   const [playing, setPlaying] = useState<number | null>(null)
 
-  // Object URLs of the recorded answers live as long as the player.
+  // The answers' sound is read once per set of answers, not again when the
+  // session is starred or assessed. Their object URLs live as long as that.
+  const answersKey = `${session.id}:${session.turns.length}:${session.finishedAt}`
   useEffect(() => {
-    const made = parts.map((p) =>
-      typeof p.src === 'string'
-        ? p.src
-        : URL.createObjectURL(
-            new Blob([p.src.audio], { type: p.src.mimeType }),
-          ),
-    )
-    urls.current = made
-    return () =>
-      made.forEach((u) => u.startsWith('blob:') && URL.revokeObjectURL(u))
-    // The parts change only with the session.
+    let gone = false
+    let made: string[] = []
+    void Promise.all(
+      parts.map(async (p) => {
+        if (typeof p.src === 'string') return p.src
+        const bytes = await getAudio(p.src.audioId)
+        return bytes
+          ? URL.createObjectURL(new Blob([bytes], { type: p.src.mimeType }))
+          : ''
+      }),
+    ).then((urls) => {
+      made = urls
+      if (gone) urls.forEach(revoke)
+      else urlsRef.current = urls
+    })
+    return () => {
+      gone = true
+      made.forEach(revoke)
+    }
+    // The parts change only with the answers.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session])
+  }, [answersKey])
 
   function play(index: number) {
     const element = audio.current
-    if (!element || index >= urls.current.length) {
+    // An answer whose sound is gone is skipped.
+    while (index < urlsRef.current.length && !urlsRef.current[index]) index++
+    if (!element || index >= urlsRef.current.length) {
       setPlaying(null)
       return
     }
-    element.src = urls.current[index]!
+    element.src = urlsRef.current[index]!
     setPlaying(index)
     element.play().catch(() => setPlaying(null))
   }

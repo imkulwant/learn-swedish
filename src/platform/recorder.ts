@@ -54,35 +54,38 @@ export async function startRecording(): Promise<ActiveRecording> {
   })
   const release = () => stream.getTracks().forEach((t) => t.stop())
   const startedAt = Date.now()
+  // The recorder can stop by itself, for example when iOS takes the
+  // microphone for a call. What it recorded until then is kept.
+  let endedAt: number | null = null
+  const ended = new Promise<void>((resolve) => {
+    const end = () => {
+      endedAt ??= Date.now()
+      resolve()
+    }
+    recorder.addEventListener('stop', end, { once: true })
+    recorder.addEventListener('error', end, { once: true })
+  })
   // A timeslice makes the browser hand over data as it records, so a long
   // recording is not held in one piece until the end.
   recorder.start(1000)
 
   return {
     startedAt,
-    stop() {
-      return new Promise<Recorded>((resolve, reject) => {
-        recorder.addEventListener(
-          'stop',
-          () => {
-            release()
-            const type = recorder.mimeType || mimeType || 'audio/mp4'
-            new Blob(chunks, { type })
-              .arrayBuffer()
-              .then((bytes) =>
-                resolve({
-                  bytes,
-                  mimeType: type,
-                  durationMs: Date.now() - startedAt,
-                }),
-              )
-              .catch(() => reject(new RecorderFailure('failed')))
-          },
-          { once: true },
-        )
-        if (recorder.state === 'inactive') release()
-        else recorder.stop()
-      })
+    async stop() {
+      if (recorder.state !== 'inactive') recorder.stop()
+      await ended
+      release()
+      const type = recorder.mimeType || mimeType || 'audio/mp4'
+      if (!chunks.length) throw new RecorderFailure('failed')
+      try {
+        return {
+          bytes: await new Blob(chunks, { type }).arrayBuffer(),
+          mimeType: type,
+          durationMs: (endedAt ?? Date.now()) - startedAt,
+        }
+      } catch {
+        throw new RecorderFailure('failed')
+      }
     },
     cancel() {
       if (recorder.state !== 'inactive') recorder.stop()
