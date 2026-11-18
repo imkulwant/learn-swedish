@@ -1,4 +1,4 @@
-import type { Level, Skill } from './content/schema.ts'
+import type { AttemptSkill, Level } from './content/schema.ts'
 
 export type Id = string
 export type EpochMs = number
@@ -14,7 +14,7 @@ export interface Attempt {
   /** The pack version the item came from, so later content edits never rewrite history. */
   packVersion: number
   level: Level
-  skill: Skill
+  skill: AttemptSkill
   mode: AttemptMode
   score: number
   maxScore: number

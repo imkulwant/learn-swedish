@@ -6,6 +6,7 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parse } from 'yaml'
 import {
+  GrammarPack,
   ListeningPack,
   VocabPack,
   type Line,
@@ -17,6 +18,7 @@ import {
 export const ROOT = fileURLToPath(new URL('../../', import.meta.url))
 export const LISTENING_SOURCES = join(ROOT, 'content/listening')
 export const VOCAB_SOURCES = join(ROOT, 'content/vocab')
+export const GRAMMAR_SOURCES = join(ROOT, 'content/grammar')
 /** Where the made audio is kept, committed: one `<clip id>.m4a` per clip. */
 export const AUDIO_DIR = join(ROOT, 'content/audio')
 /** Where the build publishes the audio of shipped clips (generated). */
@@ -81,7 +83,7 @@ interface Parser<T> {
 }
 
 /** Every YAML pack in a folder, parsed; problems are returned, not thrown. */
-async function readPacks<T>(
+export async function readPacks<T>(
   dir: string,
   schema: Parser<T>,
 ): Promise<{ packs: T[]; problems: string[] }> {
@@ -109,6 +111,10 @@ export const readListeningSources = () =>
 
 export const readVocabSources = () =>
   readPacks<VocabPack>(VOCAB_SOURCES, VocabPack)
+
+/** Grammar packs have no audio; they are read here with the other sources. */
+export const readGrammarSources = () =>
+  readPacks<GrammarPack>(GRAMMAR_SOURCES, GrammarPack)
 
 /** Every audio source of every pack, drafts included. */
 export async function readAudioSources(): Promise<{

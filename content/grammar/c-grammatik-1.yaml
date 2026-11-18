@@ -1,0 +1,371 @@
+# Grammar pack 1: the grammar every C and D learner needs first.
+# Explanations are in English, in the Markdown subset of
+# src/domain/lessonText.ts: *Swedish* in single stars, **bold** in double.
+# Instructions to the learner (prompt) are in Swedish, as on the test; the
+# explanation after an answer (explain) is in English.
+id: c-grammatik-1
+version: 1
+level: C
+skill: grammatik
+title: Grammatik – paket 1
+lessons:
+  - id: g-v2
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27: [sprak.meningsbyggnad]
+    title: Verbet på plats två
+    en: The verb comes second
+    body: |
+      In a Swedish main clause, the verb that shows the tense always comes **second**. The first place can hold the subject, a time, a place or almost anything else.
+
+      - *Jag **börjar** jobbet klockan sju.*
+      - *Klockan sju **börjar** jag jobbet.*
+      - *På måndagar **börjar** jag jobbet klockan sju.*
+
+      ## Inversion
+
+      When something other than the subject comes first, the subject moves to just after the verb. This is called inversion (*omvänd ordföljd*).
+
+      | Place 1 | Verb | Subject | The rest |
+      | --- | --- | --- | --- |
+      | *I dag* | *jobbar* | *jag* | *hemma.* |
+      | *I Sverige* | *dricker* | *man* | *mycket kaffe.* |
+      | *Efter kursen* | *ska* | *hon* | *söka jobb.* |
+
+      A whole subordinate clause can take place 1. The verb still comes next: *När jag kom hem, **lagade** jag mat.*
+
+      ## Questions
+
+      A yes or no question starts with the verb: *Jobbar du i dag?* A question word takes place 1, and the verb comes second: *När **börjar** du?*
+
+      ## A common mistake
+
+      *I dag jag jobbar hemma* is wrong, because the verb comes third. Say *I dag **jobbar** jag hemma.*
+    items:
+      - type: order
+        id: g-v2-1
+        prompt: Börja med "I dag".
+        chunks: [I dag, jobbar, jag, hemma]
+        explain: I dag takes place 1, so the verb jobbar comes second and the subject jag after it.
+      - type: order
+        id: g-v2-2
+        prompt: Börja med "På lördagar".
+        chunks: [På lördagar, handlar, vi, mat, på torget]
+        explain: På lördagar is place 1. The verb handlar comes second, then the subject vi.
+      - type: order
+        id: g-v2-3
+        prompt: Gör en ja- eller nej-fråga.
+        chunks: [Har, du, tid, i morgon]
+        end: '?'
+        explain: A yes or no question starts with the verb.
+      - type: mc
+        id: g-v2-4
+        prompt: Vilken mening är rätt?
+        options:
+          - I går jag var sjuk.
+          - I går var jag sjuk.
+          - I går var sjuk jag.
+        answer: 1
+        explain: I går is place 1, so the verb var comes second and the subject jag right after it.
+      - type: order
+        id: g-v2-5
+        prompt: Börja med "När jag kom hem".
+        chunks: ['När jag kom hem,', lagade, jag, mat]
+        explain: The whole subordinate clause När jag kom hem is place 1. The verb lagade comes next, then jag.
+      - type: mc
+        id: g-v2-6
+        prompt: Vilken mening är rätt?
+        options:
+          - På kvällen tittar jag på tv.
+          - På kvällen jag tittar på tv.
+          - Jag på kvällen tittar på tv.
+        answer: 0
+        explain: På kvällen is place 1, so the verb tittar comes second.
+
+  - id: g-biff
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27: [sprak.meningsbyggnad]
+    title: Inte i bisatser
+    en: Where inte goes in a subordinate clause
+    body: |
+      In a main clause, *inte* comes after the verb: *Jag **kommer inte** i dag.*
+
+      In a subordinate clause, *inte* comes **before** the verb: *Jag är ledsen att jag **inte kan** komma i dag.* Words like *alltid*, *aldrig*, *ofta* and *redan* follow the same rule.
+
+      Remember it as **BIFF**: **B**isats, **I**nte **F**öre **F**initum. In a subordinate clause, *inte* comes before the verb that shows the tense.
+
+      | Main clause | Subordinate clause |
+      | --- | --- |
+      | *Han **har inte** tid.* | *Han säger att han **inte har** tid.* |
+      | *Hon **röker aldrig**.* | *Jag vet att hon **aldrig röker**.* |
+      | *Bussen **kommer ofta** sent.* | *Jag går, eftersom bussen **ofta kommer** sent.* |
+
+      A subordinate clause often starts with *att*, *eftersom*, *om*, *när*, *som*, *fast* or *därför att*. In it, the subject always comes first, so there is no inversion: *…om du **inte vill**.*
+    items:
+      - type: order
+        id: g-biff-1
+        prompt: Fortsätt meningen "Jag är ledsen eftersom …".
+        chunks: [jag, inte, kan, komma]
+        explain: Eftersom starts a subordinate clause, so inte comes before the verb kan.
+      - type: order
+        id: g-biff-2
+        prompt: Fortsätt meningen "Hon säger att …".
+        chunks: [hon, alltid, tar, bussen]
+        explain: After att, alltid comes before the verb tar, just like inte.
+      - type: mc
+        id: g-biff-3
+        prompt: Vilken mening är rätt?
+        options:
+          - Jag tror att han kommer inte i dag.
+          - Jag tror att han inte kommer i dag.
+          - Jag tror att inte han kommer i dag.
+        answer: 1
+        explain: In the subordinate clause after att, the subject han comes first, then inte, then the verb kommer.
+      - type: mc
+        id: g-biff-4
+        prompt: Vilken mening är rätt?
+        options:
+          - Vi har inte bil.
+          - Vi inte har bil.
+        answer: 0
+        explain: This is a main clause, so inte comes after the verb har. BIFF is only for subordinate clauses.
+      - type: order
+        id: g-biff-5
+        prompt: Fortsätt meningen "Ring mig om …".
+        chunks: [du, inte, hittar, adressen]
+        explain: Om starts a subordinate clause, so inte comes before the verb hittar.
+      - type: transform
+        id: g-biff-6
+        prompt: Börja med "Jag vet att".
+        from: Han dricker aldrig kaffe.
+        accept: [Jag vet att han aldrig dricker kaffe.]
+        explain: After att the sentence becomes a subordinate clause, so aldrig moves to before the verb dricker.
+
+  - id: g-perfekt
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27: [sprak.ordforrad-bojning]
+    title: Perfekt och pluskvamperfekt
+    en: The perfect and past perfect tenses
+    body: |
+      ## Perfekt
+
+      The perfect is *har* and the supine form of the verb. Use it for something that has happened, when you do not say when, or for something that started earlier and is still true.
+
+      - *Jag **har läst** boken.*
+      - *Vi **har bott** i Sverige i två år.*
+
+      When you say when it happened, use the past tense (preteritum) instead. Words like *i går*, *förra året* and *för två år sedan* name a finished time.
+
+      - *Jag **läste** boken i går.*
+      - *Vi **flyttade** hit för två år sedan.*
+
+      ## Pluskvamperfekt
+
+      The past perfect is *hade* and the supine. Use it for something that happened before something else in the past: *När jag kom, **hade** filmen redan **börjat**.*
+
+      ## The supine
+
+      | Infinitive | Past | Supine |
+      | --- | --- | --- |
+      | *jobba* | *jobbade* | *jobbat* |
+      | *stänga* | *stängde* | *stängt* |
+      | *köpa* | *köpte* | *köpt* |
+      | *bo* | *bodde* | *bott* |
+      | *skriva* | *skrev* | *skrivit* |
+      | *gå* | *gick* | *gått* |
+      | *vara* | *var* | *varit* |
+    items:
+      - type: gap
+        id: g-perfekt-1
+        prompt: Skriv verbet i perfekt.
+        sentence: Jag har ___ i Sverige i tre år.
+        hint: bo
+        accept: [bott]
+        explain: The supine of bo is bott. The perfect fits, because the speaker still lives in Sweden.
+      - type: gap
+        id: g-perfekt-2
+        prompt: Skriv verbet i perfekt.
+        sentence: Har du ___ brevet från Skatteverket?
+        hint: läsa
+        accept: [läst]
+        explain: The supine of läsa is läst.
+      - type: gap
+        id: g-perfekt-3
+        prompt: Skriv verbet i perfekt.
+        sentence: Jag har aldrig ___ i Norrland.
+        hint: vara
+        accept: [varit]
+        explain: The supine of vara is varit.
+      - type: gap
+        id: g-perfekt-4
+        prompt: Skriv rätt form av "ha".
+        sentence: Tåget ___ redan gått när vi kom till stationen.
+        accept: [hade]
+        explain: The train left before we arrived, both in the past, so the past perfect hade gått fits.
+      - type: mc
+        id: g-perfekt-5
+        prompt: Vilken form passar? Jag ___ körkort förra året.
+        options:
+          - har tagit
+          - tog
+          - tar
+        answer: 1
+        explain: Förra året names a finished time, so the past tense tog fits, not the perfect.
+      - type: transform
+        id: g-perfekt-6
+        prompt: Skriv meningen i perfekt.
+        from: Hon skriver ett mejl till chefen.
+        accept: [Hon har skrivit ett mejl till chefen.]
+        explain: The perfect is har and the supine. The supine of skriva is skrivit.
+      - type: transform
+        id: g-perfekt-7
+        prompt: Skriv meningen i perfekt.
+        from: Vi stänger butiken.
+        accept: [Vi har stängt butiken.]
+        explain: The supine of stänga is stängt.
+
+  - id: g-bestamd
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27: [sprak.ordforrad-bojning]
+    title: Bestämd form och adjektiv
+    en: Definite forms and adjective endings
+    body: |
+      Every noun is an *en* word or an *ett* word. The definite article goes on the end of the noun.
+
+      | Form | en word | ett word |
+      | --- | --- | --- |
+      | Indefinite | *en bil* | *ett hus* |
+      | Definite | *bilen* | *huset* |
+      | Plural | *bilar* | *hus* |
+      | Definite plural | *bilarna* | *husen* |
+
+      ## Adjectives
+
+      An adjective agrees with its noun. It takes *-t* with an *ett* word, and *-a* in the plural.
+
+      - *en **ny** bil*
+      - *ett **nytt** hus*
+      - *två **nya** bilar*
+
+      With the definite form, put *den*, *det* or *de* first. The adjective takes *-a*, and the noun is definite too.
+
+      - *den **nya** bilen*
+      - *det **nya** huset*
+      - *de **nya** bilarna*
+
+      After a verb such as *är*, the adjective still agrees: *Huset är **nytt**. Bilarna är **nya**.*
+    items:
+      - type: gap
+        id: g-bestamd-1
+        prompt: Skriv substantivet i bestämd form.
+        sentence: Jag hittar inte ___.
+        hint: en nyckel
+        accept: [nyckeln]
+        explain: Nyckel is an en word, so the definite form is nyckeln.
+      - type: gap
+        id: g-bestamd-2
+        prompt: Skriv substantivet i bestämd form.
+        sentence: ___ är stängt på söndagar.
+        hint: ett bibliotek
+        accept: [Biblioteket]
+        explain: Bibliotek is an ett word, so the definite form is biblioteket. That is also why the adjective is stängt.
+      - type: gap
+        id: g-bestamd-3
+        prompt: Skriv adjektivet i rätt form.
+        sentence: Vi har köpt ett ___ bord.
+        hint: stor
+        accept: [stort]
+        explain: Bord is an ett word, so the adjective takes -t.
+      - type: gap
+        id: g-bestamd-4
+        prompt: Skriv adjektivet i rätt form.
+        sentence: De ___ lägenheterna är dyra.
+        hint: ny
+        accept: [nya]
+        explain: After de, the adjective takes -a.
+      - type: mc
+        id: g-bestamd-5
+        prompt: Vilken form passar? Rummet är ___.
+        options:
+          - ljus
+          - ljust
+          - ljusa
+        answer: 1
+        explain: Rum is an ett word, so the adjective after är takes -t.
+      - type: gap
+        id: g-bestamd-6
+        prompt: Skriv substantivet i bestämd form plural.
+        sentence: Kan du hämta ___ på förskolan?
+        hint: ett barn
+        accept: [barnen]
+        explain: Barn is an ett word. Its plural is barn, and the definite plural is barnen.
+
+  - id: g-sambandsord
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27: [sprak.textbindning]
+    title: Sambandsord
+    en: Linking words
+    body: |
+      Linking words show how your ideas fit together. They make a text easier to follow, and the test looks for them when you write and speak.
+
+      | Meaning | Words |
+      | --- | --- |
+      | Adding | *och*, *också*, *dessutom* |
+      | Contrast | *men*, *fast*, *däremot* |
+      | Cause | *eftersom*, *för*, *därför att* |
+      | Result | *så*, *därför* |
+      | Time | *först*, *sedan*, *till sist*, *när* |
+
+      ## Word order after a linking word
+
+      - *och*, *men*, *för* and *så* join two main clauses, so the word order does not change: *Jag var trött, **så** jag gick hem.*
+      - *eftersom*, *därför att*, *när* and *fast* start a subordinate clause, where *inte* comes before the verb: *Jag gick hem **eftersom** jag inte mådde bra.*
+      - *därför*, *dessutom*, *sedan* and *däremot* take place 1 when they start a sentence, so the verb comes next: *Jag var sjuk. **Därför** stannade jag hemma.*
+    items:
+      - type: mc
+        id: g-samband-1
+        prompt: Välj rätt ord. Jag stannade hemma ___ jag var sjuk.
+        options: [eftersom, men, därför]
+        answer: 0
+        explain: Being ill is the cause, and eftersom gives a cause.
+      - type: mc
+        id: g-samband-2
+        prompt: Välj rätt ord. Jag ville gå på festen, ___ jag var tvungen att jobba.
+        options: [men, eftersom, därför]
+        answer: 0
+        explain: The second part goes against the first, so men fits.
+      - type: mc
+        id: g-samband-3
+        prompt: Välj rätt ord. Det regnade. ___ tog vi bussen.
+        options: [Därför, Eftersom, Fast]
+        answer: 0
+        explain: Taking the bus is the result of the rain. Därför takes place 1, so the verb tog comes next.
+      - type: order
+        id: g-samband-4
+        prompt: Bussen var försenad. Fortsätt med "Därför".
+        chunks: [Därför, kom, jag, för sent]
+        explain: Därför takes place 1, so the verb kom comes second and jag after it.
+      - type: mc
+        id: g-samband-5
+        prompt: Vilken mening är rätt?
+        options:
+          - Jag tycker om jobbet, fast lönen är låg.
+          - Jag tycker om jobbet, fast lönen låg är.
+          - Jag tycker om jobbet, fast är lönen låg.
+        answer: 0
+        explain: Fast starts a subordinate clause, where the subject lönen comes first and then the verb är.
+      - type: mc
+        id: g-samband-6
+        prompt: Välj rätt ord. ___ lagade jag mat, och sedan diskade jag.
+        options: [Först, Eftersom, Men]
+        answer: 0
+        explain: Först and sedan put events in order. Först takes place 1, so the verb lagade comes next.

@@ -33,6 +33,7 @@ import {
   clipSource,
   publishedAudioPath,
   readAudioSources,
+  readGrammarSources,
   readLock,
   sourceAudioFile,
   wordSource,
@@ -61,6 +62,9 @@ for (const file of (await readdir(READING_SOURCES))
 const audio = await readAudioSources()
 packs.push(...audio.listening, ...audio.vocab)
 problems.push(...audio.problems)
+const grammar = await readGrammarSources()
+packs.push(...grammar.packs)
+problems.push(...grammar.problems)
 problems.push(...packProblems(packs))
 
 const shipped = publishable(packs, includeDrafts)

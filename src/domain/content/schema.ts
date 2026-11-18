@@ -14,6 +14,10 @@ export type Level = (typeof LEVELS)[number]
 export const SKILLS = ['lasa', 'hora', 'skriva', 'tala'] as const
 export type Skill = (typeof SKILLS)[number]
 
+/** What an answer can practise: a part of the test, or grammar. */
+export const ATTEMPT_SKILLS = [...SKILLS, 'grammatik'] as const
+export type AttemptSkill = (typeof ATTEMPT_SKILLS)[number]
+
 const id = z
   .string()
   .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, 'ids are lower-case words joined by -')
@@ -215,14 +219,102 @@ export const CompiledVocabPack = VocabPack.extend({
 }).strict()
 export type CompiledVocabPack = z.infer<typeof CompiledVocabPack>
 
+/** The gap in a gap exercise's sentence. */
+export const GAP = '___'
+
+/**
+ * Put the chunks in order. `chunks` is listed in a right order; the app shows
+ * them shuffled. `alsoAccept` lists other right sentences made of the same chunks.
+ */
+const OrderItem = z
+  .object({
+    type: z.literal('order'),
+    id,
+    prompt: text,
+    chunks: z.array(text).min(3).max(10),
+    alsoAccept: z.array(text).optional(),
+    /** The sentence's last mark, shown after the chunks. */
+    end: z.enum(['.', '?', '!']).default('.'),
+    explain: text,
+  })
+  .strict()
+
+/** Type one form into the gap of a sentence, for example a verb in perfect. */
+const GapItem = z
+  .object({
+    type: z.literal('gap'),
+    id,
+    prompt: text,
+    /** One sentence with GAP where the answer goes. */
+    sentence: text,
+    /** Shown next to the gap, usually the word to inflect. */
+    hint: text.optional(),
+    accept: z.array(text).min(1),
+    explain: text,
+  })
+  .strict()
+
+/** Rewrite a sentence, for example from present to perfect. */
+const TransformItem = z
+  .object({
+    type: z.literal('transform'),
+    id,
+    prompt: text,
+    from: text,
+    /** Every right rewrite. The first is shown after a wrong answer. */
+    accept: z.array(text).min(1),
+    explain: text,
+  })
+  .strict()
+
+export const GrammarItem = z.discriminatedUnion('type', [
+  McItem,
+  OrderItem,
+  GapItem,
+  TransformItem,
+])
+export type GrammarItem = z.infer<typeof GrammarItem>
+export type OrderItem = z.infer<typeof OrderItem>
+export type GapItem = z.infer<typeof GapItem>
+export type TransformItem = z.infer<typeof TransformItem>
+
+export const GrammarLesson = z
+  .object({
+    id,
+    ...reviewFields,
+    kp27: z.array(z.enum(KP27_POINT_IDS)).min(1),
+    /** The lesson's name in Swedish, such as "Verbet på plats två". */
+    title: text,
+    /** The same in English. */
+    en: text,
+    /** The explanation, in the Markdown subset of lessonText.ts. */
+    body: text,
+    items: z.array(GrammarItem).min(1),
+  })
+  .strict()
+export type GrammarLesson = z.infer<typeof GrammarLesson>
+
+export const GrammarPack = z
+  .object({
+    id,
+    version: z.number().int().min(1),
+    level: z.enum(LEVELS),
+    skill: z.literal('grammatik'),
+    title: text,
+    /** In the order they are taught. */
+    lessons: z.array(GrammarLesson).min(1),
+  })
+  .strict()
+export type GrammarPack = z.infer<typeof GrammarPack>
+
 export const PackSummary = z
   .object({
     id,
     version: z.number().int(),
     level: z.enum(LEVELS),
-    skill: z.enum([...SKILLS, 'ord']),
+    skill: z.enum([...SKILLS, 'ord', 'grammatik']),
     title: text,
-    /** Texts in a reading pack, clips in a listening pack, words in a vocabulary pack. */
+    /** Texts, clips, words or lessons, by the kind of pack. */
     unitCount: z.number().int(),
     itemCount: z.number().int(),
     /** True when the pack holds items no reviewer has approved yet. */

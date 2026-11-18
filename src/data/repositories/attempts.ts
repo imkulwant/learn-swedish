@@ -1,4 +1,4 @@
-import type { Level, Skill } from '../../domain/content/schema'
+import type { AttemptSkill, Level, Skill } from '../../domain/content/schema'
 import type { Attempt } from '../../domain/types'
 import { db } from '../db'
 
@@ -33,6 +33,18 @@ export async function listAttempts(
     .equals([level, skill])
     .toArray()
   return rows.sort((a, b) => b.answeredAt - a.answeredAt)
+}
+
+/** The items of these levels answered at least once, for lesson progress. */
+export async function answeredItemIds(
+  levels: Level[],
+  skill: AttemptSkill,
+): Promise<Set<string>> {
+  const rows = await db.attempts
+    .where('[level+skill]')
+    .anyOf(levels.map((level) => [level, skill]))
+    .toArray()
+  return new Set(rows.map((r) => r.itemId))
 }
 
 export const countAttempts = (): Promise<number> => db.attempts.count()

@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import type { ListeningPack, ReadingPack } from './schema.ts'
+import type {
+  GrammarItem,
+  GrammarPack,
+  ListeningPack,
+  ReadingPack,
+} from './schema.ts'
 import { packProblems, publishable, textWords } from './validate.ts'
 
 const sentence = 'Det här är en mening med några ord i sig.' // 10 words
@@ -181,5 +186,99 @@ describe('listening packs', () => {
   it('ships draft clips only in previews', () => {
     expect(publishable([clipPack()], false)).toEqual([])
     expect(publishable([clipPack()], true)[0]?.clips).toHaveLength(1)
+  })
+})
+
+describe('grammar packs', () => {
+  const grammar = (
+    items: GrammarItem[],
+    body = 'The verb comes second: *Idag **har** jag tid.*',
+  ): GrammarPack => ({
+    id: 'g',
+    version: 1,
+    level: 'C',
+    skill: 'grammatik',
+    title: 'G',
+    lessons: [
+      {
+        id: 'l',
+        status: 'draft',
+        kp27: ['sprak.meningsbyggnad'],
+        title: 'Verbet på plats två',
+        en: 'Verb second',
+        body,
+        items,
+      },
+    ],
+  })
+  const order: GrammarItem = {
+    type: 'order',
+    id: 'o',
+    prompt: 'Börja med "Idag".',
+    chunks: ['Idag', 'har', 'jag', 'tid'],
+    alsoAccept: ['Jag har tid idag'],
+    end: '.',
+    explain: '-',
+  }
+  const gap: GrammarItem = {
+    type: 'gap',
+    id: 'g1',
+    prompt: 'Perfekt.',
+    sentence: 'Jag har ___ boken.',
+    hint: 'läsa',
+    accept: ['läst'],
+    explain: '-',
+  }
+  const transform: GrammarItem = {
+    type: 'transform',
+    id: 't1',
+    prompt: 'Skriv i perfekt.',
+    from: 'Jag läser boken.',
+    accept: ['Jag har läst boken.'],
+    explain: '-',
+  }
+
+  it('passes a valid lesson', () => {
+    expect(packProblems([grammar([order, gap, transform])])).toEqual([])
+  })
+
+  it('finds lesson text outside the Markdown subset', () => {
+    expect(packProblems([grammar([gap], '# Title')]).join()).toMatch(
+      /g\/l: body: .*a heading is one line/,
+    )
+  })
+
+  it('finds an also-accepted order made of other words', () => {
+    expect(
+      packProblems([
+        grammar([{ ...order, alsoAccept: ['Jag har tid nu'] }]),
+      ]).join(),
+    ).toMatch(/"Jag har tid nu" is not made of the chunks/)
+    expect(
+      packProblems([
+        grammar([{ ...order, alsoAccept: ['idag har jag tid'] }]),
+      ]).join(),
+    ).toMatch(/accepted orders repeat/)
+  })
+
+  it('finds a gap sentence without exactly one gap', () => {
+    for (const sentence of ['Jag har läst boken.', 'Jag ___ ___ boken.'])
+      expect(packProblems([grammar([{ ...gap, sentence }])]).join()).toMatch(
+        /needs exactly one ___/,
+      )
+  })
+
+  it('finds a rewrite that is the sentence itself', () => {
+    expect(
+      packProblems([
+        grammar([{ ...transform, accept: ['jag läser boken'] }]),
+      ]).join(),
+    ).toMatch(/an accepted answer is the sentence itself/)
+  })
+
+  it('ships draft lessons only in previews', () => {
+    const packs = [grammar([gap])]
+    expect(publishable(packs, false)).toEqual([])
+    expect(publishable(packs, true)).toEqual(packs)
   })
 })

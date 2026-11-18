@@ -2,7 +2,9 @@ import {
   CompiledListeningPack,
   CompiledVocabPack,
   ContentManifest,
+  GrammarPack,
   ReadingPack,
+  type GrammarLesson,
   type Level,
   type PackSummary,
   type Skill,
@@ -52,7 +54,10 @@ export async function listPacks(
   return packs.filter((p) => p.level === level && p.skill === skill)
 }
 
-async function packFile(id: string, skill: Skill | 'ord'): Promise<unknown> {
+async function packFile(
+  id: string,
+  skill: Skill | 'ord' | 'grammatik',
+): Promise<unknown> {
   const summary = (await loadManifest()).packs.find(
     (p) => p.id === id && p.skill === skill,
   )
@@ -74,9 +79,35 @@ export async function loadVocabPack(id: string): Promise<CompiledVocabPack> {
   return CompiledVocabPack.parse(await packFile(id, 'ord'))
 }
 
-/** Levels whose words someone preparing for `level` practises: C before D. */
-const vocabLevels = (level: Level): Level[] =>
+export async function loadGrammarPack(id: string): Promise<GrammarPack> {
+  return GrammarPack.parse(await packFile(id, 'grammatik'))
+}
+
+/**
+ * Levels whose words and lessons someone preparing for `level` practises:
+ * C before D.
+ */
+export const practiceLevels = (level: Level): Level[] =>
   level === 'D' ? ['C', 'D'] : ['C']
+
+export interface OfferedLesson {
+  lesson: GrammarLesson
+  pack: Pick<GrammarPack, 'id' | 'version' | 'level'>
+}
+
+/** The grammar lessons of these levels, in teaching order. */
+export async function loadLessons(levels: Level[]): Promise<OfferedLesson[]> {
+  const summaries = (await loadManifest()).packs
+    .filter((p) => p.skill === 'grammatik' && levels.includes(p.level))
+    .sort((a, b) => levels.indexOf(a.level) - levels.indexOf(b.level))
+  const packs = await Promise.all(summaries.map((p) => loadGrammarPack(p.id)))
+  return packs.flatMap((pack) =>
+    pack.lessons.map((lesson) => ({
+      lesson,
+      pack: { id: pack.id, version: pack.version, level: pack.level },
+    })),
+  )
+}
 
 export interface OfferedWord extends QueueWord {
   word: Word
@@ -93,7 +124,7 @@ export interface OfferedVocab {
 
 /** The words a learner preparing for `level` practises, C words first. */
 export async function loadOfferedVocab(level: Level): Promise<OfferedVocab> {
-  const levels = vocabLevels(level)
+  const levels = practiceLevels(level)
   const summaries = (await loadManifest()).packs
     .filter((p) => p.skill === 'ord' && levels.includes(p.level))
     .sort((a, b) => levels.indexOf(a.level) - levels.indexOf(b.level))

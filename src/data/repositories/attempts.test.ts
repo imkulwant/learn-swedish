@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { resetDb } from '../../test/db'
 import { SfiDb } from '../db'
 import {
+  answeredItemIds,
   listAttempts,
   oldestAttemptSince,
   recordAttempt,
@@ -26,6 +27,20 @@ const answer = (overrides: Partial<NewAttempt> = {}): NewAttempt => ({
 beforeEach(resetDb)
 
 describe('attempts', () => {
+  it('lists the grammar items answered, of the levels asked for only', async () => {
+    const grammar = { skill: 'grammatik', packId: 'g' } as const
+    await recordAttempt(answer({ ...grammar, itemId: 'c1', level: 'C' }))
+    await recordAttempt(
+      answer({ ...grammar, itemId: 'c1', level: 'C', score: 0 }),
+    )
+    await recordAttempt(answer({ ...grammar, itemId: 'd1' }))
+    await recordAttempt(answer({ itemId: 'reading' }))
+    expect([...(await answeredItemIds(['C'], 'grammatik'))]).toEqual(['c1'])
+    expect(
+      [...(await answeredItemIds(['C', 'D'], 'grammatik'))].sort(),
+    ).toEqual(['c1', 'd1'])
+  })
+
   it('reads back what was written after the database is reopened', async () => {
     const written = await recordAttempt(answer({ response: [2, null, 1] }))
     const reopened = new SfiDb()

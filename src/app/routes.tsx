@@ -3,6 +3,8 @@ import { ExamScreen } from '../features/exam/ExamScreen'
 import { ListeningDrillScreen } from '../features/exam/ListeningDrillScreen'
 import { PartScreen } from '../features/exam/PartScreen'
 import { ReadingDrillScreen } from '../features/exam/ReadingDrillScreen'
+import { GrammarScreen } from '../features/learn/grammar/GrammarScreen'
+import { LessonScreen } from '../features/learn/grammar/LessonScreen'
 import { LearnScreen } from '../features/learn/LearnScreen'
 import { VocabScreen } from '../features/learn/VocabScreen'
 import { ComingSoonScreen } from '../features/placeholder/ComingSoonScreen'
@@ -40,6 +42,8 @@ export function AppRoutes() {
         <Route path="exam/hora/:packId" element={<ListeningDrillScreen />} />
         <Route path="learn" element={<LearnScreen />} />
         <Route path="learn/ord" element={<VocabScreen />} />
+        <Route path="learn/grammatik" element={<GrammarScreen />} />
+        <Route path="learn/grammatik/:lessonId" element={<LessonScreen />} />
         <Route
           path="everyday"
           element={

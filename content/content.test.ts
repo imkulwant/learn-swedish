@@ -11,6 +11,7 @@ import {
 import {
   audioHash,
   readAudioSources,
+  readGrammarSources,
   readLock,
   sourceAudioFile,
 } from '../scripts/lib/listening.ts'
@@ -46,5 +47,23 @@ describe('the listening and word content in this repository', () => {
       expect(existsSync(sourceAudioFile(source.id)), source.id).toBe(true)
       expect(lock[source.id], source.id).toBe(audioHash(source))
     }
+  })
+})
+
+describe('the grammar content in this repository', () => {
+  it('parses, has no problems, and covers the grammar points of KP27', async () => {
+    const { packs, problems } = await readGrammarSources()
+    expect(problems).toEqual([])
+    expect(packs.length).toBeGreaterThan(0)
+    expect(packProblems(packs)).toEqual([])
+    const covered = new Set(
+      packs.flatMap((p) => p.lessons.flatMap((l) => l.kp27)),
+    )
+    for (const point of [
+      'sprak.meningsbyggnad',
+      'sprak.ordforrad-bojning',
+      'sprak.textbindning',
+    ] as const)
+      expect(covered.has(point), point).toBe(true)
   })
 })

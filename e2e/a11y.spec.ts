@@ -16,6 +16,8 @@ const SCREENS: [string, string][] = [
   ['exam/hora/d-hora-1', 'Höra D – paket 1'],
   ['learn', 'Learn'],
   ['learn/ord', 'Words'],
+  ['learn/grammatik', 'Grammar'],
+  ['learn/grammatik/g-v2', 'Verbet på plats två'],
 ]
 
 for (const [path, title] of SCREENS) {
@@ -47,6 +49,22 @@ test('a checked question with feedback stays accessible', async ({ page }) => {
   await group.getByLabel('Datorkunskap för nybörjare').check()
   await group.getByRole('button', { name: 'Check' }).click()
   await expect(group.getByRole('status')).toBeVisible()
+  const { violations } = await new AxeBuilder({ page }).analyze()
+  expect(violations.map((v) => `${v.id}: ${v.help}`)).toEqual([])
+})
+
+test('checked grammar exercises stay accessible', async ({ page }) => {
+  await page.goto('learn/grammatik/g-perfekt')
+  const gap = page.getByRole('group', { name: 'Skriv verbet i perfekt. (bo)' })
+  await gap.getByRole('textbox').fill('bodde')
+  await gap.getByRole('button', { name: 'Check' }).click()
+  await expect(gap.getByRole('status')).toBeVisible()
+  await page.goto('learn/grammatik/g-v2')
+  const order = page.getByRole('group', { name: 'Börja med "I dag".' })
+  for (const chunk of ['hemma', 'I dag', 'jag', 'jobbar'])
+    await order.getByRole('button', { name: chunk, exact: true }).click()
+  await order.getByRole('button', { name: 'Check' }).click()
+  await expect(order.getByRole('status')).toBeVisible()
   const { violations } = await new AxeBuilder({ page }).analyze()
   expect(violations.map((v) => `${v.id}: ${v.help}`)).toEqual([])
 })

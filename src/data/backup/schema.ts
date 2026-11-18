@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { LEVELS, SKILLS } from '../../domain/content/schema'
+import { ATTEMPT_SKILLS, LEVELS } from '../../domain/content/schema'
 import { isLocalDate } from '../../domain/dates'
 import type { Attempt, Setting, StudyDay, VocabCard } from '../../domain/types'
 
@@ -24,7 +24,7 @@ const attempt = z
     packId: shortId,
     packVersion: z.number().int().min(1),
     level: z.enum(LEVELS),
-    skill: z.enum(SKILLS),
+    skill: z.enum(ATTEMPT_SKILLS),
     mode: z.enum(['drill', 'mock', 'placement']),
     score: z.number().nonnegative(),
     maxScore: z.number().positive(),

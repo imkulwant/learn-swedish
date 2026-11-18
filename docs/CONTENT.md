@@ -8,6 +8,7 @@ Every pack is drafted, checked by `npm run content`, and reviewed by a native sp
 | `d-hora-1` | D | Höra | 5 clips | 18 | Reviewed by Anna, 2026-11-18 |
 | `d-ord-arbete` | D | Words: work | 30 words | – | Reviewed by Anna, 2026-11-18 |
 | `d-ord-halsa` | D | Words: health and care | 30 words | – | Reviewed by Anna, 2026-11-18 |
+| `c-grammatik-1` | C (also shown at D) | Grammar | 5 lessons | 31 exercises | Reviewed by Anna, 2026-11-18 |
 
 ## How to review a pack
 
@@ -35,3 +36,15 @@ Word packs are in `content/vocab/`. For each word please check:
 - `example`: one Swedish sentence and its English translation.
 
 Listen to each word in the app (Learn → Practise words, or `npm run dev`). The audio reads the first form.
+
+## Reviewing a grammar pack
+
+Grammar packs are in `content/grammar/`. Try them in the app with `npm run dev`, then Learn → Grammar. For each lesson please check:
+
+- `body`: the English explanation and every Swedish example in it (examples are between single stars).
+- Each exercise's `prompt` (Swedish), and its answers:
+  - `order`: `chunks` in a right order. If another order of the same chunks is also right, add it to `alsoAccept`, or it will be marked wrong.
+  - `gap` and `transform`: `accept` must list **every** right answer. Anything not listed is marked wrong.
+  - `mc`: exactly one right option, at `answer` (counting from 0).
+- `explain`: the English explanation shown after an answer.
+

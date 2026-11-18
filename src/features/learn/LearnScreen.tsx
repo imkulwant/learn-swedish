@@ -1,4 +1,5 @@
 import { Screen } from '../../ui/Screen'
+import { GrammarStatusCard } from './grammar/GrammarScreen'
 import { useOfferedVocab } from './useOfferedVocab'
 import { VocabStatusCard } from './VocabStatusCard'
 
@@ -8,6 +9,7 @@ export function LearnScreen() {
   return (
     <Screen title="Learn">
       <VocabStatusCard />
+      <GrammarStatusCard />
       {offered.status === 'ready' && offered.value.packs.length > 0 && (
         <section aria-label="Word packs" className="flex flex-col gap-2">
           <h2 className="text-sm text-muted">Word packs</h2>
@@ -34,9 +36,7 @@ export function LearnScreen() {
           Word packs appear here once a reviewer has checked them.
         </p>
       )}
-      <p className="text-sm text-muted">
-        Grammar lessons and pronunciation practice come later.
-      </p>
+      <p className="text-sm text-muted">Pronunciation practice comes later.</p>
     </Screen>
   )
 }

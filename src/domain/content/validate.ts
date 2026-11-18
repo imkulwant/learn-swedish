@@ -1,5 +1,9 @@
 import {
   FORM_COUNT,
+  GAP,
+  type GrammarItem,
+  type GrammarLesson,
+  type GrammarPack,
   type Item,
   type Level,
   type ListeningPack,
@@ -8,9 +12,12 @@ import {
   type VocabPack,
   type Word,
 } from './schema.ts'
+import { normalizeAnswer } from '../answerCheck.ts'
+import { acceptedOrders, shuffledChunks, wordBag } from '../grammar.ts'
+import { parseLesson } from '../lessonText.ts'
 import { KP27_POINT_IDS, type Kp27Point } from './kp27.ts'
 
-export type Pack = ReadingPack | ListeningPack | VocabPack
+export type Pack = ReadingPack | ListeningPack | VocabPack | GrammarPack
 
 /**
  * Word-count range of one reading text per level. C texts stay short; D allows
@@ -46,9 +53,10 @@ interface Unit {
   reviewedBy?: string
   reviewedAt?: string
   kp27: Kp27Point[]
-  items: Item[]
+  items: (Item | GrammarItem)[]
   words: number
-  range: { min: number; max: number }
+  /** The allowed word count, for texts and clips. */
+  range: { min: number; max: number } | null
 }
 
 export function packUnits(pack: Pack): Unit[] {
@@ -64,13 +72,15 @@ export function packUnits(pack: Pack): Unit[] {
       words: c.lines.reduce((n, l) => n + countWords(l.say ?? l.text), 0),
       range: CLIP_WORDS[pack.level],
     }))
+  if (pack.skill === 'grammatik')
+    return pack.lessons.map((l) => ({ ...l, words: 0, range: null }))
   // A word is a unit with no questions: its card is the practice.
   return pack.words.map((w) => ({
     ...w,
     kp27: ['sprak.ordforrad-bojning' as const],
     items: [],
     words: 0,
-    range: { min: 0, max: 0 },
+    range: null,
   }))
 }
 
@@ -90,10 +100,14 @@ function wordProblems(word: Word): string[] {
   return problems.map((p) => `word ${word.id}: ${p}`)
 }
 
-function itemProblems(item: Item): string[] {
+/** Problems in a lesson's explanation, which the app renders as written. */
+const lessonProblems = (lesson: GrammarLesson): string[] =>
+  parseLesson(lesson.body).problems.map((p) => `body: ${p}`)
+
+function itemProblems(item: Item | GrammarItem): string[] {
   const problems: string[] = []
   const unique = (list: string[]) =>
-    new Set(list.map((s) => s.trim().toLowerCase())).size === list.length
+    new Set(list.map(normalizeAnswer)).size === list.length
 
   if (item.type === 'mc') {
     if (item.answer >= item.options.length)
@@ -116,6 +130,27 @@ function itemProblems(item: Item): string[] {
       problems.push('two pairs share one answer')
     if (!unique(item.options)) problems.push('options repeat')
   }
+  if (item.type === 'order') {
+    const bag = wordBag(item.chunks.join(' '))
+    for (const other of item.alsoAccept ?? [])
+      if (wordBag(other) !== bag)
+        problems.push(`"${other}" is not made of the chunks`)
+    if (!unique(acceptedOrders(item))) problems.push('accepted orders repeat')
+    if (!shuffledChunks(item))
+      problems.push('the chunks cannot be shuffled into a wrong order')
+  }
+  if (item.type === 'gap' && item.sentence.split(GAP).length !== 2)
+    problems.push(`the sentence needs exactly one ${GAP}`)
+  if (
+    (item.type === 'gap' || item.type === 'transform') &&
+    !unique(item.accept)
+  )
+    problems.push('accepted answers repeat')
+  if (
+    item.type === 'transform' &&
+    item.accept.some((a) => normalizeAnswer(a) === normalizeAnswer(item.from))
+  )
+    problems.push('an accepted answer is the sentence itself')
   return problems.map((p) => `item ${item.id}: ${p}`)
 }
 
@@ -143,13 +178,20 @@ export function packProblems(packs: Pack[]): string[] {
           )
         else headwords.set(key, pack.id)
       }
+    if (pack.skill === 'grammatik')
+      for (const lesson of pack.lessons)
+        problems.push(
+          ...lessonProblems(lesson).map((p) => `${pack.id}/${lesson.id}: ${p}`),
+        )
     for (const unit of packUnits(pack)) {
       const where = `${pack.id}/${unit.id}`
       claim(unit.id, where)
-      const { min, max } = unit.range
-      if (pack.skill !== 'ord' && (unit.words < min || unit.words > max))
+      if (
+        unit.range &&
+        (unit.words < unit.range.min || unit.words > unit.range.max)
+      )
         problems.push(
-          `${where}: ${unit.words} words, outside ${min}-${max} for level ${pack.level}`,
+          `${where}: ${unit.words} words, outside ${unit.range.min}-${unit.range.max} for level ${pack.level}`,
         )
       if (unit.status === 'reviewed' && !(unit.reviewedBy && unit.reviewedAt))
         problems.push(`${where}: reviewed without reviewedBy and reviewedAt`)
@@ -179,7 +221,9 @@ export function publishable<P extends Pack>(
         ? { ...pack, texts: keep(pack.texts, includeDrafts) }
         : pack.skill === 'hora'
           ? { ...pack, clips: keep(pack.clips, includeDrafts) }
-          : { ...pack, words: keep(pack.words, includeDrafts) },
+          : pack.skill === 'grammatik'
+            ? { ...pack, lessons: keep(pack.lessons, includeDrafts) }
+            : { ...pack, words: keep(pack.words, includeDrafts) },
     )
     .filter((pack) => packUnits(pack).length > 0) as P[]
 }

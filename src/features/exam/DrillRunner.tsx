@@ -1,13 +1,11 @@
 import { useState, type ReactNode } from 'react'
 import { Link } from 'react-router'
-import { recordAttempt } from '../../data/repositories/attempts'
 import type { Item, Level, Skill } from '../../domain/content/schema'
-import { dataMarker } from '../../platform/dataMarker'
-import { reportStorageFailure } from '../../platform/storageFailure'
 import { Button } from '../../ui/Button'
 import { MatchQuestion } from './items/MatchQuestion'
 import { McQuestion } from './items/McQuestion'
 import { ShortQuestion } from './items/ShortQuestion'
+import { storeAnswer } from './items/storeAnswer'
 import type { Answered, OnAnswered } from './items/types'
 import { ReadinessCard } from './ReadinessCard'
 
@@ -93,24 +91,7 @@ export function DrillRunner({
   const last = index === units.length - 1
 
   async function answered(item: Item, answer: Answered) {
-    // The answer counts only once it is stored. A device that refuses writes
-    // opens the storage-failure gate, and any failure leaves the question open.
-    try {
-      await recordAttempt({
-        ...answer,
-        itemId: item.id,
-        packId: pack.id,
-        packVersion: pack.version,
-        level: pack.level,
-        skill: pack.skill,
-        mode: 'drill',
-      })
-    } catch (error) {
-      reportStorageFailure(error)
-      throw error
-    }
-    // From now on, an empty database at launch means progress was lost.
-    dataMarker.mark()
+    await storeAnswer(pack, item.id, answer)
     setAnswers((a) => ({ ...a, [item.id]: answer }))
   }
 

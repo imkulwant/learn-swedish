@@ -49,6 +49,13 @@ describe('backup', () => {
       maxScore: 4,
       response: [1, null, 0],
     })
+    await recordAttempt({
+      ...answer('g'),
+      packId: 'c-grammatik-1',
+      level: 'C',
+      skill: 'grammatik',
+      response: 'Idag har jag tid',
+    })
     const before = await snapshot()
 
     const backup = await roundTrip()
