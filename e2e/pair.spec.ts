@@ -60,7 +60,7 @@ test('a discussion with the scripted partner works offline, is stored turn by tu
     await discussion(page).getByRole('button', { name: 'Done' }).click()
   }
   await expect(discussion(page)).toContainText(
-    'The partner ends the discussion',
+    'The partner ends the conversation',
   )
   await skipPartner(page)
 

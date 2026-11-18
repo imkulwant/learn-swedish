@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { appUrl, type OfferedPair } from '../../data/content'
+import { appUrl, type PartnerScript } from '../../data/content'
 import { addPairTurn, finishPairSession } from '../../data/repositories/pairs'
 import { formatDuration } from '../../domain/speaking'
 import {
@@ -28,6 +28,20 @@ const MIC_ERRORS: Record<RecorderFailure['reason'], string> = {
   failed: 'Recording could not start. Try again.',
 }
 
+/** What the learner might say now, for role-plays. */
+function Hint({ script, turn }: { script: PartnerScript; turn: number }) {
+  const hint = script.hints?.[turn]
+  if (!hint) return null
+  return (
+    <p className="text-sm text-muted">
+      {hint.en} For example:{' '}
+      <span lang="sv" className="italic">
+        {hint.example}
+      </span>
+    </p>
+  )
+}
+
 /**
  * A discussion with a scripted partner. The partner says a line, the learner
  * taps to answer and taps when done, and the next line plays. One audio
@@ -35,13 +49,13 @@ const MIC_ERRORS: Record<RecorderFailure['reason'], string> = {
  * play the following lines too.
  */
 export function ScriptedPartner({
-  offered,
+  script,
   onFinished,
 }: {
-  offered: OfferedPair
+  script: PartnerScript
   onFinished: (sessionId: string) => void
 }) {
-  const { topic, pack } = offered
+  const { pack } = script
   const [phase, setPhase] = useState<Phase>({ name: 'idle' })
   const [showText, setShowText] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -56,20 +70,21 @@ export function ScriptedPartner({
 
   useEffect(() => () => active.current?.cancel(), [])
 
-  const last = topic.partner.length - 1
+  const rolePlay = script.hints !== undefined
+  const last = script.partner.length - 1
   const lineOf = (p: Phase) =>
     p.name === 'closing'
-      ? topic.closing
+      ? script.closing
       : 'turn' in p
-        ? topic.partner[p.turn]!
+        ? script.partner[p.turn]!
         : null
 
   function speak(next: Phase & ({ name: 'partner' } | { name: 'closing' })) {
     const element = audio.current!
     element.src = appUrl(
       next.name === 'closing'
-        ? offered.closingAudio
-        : offered.turnAudio[next.turn]!,
+        ? script.closingAudio
+        : script.turnAudio[next.turn]!,
     )
     setPhase(next)
     setBlocked(false)
@@ -81,7 +96,11 @@ export function ScriptedPartner({
     if (phase.name === 'partner') setPhase({ name: 'answer', turn: phase.turn })
     else if (phase.name === 'closing' && session.current) {
       const id = session.current
-      void finishPairSession(id).then(() => onFinished(id))
+      // The answers are already stored, so the review opens even if marking
+      // the end fails; the failure is still reported.
+      void finishPairSession(id)
+        .catch((error: unknown) => reportStorageFailure(error))
+        .finally(() => onFinished(id))
     }
   }
 
@@ -111,7 +130,7 @@ export function ScriptedPartner({
       const recorded = await recording.stop()
       session.current = await addPairTurn(
         {
-          topicId: topic.id,
+          topicId: script.id,
           packId: pack.id,
           packVersion: pack.version,
           level: pack.level,
@@ -156,10 +175,13 @@ export function ScriptedPartner({
         <>
           <p className="text-sm text-muted">
             The partner speaks first. After each line, tap Answer, speak, and
-            tap Done. Use the mind map and the phrases.
+            tap Done.{' '}
+            {rolePlay
+              ? 'Each turn has a hint.'
+              : 'Use the mind map and the phrases.'}
           </p>
           <Button onClick={() => speak({ name: 'partner', turn: 0 })}>
-            Start the discussion
+            {rolePlay ? 'Start the role-play' : 'Start the discussion'}
           </Button>
         </>
       )}
@@ -167,8 +189,8 @@ export function ScriptedPartner({
         <div className="flex flex-col gap-2 rounded-card border border-border bg-surface p-4">
           <p className="font-semibold">
             {phase.name === 'closing'
-              ? 'The partner ends the discussion'
-              : `The partner speaks (${phase.turn + 1} of ${topic.partner.length})`}
+              ? 'The partner ends the conversation'
+              : `The partner speaks (${phase.turn + 1} of ${script.partner.length})`}
           </p>
           {unplayable && (
             <>
@@ -188,6 +210,7 @@ export function ScriptedPartner({
       {phase.name === 'answer' && (
         <div className="flex flex-col gap-2 rounded-card border border-accent bg-surface p-4">
           <p className="font-semibold">Your turn</p>
+          <Hint script={script} turn={phase.turn} />
           <Button onClick={() => void answer(phase.turn)}>Answer</Button>
           <Button
             variant="secondary"
@@ -200,6 +223,7 @@ export function ScriptedPartner({
       {phase.name === 'recording' && (
         <div className="flex flex-col items-center gap-2 rounded-card border border-danger bg-surface p-4">
           <p className="text-sm text-danger">● Recording your answer</p>
+          <Hint script={script} turn={phase.turn} />
           <p className="text-3xl font-bold tabular-nums" role="timer">
             {formatDuration(now - phase.active.startedAt)}
           </p>

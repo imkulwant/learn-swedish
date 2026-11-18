@@ -15,7 +15,7 @@ export const SKILLS = ['lasa', 'hora', 'skriva', 'tala'] as const
 export type Skill = (typeof SKILLS)[number]
 
 /** What an answer can practise: a part of the test, or grammar. */
-export const ATTEMPT_SKILLS = [...SKILLS, 'grammatik'] as const
+export const ATTEMPT_SKILLS = [...SKILLS, 'grammatik', 'vardag'] as const
 export type AttemptSkill = (typeof ATTEMPT_SKILLS)[number]
 
 const id = z
@@ -166,6 +166,72 @@ export const CompiledListeningPack = ListeningPack.extend({
   audio: z.record(z.string(), z.string().regex(/^audio\/[a-z0-9-]+\.m4a$/)),
 }).strict()
 export type CompiledListeningPack = z.infer<typeof CompiledListeningPack>
+
+/** A key phrase of an everyday scenario, with audio. */
+const Phrase = z
+  .object({
+    sv: text,
+    en: text,
+    /** What the voice reads, when it must differ. */
+    say: text.optional(),
+  })
+  .strict()
+export type Phrase = z.infer<typeof Phrase>
+
+/**
+ * An everyday situation, such as calling the health centre: key phrases, a
+ * dialogue to listen to with questions, and a role-play with a scripted
+ * partner. The review fields of the scenario cover all three.
+ */
+export const Scenario = z
+  .object({
+    id,
+    ...reviewFields,
+    kp27: z.array(z.enum(KP27_POINT_IDS)).min(1),
+    theme: text,
+    title: text,
+    en: text,
+    /** The situation, in English. */
+    about: text,
+    phrases: z.array(Phrase).min(3),
+    /** The scenario's review fields, KP27 points and theme cover it. */
+    dialog: ListeningClip.omit({
+      status: true,
+      reviewedBy: true,
+      reviewedAt: true,
+      kp27: true,
+      theme: true,
+    }),
+    roleplay: z
+      .object({
+        /** The learner's part, in English. */
+        intro: text,
+        partner: z.array(Line).min(2),
+        closing: Line,
+        /** What to say after each partner line: the job in English, and an example. */
+        hints: z.array(z.object({ en: text, example: text }).strict()),
+      })
+      .strict(),
+  })
+  .strict()
+export type Scenario = z.infer<typeof Scenario>
+
+export const ScenarioPack = z
+  .object({
+    id,
+    version: z.number().int().min(1),
+    level: z.enum(LEVELS),
+    skill: z.literal('vardag'),
+    title: text,
+    scenarios: z.array(Scenario).min(1),
+  })
+  .strict()
+export type ScenarioPack = z.infer<typeof ScenarioPack>
+
+export const CompiledScenarioPack = ScenarioPack.extend({
+  audio: z.record(z.string(), z.string().regex(/^audio\/[a-z0-9-]+\.m4a$/)),
+}).strict()
+export type CompiledScenarioPack = z.infer<typeof CompiledScenarioPack>
 
 export const PARTS_OF_SPEECH = ['noun', 'verb', 'adjective', 'phrase'] as const
 export type PartOfSpeech = (typeof PARTS_OF_SPEECH)[number]
@@ -435,7 +501,7 @@ export const PackSummary = z
     id,
     version: z.number().int(),
     level: z.enum(LEVELS),
-    skill: z.enum([...SKILLS, 'ord', 'grammatik']),
+    skill: z.enum([...SKILLS, 'ord', 'grammatik', 'vardag']),
     title: text,
     /** Texts, clips, words or lessons, by the kind of pack. */
     unitCount: z.number().int(),

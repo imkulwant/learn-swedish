@@ -8,12 +8,14 @@ import { parse } from 'yaml'
 import {
   GrammarPack,
   ListeningPack,
+  ScenarioPack,
   SpeakingPack,
   VocabPack,
   WritingPack,
   type Line,
   type ListeningClip,
   type PairTopic,
+  type Scenario,
   type SpeakingTask,
   type Voice,
   type Word,
@@ -25,6 +27,7 @@ export const VOCAB_SOURCES = join(ROOT, 'content/vocab')
 export const GRAMMAR_SOURCES = join(ROOT, 'content/grammar')
 export const WRITING_SOURCES = join(ROOT, 'content/writing')
 export const SPEAKING_SOURCES = join(ROOT, 'content/speaking')
+export const SCENARIO_SOURCES = join(ROOT, 'content/everyday')
 /** Where the made audio is kept, committed: one `<clip id>.m4a` per clip. */
 export const AUDIO_DIR = join(ROOT, 'content/audio')
 /** Where the build publishes the audio of shipped clips (generated). */
@@ -75,6 +78,31 @@ export const pairAudio = (
     key: `${topic.id}-${n}`,
     source: { id: `par-${topic.id}-${n}`, kind: 'par', lines: [line] },
   }))
+
+/**
+ * The audio of a scenario: its dialogue, each key phrase, and each line of the
+ * role-play partner. Keyed as the compiled pack lists them.
+ */
+export function scenarioAudio(
+  scenario: Scenario,
+): { key: string; source: AudioSource }[] {
+  const { id, dialog, phrases, roleplay } = scenario
+  const one = (key: string, line: Line) => ({
+    key: `${id}-${key}`,
+    source: { id: `vardag-${id}-${key}`, kind: 'vardag', lines: [line] },
+  })
+  return [
+    {
+      key: dialog.id,
+      source: { id: dialog.id, kind: dialog.kind, lines: dialog.lines },
+    },
+    ...phrases.map((p, i) =>
+      one(`fras-${i + 1}`, { voice: WORD_VOICE, text: p.sv, say: p.say }),
+    ),
+    ...roleplay.partner.map((line, i) => one(`roll-${i + 1}`, line)),
+    one('roll-slut', roleplay.closing),
+  ]
+}
 
 /** The fingerprint of what a source's audio says and how it was made. */
 export function audioHash(source: Pick<AudioSource, 'kind' | 'lines'>): string {
@@ -147,6 +175,9 @@ export const readGrammarSources = () =>
 export const readWritingSources = () =>
   readPacks<WritingPack>(WRITING_SOURCES, WritingPack)
 
+export const readScenarioSources = () =>
+  readPacks<ScenarioPack>(SCENARIO_SOURCES, ScenarioPack)
+
 export const readSpeakingSources = () =>
   readPacks<SpeakingPack>(SPEAKING_SOURCES, SpeakingPack)
 
@@ -156,11 +187,13 @@ export async function readAudioSources(): Promise<{
   listening: ListeningPack[]
   vocab: VocabPack[]
   speaking: SpeakingPack[]
+  everyday: ScenarioPack[]
   problems: string[]
 }> {
   const l = await readListeningSources()
   const v = await readVocabSources()
   const t = await readSpeakingSources()
+  const e = await readScenarioSources()
   const sources = [
     ...l.packs.flatMap((p) => p.clips.map(clipSource)),
     ...v.packs.flatMap((p) => p.words.map(wordSource)),
@@ -168,8 +201,11 @@ export async function readAudioSources(): Promise<{
     ...t.packs.flatMap((p) =>
       p.pairs.flatMap((topic) => pairAudio(topic).map((a) => a.source)),
     ),
+    ...e.packs.flatMap((p) =>
+      p.scenarios.flatMap((s) => scenarioAudio(s).map((a) => a.source)),
+    ),
   ]
-  const problems = [...l.problems, ...v.problems, ...t.problems]
+  const problems = [...l.problems, ...v.problems, ...t.problems, ...e.problems]
   // Clip ids and word and speaking audio ids ("ord-…", "tala-…") share one
   // folder of files.
   const seen = new Set<string>()
@@ -182,6 +218,7 @@ export async function readAudioSources(): Promise<{
     listening: l.packs,
     vocab: v.packs,
     speaking: t.packs,
+    everyday: e.packs,
     problems,
   }
 }

@@ -9,7 +9,8 @@ import { storeAnswer } from './items/storeAnswer'
 import type { Answered, OnAnswered } from './items/types'
 import { ReadinessCard } from './ReadinessCard'
 
-function Question({
+/** One question of any reading or listening format. */
+export function Question({
   item,
   onAnswered,
 }: {

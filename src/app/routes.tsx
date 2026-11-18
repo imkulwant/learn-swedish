@@ -1,4 +1,6 @@
 import { Link, Route, Routes } from 'react-router'
+import { EverydayScreen } from '../features/everyday/EverydayScreen'
+import { ScenarioScreen } from '../features/everyday/ScenarioScreen'
 import { ExamScreen } from '../features/exam/ExamScreen'
 import { ListeningDrillScreen } from '../features/exam/ListeningDrillScreen'
 import { PartScreen } from '../features/exam/PartScreen'
@@ -54,15 +56,8 @@ export function AppRoutes() {
         <Route path="learn/ord" element={<VocabScreen />} />
         <Route path="learn/grammatik" element={<GrammarScreen />} />
         <Route path="learn/grammatik/:lessonId" element={<LessonScreen />} />
-        <Route
-          path="everyday"
-          element={
-            <ComingSoonScreen
-              title="Everyday"
-              description="Role-plays for the health centre, work, school, the landlord and more."
-            />
-          }
-        />
+        <Route path="everyday" element={<EverydayScreen />} />
+        <Route path="everyday/:scenarioId" element={<ScenarioScreen />} />
         <Route
           path="progress"
           element={

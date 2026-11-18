@@ -4,6 +4,7 @@ import type {
   GrammarPack,
   ListeningPack,
   ReadingPack,
+  ScenarioPack,
 } from './schema.ts'
 import { packProblems, publishable, textWords } from './validate.ts'
 
@@ -280,5 +281,92 @@ describe('grammar packs', () => {
     const packs = [grammar([gap])]
     expect(publishable(packs, false)).toEqual([])
     expect(publishable(packs, true)).toEqual(packs)
+  })
+})
+
+describe('everyday scenarios', () => {
+  const line = {
+    voice: 'alma',
+    text: 'Hej, hur kan jag hjälpa dig med det här i dag?',
+  } as const
+  const pack = (
+    overrides: Partial<ScenarioPack['scenarios'][number]> = {},
+  ): ScenarioPack => ({
+    id: 'vardag-t',
+    version: 1,
+    level: 'D',
+    skill: 'vardag',
+    title: 'V',
+    scenarios: [
+      {
+        id: 'v-t',
+        status: 'draft',
+        kp27: ['samtala.anpassning'],
+        theme: 'hälsa',
+        title: 'T',
+        en: 'T',
+        about: 'A',
+        phrases: [
+          { sv: 'Hej', en: 'Hi' },
+          { sv: 'Tack', en: 'Thanks' },
+          { sv: 'Hej då', en: 'Bye' },
+        ],
+        dialog: {
+          id: 'v-t-dialog',
+          kind: 'dialog',
+          instruction: 'Lyssna.',
+          title: 'D',
+          lines: [line, line, line],
+          items: [
+            {
+              type: 'mc',
+              id: 'v-t-1',
+              prompt: '?',
+              options: ['a', 'b'],
+              answer: 0,
+              explain: '-',
+            },
+          ],
+        },
+        roleplay: {
+          intro: 'I',
+          partner: [line, line],
+          closing: line,
+          hints: [
+            { en: 'Say hi.', example: 'Hej!' },
+            { en: 'Say thanks.', example: 'Tack!' },
+          ],
+        },
+        ...overrides,
+      },
+    ],
+  })
+
+  it('passes a valid scenario', () => {
+    expect(packProblems([pack()])).toEqual([])
+  })
+
+  it('needs one hint per partner line', () => {
+    const p = pack()
+    p.scenarios[0]!.roleplay.hints.pop()
+    expect(packProblems([p]).join()).toMatch(
+      /one hint per partner line \(2\), not 1/,
+    )
+  })
+
+  it('refuses a dialogue id that looks like generated audio, and ids used twice', () => {
+    const p = pack()
+    p.scenarios[0]!.dialog.id = 'v-t-roll-1'
+    expect(packProblems([p]).join()).toMatch(
+      /looks like a phrase or role-play audio name/,
+    )
+    const q = pack()
+    q.scenarios[0]!.dialog.id = 'v-t'
+    expect(packProblems([q]).join()).toMatch(/id v-t is used twice/)
+  })
+
+  it('ships draft scenarios only in previews', () => {
+    expect(publishable([pack()], false)).toEqual([])
+    expect(publishable([pack()], true)).toHaveLength(1)
   })
 })

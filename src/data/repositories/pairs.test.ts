@@ -5,6 +5,7 @@ import {
   addPairTurn,
   assessPairSession,
   finishPairSession,
+  latestPairSessions,
   listPairSessions,
   setPairStarred,
 } from './pairs'
@@ -103,5 +104,16 @@ describe('pair sessions', () => {
     const left = (await listPairSessions(source.topicId)).map((s) => s.id)
     expect(left).toEqual([kept])
     expect(left).not.toContain(old)
+  })
+
+  it('keeps a role-play out of Tala readiness and the pair list', async () => {
+    await addPairTurn({ ...source, topicId: 'v-vardcentralen' }, null, turn(0))
+    expect(await getReadiness('D', 'tala')).toMatchObject({
+      status: 'insufficient',
+      count: 0,
+    })
+    const latest = await latestPairSessions()
+    expect(latest.has('v-vardcentralen')).toBe(true)
+    expect(latest.has(source.topicId)).toBe(false)
   })
 })

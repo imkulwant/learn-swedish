@@ -1,0 +1,368 @@
+# Everyday scenarios, pack 1: health and work.
+# Each scenario has key phrases (read by alma), a dialogue with questions, and
+# a role-play: the partner says one line at a time, and the learner answers
+# with the help of a hint. Facts about real services are kept general.
+id: vardag-1
+version: 1
+level: D
+skill: vardag
+title: Vardag – paket 1
+scenarios:
+  - id: v-vardcentralen
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27:
+      [
+        lyssna-lasa.berattelser-nyheter-instruktioner,
+        samtala.onskemal-asikter,
+        samtala.anpassning,
+        sprak.uttal,
+      ]
+    theme: hälsa och vård
+    title: Ringa vårdcentralen
+    en: Calling the health centre
+    about: You call the health centre to book an appointment because you are ill.
+    phrases:
+      - sv: Jag skulle vilja boka en tid.
+        en: I would like to book an appointment.
+      - sv: Jag har haft feber i tre dagar.
+        en: I have had a fever for three days.
+      - sv: Det gör ont i halsen.
+        en: My throat hurts.
+      - sv: Har ni någon tid i dag?
+        en: Do you have an appointment today?
+      - sv: Det passar bra.
+        en: That suits me fine.
+      - sv: Kan du upprepa, tack?
+        en: Could you say that again, please?
+    dialog:
+      id: v-vardcentralen-dialog
+      kind: dialog
+      instruction: Lyssna på samtalet och svara på frågorna.
+      title: Samtal till vårdcentralen
+      lines:
+        - voice: alma
+          speaker: Lena
+          text: Vårdcentralen Ekdala, det är Lena.
+        - voice: nst
+          speaker: Ali
+          text: Hej, jag heter Ali Haddad. Jag skulle vilja boka en tid.
+        - voice: alma
+          speaker: Lena
+          text: Vad gäller det?
+        - voice: nst
+          speaker: Ali
+          text: Jag har haft feber och ont i halsen sedan i söndags.
+        - voice: alma
+          speaker: Lena
+          text: Hur hög är febern?
+        - voice: nst
+          speaker: Ali
+          text: I morse var den 38,5.
+          say: I morse var den trettioåtta komma fem.
+        - voice: alma
+          speaker: Lena
+          text: Okej. Jag har en tid i morgon klockan 9.15. Passar det?
+          say: Okej. Jag har en tid i morgon klockan kvart över nio. Passar det?
+        - voice: nst
+          speaker: Ali
+          text: Ja, det passar bra.
+        - voice: alma
+          speaker: Lena
+          text: Bra. Ta med legitimation. Om du blir sämre i natt kan du ringa 1177.
+          say: Bra. Ta med legitimation. Om du blir sämre i natt kan du ringa elva sjuttiosju.
+        - voice: nst
+          speaker: Ali
+          text: Tack så mycket. Hej då.
+      items:
+        - type: mc
+          id: v-vardcentralen-1
+          prompt: Varför ringer Ali?
+          options:
+            - Han vill boka en tid.
+            - Han vill förnya ett recept.
+            - Han vill avboka en tid.
+          answer: 0
+          explain: Ali says "Jag skulle vilja boka en tid".
+        - type: short
+          id: v-vardcentralen-2
+          prompt: Sedan när har Ali varit sjuk?
+          accept: [sedan i söndags, i söndags, sedan söndag, söndag]
+          model: Sedan i söndags.
+          explain: Ali says he has had a fever "sedan i söndags", since Sunday.
+        - type: mc
+          id: v-vardcentralen-3
+          prompt: När får Ali en tid?
+          options:
+            - I dag klockan 9.15
+            - I morgon klockan 9.15
+            - I morgon klockan 15.09
+          answer: 1
+          explain: Lena offers a time "i morgon klockan kvart över nio".
+        - type: mc
+          id: v-vardcentralen-4
+          prompt: Vad ska Ali göra om han blir sämre i natt?
+          options:
+            - Ringa 1177
+            - Gå till vårdcentralen
+            - Ringa Lena
+          answer: 0
+          explain: Lena says he can call 1177 if he gets worse tonight.
+    roleplay:
+      intro: You have had a cough for a week and want to see a doctor. You call the health centre, and a nurse answers.
+      partner:
+        - voice: alma
+          text: Vårdcentralen, det är Lena. Vad kan jag hjälpa dig med?
+        - voice: alma
+          text: Vad är det för besvär?
+        - voice: alma
+          text: Har du feber?
+        - voice: alma
+          text: Jag har en tid på torsdag klockan 14. Passar det?
+          say: Jag har en tid på torsdag klockan två. Passar det?
+      closing:
+        voice: alma
+        text: Bra, då ses vi på torsdag. Krya på dig!
+      hints:
+        - en: Say who you are and that you want to book an appointment.
+          example: Hej, jag heter … Jag skulle vilja boka en tid.
+        - en: Say what is wrong and since when.
+          example: Jag har hostat i en vecka.
+        - en: Answer, and say if you have other problems.
+          example: Nej, men jag är väldigt trött.
+        - en: Accept the time, or ask for another one.
+          example: Ja, det passar bra.
+
+  - id: v-apoteket
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27:
+      [
+        lyssna-lasa.berattelser-nyheter-instruktioner,
+        samtala.onskemal-asikter,
+        samtala.anpassning,
+        sprak.uttal,
+      ]
+    theme: hälsa och vård
+    title: På apoteket
+    en: At the pharmacy
+    about: You pick up medicine your doctor has prescribed, and ask for something for a cold.
+    phrases:
+      - sv: Jag ska hämta ut ett recept.
+        en: I'm here to pick up a prescription.
+      - sv: Här är min legitimation.
+        en: Here is my ID.
+      - sv: Hur ofta ska jag ta tabletterna?
+        en: How often should I take the tablets?
+      - sv: Har ni något mot huvudvärk?
+        en: Do you have anything for a headache?
+      - sv: Finns det något billigare alternativ?
+        en: Is there a cheaper alternative?
+      - sv: Jag tar inga andra mediciner.
+        en: I don't take any other medicines.
+    dialog:
+      id: v-apoteket-dialog
+      kind: dialog
+      instruction: Lyssna på samtalet och svara på frågorna.
+      title: På apoteket
+      lines:
+        - voice: nst
+          speaker: Kund
+          text: Hej, jag ska hämta ut ett recept.
+        - voice: alma
+          speaker: Farmaceut
+          text: Hej! Har du legitimation?
+        - voice: nst
+          speaker: Kund
+          text: Ja, här.
+        - voice: alma
+          speaker: Farmaceut
+          text: Tack. Det är antibiotika från din läkare. Det står här att du ska ta en tablett tre gånger om dagen.
+        - voice: nst
+          speaker: Kund
+          text: Hur länge ska jag ta dem?
+        - voice: alma
+          speaker: Farmaceut
+          text: I sju dagar. Ta alla tabletter, även om du mår bättre efter några dagar.
+        - voice: nst
+          speaker: Kund
+          text: Okej. Vad kostar det?
+        - voice: alma
+          speaker: Farmaceut
+          text: Det blir 95 kronor.
+          say: Det blir nittiofem kronor.
+      items:
+        - type: mc
+          id: v-apoteket-1
+          prompt: Vad visar kunden?
+          options:
+            - Sin legitimation
+            - Sitt kvitto
+            - Sitt recept på papper
+          answer: 0
+          explain: The pharmacist asks for "legitimation", ID, and the customer shows it.
+        - type: short
+          id: v-apoteket-2
+          prompt: Hur många tabletter ska kunden ta varje dag?
+          accept: [tre, '3', tre tabletter, 3 tabletter, tre stycken]
+          model: Tre tabletter om dagen.
+          explain: One tablet "tre gånger om dagen" makes three a day.
+        - type: mc
+          id: v-apoteket-3
+          prompt: Vad säger farmaceuten om man mår bättre efter några dagar?
+          options:
+            - Man ska sluta ta tabletterna.
+            - Man ska ta alla tabletter ändå.
+            - Man ska ringa läkaren.
+          answer: 1
+          explain: She says "Ta alla tabletter, även om du mår bättre".
+        - type: mc
+          id: v-apoteket-4
+          prompt: Vad kostar medicinen?
+          options:
+            - 59 kronor
+            - 95 kronor
+            - 195 kronor
+          answer: 1
+          explain: She says "Det blir nittiofem kronor".
+    roleplay:
+      intro: You have a cold and a headache, and you go to the pharmacy for something that helps. The pharmacist asks you some questions.
+      partner:
+        - voice: alma
+          text: Hej! Vad kan jag hjälpa till med?
+        - voice: alma
+          text: Har du andra besvär också?
+        - voice: alma
+          text: Tar du några andra mediciner?
+        - voice: alma
+          text: Då kan du prova de här tabletterna. Har du några frågor?
+      closing:
+        voice: alma
+        text: Läs på förpackningen hur många du får ta. Krya på dig, och kontakta vården om du inte blir bättre!
+      hints:
+        - en: Say what you need.
+          example: Hej, har ni något mot huvudvärk?
+        - en: Describe how you feel.
+          example: Ja, jag är förkyld och har ont i halsen.
+        - en: Answer the question.
+          example: Nej, jag tar inga andra mediciner.
+        - en: Ask something about the tablets, or say thank you.
+          example: Hur ofta får jag ta dem?
+
+  - id: v-sjukanmalan
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27:
+      [
+        lyssna-lasa.berattelser-nyheter-instruktioner,
+        samtala.onskemal-asikter,
+        samtala.anpassning,
+        sprak.uttal,
+      ]
+    theme: arbete
+    title: Sjukanmälan och VAB
+    en: Calling in sick, or staying home with a sick child
+    about: You call your boss in the morning because you are ill, or because your child is.
+    phrases:
+      - sv: Jag är sjuk i dag och kan inte komma till jobbet.
+        en: I'm ill today and can't come to work.
+      - sv: Min dotter är sjuk, så jag behöver vabba.
+        en: My daughter is ill, so I need to stay home with her (VAB).
+      - sv: Jag tror att jag är tillbaka på onsdag.
+        en: I think I'll be back on Wednesday.
+      - sv: Jag hör av mig i morgon.
+        en: I'll be in touch tomorrow.
+      - sv: Kan någon ta mitt pass?
+        en: Can someone take my shift?
+      - sv: Jag har anmält VAB till Försäkringskassan.
+        en: I have reported VAB to Försäkringskassan.
+    dialog:
+      id: v-sjukanmalan-dialog
+      kind: dialog
+      instruction: Lyssna på samtalet och svara på frågorna.
+      title: Ahmed ringer sin chef
+      lines:
+        - voice: nst
+          speaker: Ahmed
+          text: Hej Maria, det är Ahmed.
+        - voice: alma
+          speaker: Maria
+          text: Hej Ahmed! Hur är det?
+        - voice: nst
+          speaker: Ahmed
+          text: Inte så bra. Min son har feber, så jag måste stanna hemma med honom i dag.
+        - voice: alma
+          speaker: Maria
+          text: Åh, vad tråkigt. Hoppas att han blir bättre snart.
+        - voice: nst
+          speaker: Ahmed
+          text: Tack. Jag skulle jobba till fem i dag. Kan någon annan ta mitt pass?
+        - voice: alma
+          speaker: Maria
+          text: Jag frågar Sara. Hon är ledig i dag. Glöm inte att anmäla VAB till Försäkringskassan.
+        - voice: nst
+          speaker: Ahmed
+          text: Nej, jag gör det i dag. Jag hör av mig i morgon bitti och berättar om jag kan komma.
+        - voice: alma
+          speaker: Maria
+          text: Bra. Ha det så bra så länge!
+      items:
+        - type: mc
+          id: v-sjukanmalan-1
+          prompt: Varför kan Ahmed inte komma till jobbet?
+          options:
+            - Han är sjuk.
+            - Hans son är sjuk.
+            - Han ska till läkaren.
+          answer: 1
+          explain: Ahmed says "Min son har feber".
+        - type: short
+          id: v-sjukanmalan-2
+          prompt: Vem kanske tar Ahmeds pass?
+          accept: [Sara, kanske Sara, Sara tar det]
+          model: Sara.
+          explain: Maria says she will ask Sara, who is free today.
+        - type: mc
+          id: v-sjukanmalan-3
+          prompt: Vad ska Ahmed göra i dag?
+          options:
+            - Anmäla VAB till Försäkringskassan
+            - Ringa Sara
+            - Gå till vårdcentralen
+          answer: 0
+          explain: Maria reminds him, and Ahmed says "jag gör det i dag".
+        - type: mc
+          id: v-sjukanmalan-4
+          prompt: När hör Ahmed av sig igen?
+          options:
+            - I kväll
+            - I morgon bitti
+            - På fredag
+          answer: 1
+          explain: Ahmed says "Jag hör av mig i morgon bitti", early tomorrow morning.
+    roleplay:
+      intro: You wake up with a fever and cannot go to work. You call your boss, Johan.
+      partner:
+        - voice: nst
+          text: Hej, det är Johan.
+        - voice: nst
+          text: Åh nej. Vad är det med dig?
+        - voice: nst
+          text: Vet du hur länge du blir borta?
+        - voice: nst
+          text: Okej. Är det något som någon annan behöver göra åt dig i dag?
+      closing:
+        voice: nst
+        text: Det ordnar vi. Krya på dig nu!
+      hints:
+        - en: Say who you are and that you are ill.
+          example: Hej Johan, det är … Jag är sjuk i dag och kan inte komma.
+        - en: Say what is wrong.
+          example: Jag har feber och ont i huvudet.
+        - en: Say when you think you are back, or when you will call.
+          example: Jag tror att jag är tillbaka på onsdag. Jag hör av mig i morgon.
+        - en: Say what a colleague needs to do, or that nothing is urgent.
+          example: Kan någon ringa kunden klockan tio?

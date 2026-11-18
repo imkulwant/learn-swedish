@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { appUrl, type OfferedPair } from '../../data/content'
+import { appUrl, type PartnerScript } from '../../data/content'
 import {
   deletePairSession,
   setPairStarred,
@@ -23,13 +23,13 @@ interface Part {
 }
 
 /** The discussion in order: each partner line, then the answer to it. */
-function partsOf(offered: OfferedPair, session: PairSession): Part[] {
+function partsOf(script: PartnerScript, session: PairSession): Part[] {
   const parts: Part[] = []
-  offered.topic.partner.forEach((line, i) => {
+  script.partner.forEach((line, i) => {
     parts.push({
       who: 'partner',
       text: line.text,
-      src: appUrl(offered.turnAudio[i]!),
+      src: appUrl(script.turnAudio[i]!),
     })
     const answer = session.turns.find((t) => t.turn === i)
     if (answer)
@@ -42,21 +42,21 @@ function partsOf(offered: OfferedPair, session: PairSession): Part[] {
   if (session.finishedAt !== null)
     parts.push({
       who: 'partner',
-      text: offered.topic.closing.text,
-      src: appUrl(offered.closingAudio),
+      text: script.closing.text,
+      src: appUrl(script.closingAudio),
     })
   return parts
 }
 
 /** Plays the whole discussion, one part after another. */
 export function ConversationPlayer({
-  offered,
+  script,
   session,
 }: {
-  offered: OfferedPair
+  script: PartnerScript
   session: PairSession
 }) {
-  const parts = partsOf(offered, session)
+  const parts = partsOf(script, session)
   const audio = useRef<HTMLAudioElement>(null)
   const urlsRef = useRef<string[]>([])
   const [playing, setPlaying] = useState<number | null>(null)
@@ -150,16 +150,19 @@ export function ConversationPlayer({
 export function PairSessionList({
   sessions,
   onOpen,
+  assessed = true,
 }: {
   sessions: PairSession[]
   onOpen: (id: string) => void
+  /** False for role-plays, which have no self-assessment. */
+  assessed?: boolean
 }) {
   const [deleting, setDeleting] = useState<PairSession | null>(null)
   if (!sessions.length) return null
   return (
     <section aria-labelledby="sessions" className="flex flex-col gap-3">
       <h2 id="sessions" className="text-lg font-semibold">
-        Your discussions
+        {assessed ? 'Your discussions' : 'Your role-plays'}
       </h2>
       <p className="text-sm text-muted">
         They stay on this phone and are not in backups. Starred ones are never
@@ -180,11 +183,13 @@ export function PairSessionList({
                   {s.turns.length === 1 ? '' : 's'}
                   {s.finishedAt === null && ' · stopped early'}
                 </span>
-                <span className="text-muted">
-                  {s.rubric
-                    ? `Assessed · ${rubricShare(s.rubric)}%`
-                    : 'Not assessed'}
-                </span>
+                {assessed && (
+                  <span className="text-muted">
+                    {s.rubric
+                      ? `Assessed · ${rubricShare(s.rubric)}%`
+                      : 'Not assessed'}
+                  </span>
+                )}
               </p>
               <div className="flex gap-2">
                 <Button
@@ -192,7 +197,7 @@ export function PairSessionList({
                   className="flex-1"
                   onClick={() => onOpen(s.id)}
                 >
-                  {s.rubric ? 'Listen' : 'Listen and assess'}
+                  {s.rubric || !assessed ? 'Listen' : 'Listen and assess'}
                 </Button>
                 <Button
                   variant="secondary"
@@ -212,7 +217,7 @@ export function PairSessionList({
       <Dialog
         open={deleting !== null}
         onClose={() => setDeleting(null)}
-        title="Delete this discussion?"
+        title="Delete this conversation?"
       >
         <p className="text-muted">It cannot be brought back.</p>
         <div className="mt-4 flex gap-2">

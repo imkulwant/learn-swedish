@@ -9,6 +9,7 @@ import {
   type ListeningPack,
   type ReadingPack,
   type ReadingText,
+  type ScenarioPack,
   type SpeakingPack,
   type VocabPack,
   type Word,
@@ -29,6 +30,7 @@ export type Pack =
   | GrammarPack
   | WritingPack
   | SpeakingPack
+  | ScenarioPack
 
 /**
  * Word-count range of one reading text per level. C texts stay short; D allows
@@ -87,6 +89,17 @@ export function packUnits(pack: Pack): Unit[] {
     return pack.lessons.map((l) => ({ ...l, words: 0, range: null }))
   // A speaking task has no questions; its model answer is about three
   // minutes of speech.
+  // A scenario is checked like a clip: its dialogue has the questions.
+  if (pack.skill === 'vardag')
+    return pack.scenarios.map((s) => ({
+      ...s,
+      items: s.dialog.items,
+      words: s.dialog.lines.reduce(
+        (n, l) => n + countWords(l.say ?? l.text),
+        0,
+      ),
+      range: CLIP_WORDS[pack.level],
+    }))
   if (pack.skill === 'tala')
     return [
       ...pack.tasks.map((t) => ({
@@ -219,6 +232,20 @@ export function packProblems(packs: Pack[]): string[] {
               `${pack.id}/${prompt.id}: the note on "${quote}" quotes nothing in the model answer`,
             )
       }
+    if (pack.skill === 'vardag')
+      for (const s of pack.scenarios) {
+        claim(s.dialog.id, `${pack.id}/${s.id}/dialog`)
+        // The build names the other audio of a scenario <id>-fras-N and
+        // <id>-roll-N, so the dialogue's own id may not look like those.
+        if (/-(fras|roll)-[a-z0-9]+$/.test(s.dialog.id))
+          problems.push(
+            `${pack.id}/${s.id}: the dialogue id ${s.dialog.id} looks like a phrase or role-play audio name`,
+          )
+        if (s.roleplay.hints.length !== s.roleplay.partner.length)
+          problems.push(
+            `${pack.id}/${s.id}: the role-play needs one hint per partner line (${s.roleplay.partner.length}), not ${s.roleplay.hints.length}`,
+          )
+      }
     if (pack.skill === 'tala') {
       if (!pack.tasks.length && !pack.pairs.length)
         problems.push(`${pack.id}: a speaking pack needs tasks or pairs`)
@@ -272,13 +299,15 @@ export function publishable<P extends Pack>(
             ? { ...pack, lessons: keep(pack.lessons, includeDrafts) }
             : pack.skill === 'skriva'
               ? { ...pack, prompts: keep(pack.prompts, includeDrafts) }
-              : pack.skill === 'tala'
-                ? {
-                    ...pack,
-                    tasks: keep(pack.tasks, includeDrafts),
-                    pairs: keep(pack.pairs, includeDrafts),
-                  }
-                : { ...pack, words: keep(pack.words, includeDrafts) },
+              : pack.skill === 'vardag'
+                ? { ...pack, scenarios: keep(pack.scenarios, includeDrafts) }
+                : pack.skill === 'tala'
+                  ? {
+                      ...pack,
+                      tasks: keep(pack.tasks, includeDrafts),
+                      pairs: keep(pack.pairs, includeDrafts),
+                    }
+                  : { ...pack, words: keep(pack.words, includeDrafts) },
     )
     .filter((pack) => packUnits(pack).length > 0) as P[]
 }

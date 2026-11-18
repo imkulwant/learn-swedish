@@ -12,6 +12,7 @@ Every pack is drafted, checked by `npm run content`, and reviewed by a native sp
 | `d-skriva-1` | D | Skriva | 4 tasks (2 informal, 2 formal) | – | Reviewed by Anna, 2026-11-18 |
 | `d-tala-1` | D | Tala | 3 solo tasks | – | Reviewed by Anna, 2026-11-18 |
 | `d-tala-2` | D | Tala, pairs | 2 discussions | – | Reviewed by Anna, 2026-11-18 |
+| `vardag-1` | all | Everyday | 3 scenarios | 12 | Reviewed by Anna, 2026-11-18 |
 | `check-sentences` | – | Sentences the writing checks are tested with | 35 sentences | – | Reviewed by Anna, 2026-11-18 |
 
 ## How to review a pack
@@ -73,4 +74,15 @@ Speaking packs are in `content/speaking/`. Try them in the app (Exam → Tala). 
 For a pair discussion, please check the `question`, the `mindmap` ideas and the `goal`, and the partner's lines (`partner` and `closing`). The lines must make sense whatever the learner answers. Listen to them in the app (Exam → Tala → the discussion → Scripted partner). Please also check the pack's `phraseCards`.
 
 After a change to `model`, `partner` or `closing`, run `npm run audio`, as for listening packs.
+
+## Reviewing an everyday scenario
+
+Scenarios are in `content/everyday/`. Try them in the app (Everyday tab). For each scenario please check:
+
+- `phrases`: each Swedish phrase and its English meaning. Tap a phrase in the app to hear it.
+- `dialog`: the lines, the questions and their answers, as for a listening clip.
+- `roleplay`: the partner's lines and closing, which must make sense whatever the learner says, and each hint with its Swedish example.
+- Facts about real services (1177, the pharmacy, Försäkringskassan) must be general and true.
+
+After a change to any spoken line, run `npm run audio`.
 

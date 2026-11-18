@@ -144,7 +144,7 @@ function Review({
           <p className="text-2xl font-bold">{rubricShare(session.rubric)}%</p>
         </section>
       )}
-      <ConversationPlayer offered={offered} session={session} />
+      <ConversationPlayer script={offered.script} session={session} />
       {session.rubric ? (
         <>
           <ReadinessCard level={offered.pack.level} skill="tala" />
@@ -202,7 +202,7 @@ function Pair({ offered }: { offered: OfferedPair }) {
         <>
           <ScriptedPartner
             key={round}
-            offered={offered}
+            script={offered.script}
             onFinished={setReviewing}
           />
           <PairSessionList sessions={sessions} onOpen={setReviewing} />

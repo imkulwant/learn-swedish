@@ -1,5 +1,6 @@
 import {
   CompiledListeningPack,
+  CompiledScenarioPack,
   CompiledSpeakingPack,
   CompiledVocabPack,
   ContentManifest,
@@ -8,7 +9,9 @@ import {
   WritingPack,
   type WritingPrompt,
   type GrammarLesson,
+  type Line,
   type PairTopic,
+  type Scenario,
   type PhraseCard,
   type SpeakingTask,
   type Level,
@@ -62,7 +65,7 @@ export async function listPacks(
 
 async function packFile(
   id: string,
-  skill: Skill | 'ord' | 'grammatik',
+  skill: Skill | 'ord' | 'grammatik' | 'vardag',
 ): Promise<unknown> {
   const summary = (await loadManifest()).packs.find(
     (p) => p.id === id && p.skill === skill,
@@ -111,13 +114,73 @@ export async function loadSpeakingTasks(level: Level): Promise<OfferedTask[]> {
   )
 }
 
+export interface OfferedScenario {
+  scenario: Scenario
+  pack: { id: string; version: number; level: Level }
+  /** Where each audio file of the scenario is served, by its key. */
+  audio: Record<string, string>
+  script: PartnerScript
+}
+
+/**
+ * Every everyday scenario, whatever the learner's level: everyday Swedish is
+ * for everyone.
+ */
+export async function loadScenarios(): Promise<OfferedScenario[]> {
+  const summaries = (await loadManifest()).packs.filter(
+    (p) => p.skill === 'vardag',
+  )
+  const packs = await Promise.all(
+    summaries.map(async (p) =>
+      CompiledScenarioPack.parse(await packFile(p.id, 'vardag')),
+    ),
+  )
+  return packs.flatMap((pack) =>
+    pack.scenarios.map((scenario) => {
+      const summary = { id: pack.id, version: pack.version, level: pack.level }
+      const { id, roleplay } = scenario
+      return {
+        scenario,
+        pack: summary,
+        audio: pack.audio,
+        script: {
+          id,
+          partner: roleplay.partner,
+          closing: roleplay.closing,
+          turnAudio: roleplay.partner.map(
+            (_, i) => pack.audio[`${id}-roll-${i + 1}`]!,
+          ),
+          closingAudio: pack.audio[`${id}-roll-slut`]!,
+          pack: summary,
+          hints: roleplay.hints,
+        },
+      }
+    }),
+  )
+}
+
+/**
+ * What a scripted partner says, one line at a time, with its audio. Pair
+ * discussions and everyday role-plays both have one.
+ */
+export interface PartnerScript {
+  /** The topic or scenario; discussions are stored under it. */
+  id: string
+  partner: Line[]
+  closing: Line
+  turnAudio: string[]
+  closingAudio: string
+  pack: { id: string; version: number; level: Level }
+  /** What the learner might say after each line. */
+  hints?: { en: string; example: string }[]
+}
+
 export interface OfferedPair {
   topic: PairTopic
   pack: Pick<CompiledSpeakingPack, 'id' | 'version' | 'level'>
   phraseCards: PhraseCard[]
   /** The audio of each partner line, in order, then of the closing line. */
-  turnAudio: string[]
-  closingAudio: string
+  script: PartnerScript
 }
 
 /** Every pair discussion topic of one level, in pack order. */
@@ -131,15 +194,24 @@ export async function loadPairTopics(level: Level): Promise<OfferedPair[]> {
     ),
   )
   return packs.flatMap((pack) =>
-    pack.pairs.map((topic) => ({
-      topic,
-      pack: { id: pack.id, version: pack.version, level: pack.level },
-      phraseCards: pack.phraseCards,
-      turnAudio: topic.partner.map(
-        (_, i) => pack.audio[`${topic.id}-${i + 1}`]!,
-      ),
-      closingAudio: pack.audio[`${topic.id}-slut`]!,
-    })),
+    pack.pairs.map((topic) => {
+      const summary = { id: pack.id, version: pack.version, level: pack.level }
+      return {
+        topic,
+        pack: summary,
+        phraseCards: pack.phraseCards,
+        script: {
+          id: topic.id,
+          partner: topic.partner,
+          closing: topic.closing,
+          turnAudio: topic.partner.map(
+            (_, i) => pack.audio[`${topic.id}-${i + 1}`]!,
+          ),
+          closingAudio: pack.audio[`${topic.id}-slut`]!,
+          pack: summary,
+        },
+      }
+    }),
   )
 }
 

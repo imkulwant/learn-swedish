@@ -10,7 +10,8 @@
 - **Slice 6 (Skriva: writing prompts, editor that saves as you type, check panel, model answers, self-assessment, backup version 3):** done. Pack `d-skriva-1` and the check sentences reviewed by Anna, who also accepted the suggested lengths.
 - **Slice 7 (Tala, solo task: recorder, planning timer, model answers with audio, self-assessment, recordings and their clean-up):** done. Pack `d-tala-1` reviewed by Anna.
 - **Slice 7b (Tala pair discussion: scripted partner, with a friend, phrase cards, database version 3):** done. Pack `d-tala-2` reviewed by Anna.
-- Next slice: 8, everyday scenarios.
+- **Slice 8 (everyday scenarios: phrases, dialogue with questions, role-play with hints):** done. Pack `vardag-1` (3 scenarios) reviewed by Anna.
+- Next slice: 9, mock exams with Today and Progress.
 
 ## Known issues and open items
 

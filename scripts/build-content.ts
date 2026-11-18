@@ -37,6 +37,7 @@ import {
   readWritingSources,
   speakingSource,
   pairAudio,
+  scenarioAudio,
   readLock,
   sourceAudioFile,
   wordSource,
@@ -63,7 +64,12 @@ for (const file of (await readdir(READING_SOURCES))
       problems.push(`${file}: ${issue.path.join('.')}: ${issue.message}`)
 }
 const audio = await readAudioSources()
-packs.push(...audio.listening, ...audio.vocab, ...audio.speaking)
+packs.push(
+  ...audio.listening,
+  ...audio.vocab,
+  ...audio.speaking,
+  ...audio.everyday,
+)
 problems.push(...audio.problems)
 for (const read of [readGrammarSources, readWritingSources]) {
   const sources = await read()
@@ -145,7 +151,16 @@ for (const pack of shipped) {
                 pairAudio(topic).map((a) => ({ id: a.key, source: a.source })),
               ),
             ])
-          : null
+          : pack.skill === 'vardag'
+            ? await publishAudio(
+                pack.scenarios.flatMap((s) =>
+                  scenarioAudio(s).map((a) => ({
+                    id: a.key,
+                    source: a.source,
+                  })),
+                ),
+              )
+            : null
   await writeFile(
     join(OUT, file),
     JSON.stringify(published ? { ...pack, audio: published.paths } : pack),
@@ -158,7 +173,10 @@ for (const pack of shipped) {
     title: pack.title,
     unitCount: units.length,
     itemCount:
-      pack.skill === 'ord' || pack.skill === 'skriva' || pack.skill === 'tala'
+      pack.skill === 'ord' ||
+      pack.skill === 'skriva' ||
+      pack.skill === 'tala' ||
+      pack.skill === 'vardag'
         ? units.length
         : units.reduce((n, u) => n + u.items.length, 0),
     hasDrafts: units.some((u) => u.status === 'draft'),
