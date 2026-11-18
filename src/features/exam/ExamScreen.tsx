@@ -4,7 +4,7 @@ import { Screen } from '../../ui/Screen'
 const PARTS = [
   { to: 'lasa', name: 'Läsa – reading', ready: true },
   { to: 'hora', name: 'Höra – listening', ready: true },
-  { to: 'skriva', name: 'Skriva – writing', ready: false },
+  { to: 'skriva', name: 'Skriva – writing', ready: true },
   { to: 'tala', name: 'Tala – speaking', ready: false },
 ]
 

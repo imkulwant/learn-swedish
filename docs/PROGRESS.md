@@ -7,7 +7,8 @@
 - **Slice 3 (Höra: Piper audio pipeline, player, listening drill, offline audio):** done. Pack `d-hora-1` reviewed by Anna.
 - **Slice 4 (vocabulary: two word packs, FSRS scheduling, three card types, backup version 2):** done. Both word packs reviewed by Anna.
 - **Slice 5 (grammar: lesson renderer, four exercise types, pack `c-grammatik-1` with 5 lessons):** done. Pack reviewed by Anna.
-- Next slice: 6, Skriva.
+- **Slice 6 (Skriva: writing prompts, editor that saves as you type, check panel, model answers, self-assessment, backup version 3):** done. Pack `d-skriva-1` and the check sentences reviewed by Anna, who also accepted the suggested lengths.
+- Next slice: 7, Tala.
 
 ## Known issues and open items
 

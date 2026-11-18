@@ -9,6 +9,7 @@ import {
   GrammarPack,
   ListeningPack,
   VocabPack,
+  WritingPack,
   type Line,
   type ListeningClip,
   type Voice,
@@ -19,6 +20,7 @@ export const ROOT = fileURLToPath(new URL('../../', import.meta.url))
 export const LISTENING_SOURCES = join(ROOT, 'content/listening')
 export const VOCAB_SOURCES = join(ROOT, 'content/vocab')
 export const GRAMMAR_SOURCES = join(ROOT, 'content/grammar')
+export const WRITING_SOURCES = join(ROOT, 'content/writing')
 /** Where the made audio is kept, committed: one `<clip id>.m4a` per clip. */
 export const AUDIO_DIR = join(ROOT, 'content/audio')
 /** Where the build publishes the audio of shipped clips (generated). */
@@ -115,6 +117,9 @@ export const readVocabSources = () =>
 /** Grammar packs have no audio; they are read here with the other sources. */
 export const readGrammarSources = () =>
   readPacks<GrammarPack>(GRAMMAR_SOURCES, GrammarPack)
+
+export const readWritingSources = () =>
+  readPacks<WritingPack>(WRITING_SOURCES, WritingPack)
 
 /** Every audio source of every pack, drafts included. */
 export async function readAudioSources(): Promise<{

@@ -11,13 +11,17 @@ import {
   type ReadingText,
   type VocabPack,
   type Word,
+  type WritingPack,
 } from './schema.ts'
 import { normalizeAnswer } from '../answerCheck.ts'
 import { acceptedOrders, shuffledChunks, wordBag } from '../grammar.ts'
 import { parseLesson } from '../lessonText.ts'
+import { WRITING_WORDS } from '../writing.ts'
+import { countWords as countTextWords } from '../writingChecks.ts'
 import { KP27_POINT_IDS, type Kp27Point } from './kp27.ts'
 
-export type Pack = ReadingPack | ListeningPack | VocabPack | GrammarPack
+export type Pack =
+  ReadingPack | ListeningPack | VocabPack | GrammarPack | WritingPack
 
 /**
  * Word-count range of one reading text per level. C texts stay short; D allows
@@ -74,6 +78,15 @@ export function packUnits(pack: Pack): Unit[] {
     }))
   if (pack.skill === 'grammatik')
     return pack.lessons.map((l) => ({ ...l, words: 0, range: null }))
+  // A writing prompt has no questions; its model answer must fit the length
+  // the app suggests to the learner.
+  if (pack.skill === 'skriva')
+    return pack.prompts.map((p) => ({
+      ...p,
+      items: [],
+      words: countTextWords(p.model.lines.join('\n')),
+      range: WRITING_WORDS[pack.level],
+    }))
   // A word is a unit with no questions: its card is the practice.
   return pack.words.map((w) => ({
     ...w,
@@ -178,6 +191,15 @@ export function packProblems(packs: Pack[]): string[] {
           )
         else headwords.set(key, pack.id)
       }
+    if (pack.skill === 'skriva')
+      for (const prompt of pack.prompts) {
+        const model = prompt.model.lines.join('\n')
+        for (const { quote } of prompt.model.notes)
+          if (!model.includes(quote))
+            problems.push(
+              `${pack.id}/${prompt.id}: the note on "${quote}" quotes nothing in the model answer`,
+            )
+      }
     if (pack.skill === 'grammatik')
       for (const lesson of pack.lessons)
         problems.push(
@@ -223,7 +245,9 @@ export function publishable<P extends Pack>(
           ? { ...pack, clips: keep(pack.clips, includeDrafts) }
           : pack.skill === 'grammatik'
             ? { ...pack, lessons: keep(pack.lessons, includeDrafts) }
-            : { ...pack, words: keep(pack.words, includeDrafts) },
+            : pack.skill === 'skriva'
+              ? { ...pack, prompts: keep(pack.prompts, includeDrafts) }
+              : { ...pack, words: keep(pack.words, includeDrafts) },
     )
     .filter((pack) => packUnits(pack).length > 0) as P[]
 }

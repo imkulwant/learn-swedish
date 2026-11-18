@@ -1,5 +1,11 @@
 import Dexie, { type EntityTable } from 'dexie'
-import type { Attempt, Setting, StudyDay, VocabCard } from '../domain/types'
+import type {
+  Attempt,
+  Setting,
+  StudyDay,
+  VocabCard,
+  Writing,
+} from '../domain/types'
 
 // The name of the database inside the browser. GitHub Pages serves every one
 // of the owner's project sites from one origin, so this name must not clash
@@ -10,6 +16,7 @@ export class SfiDb extends Dexie {
   attempts!: EntityTable<Attempt, 'id'>
   cards!: EntityTable<VocabCard, 'id'>
   studyDays!: EntityTable<StudyDay, 'date'>
+  writings!: EntityTable<Writing, 'id'>
   settings!: EntityTable<Setting, 'key'>
 
   constructor(name: string = DB_NAME) {

@@ -25,6 +25,7 @@ export function ReadinessCard({
   skill: Skill
 }) {
   const state = useLiveQuery(() => getReadiness(level, skill), [level, skill])
+  const selfAssessed = skill === 'skriva' || skill === 'tala'
 
   return (
     <section
@@ -36,8 +37,10 @@ export function ReadinessCard({
       </h2>
       {!state ? null : state.status === 'insufficient' ? (
         <p className="text-muted">
-          Answer {state.needed} questions to see how ready you are (
-          {state.count} so far).
+          {selfAssessed
+            ? `Write and assess ${state.needed} texts`
+            : `Answer ${state.needed} questions`}{' '}
+          to see how ready you are ({state.count} so far).
         </p>
       ) : (
         <>
@@ -48,8 +51,9 @@ export function ReadinessCard({
             </span>
           </p>
           <p className="text-sm text-muted">
-            An estimate from your last {state.count} answers, not an official
-            score.
+            {selfAssessed
+              ? `Your own assessment of your last ${state.count} texts, not an official score.`
+              : `An estimate from your last ${state.count} answers, not an official score.`}
           </p>
         </>
       )}

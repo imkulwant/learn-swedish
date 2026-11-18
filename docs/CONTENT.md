@@ -9,6 +9,8 @@ Every pack is drafted, checked by `npm run content`, and reviewed by a native sp
 | `d-ord-arbete` | D | Words: work | 30 words | – | Reviewed by Anna, 2026-11-18 |
 | `d-ord-halsa` | D | Words: health and care | 30 words | – | Reviewed by Anna, 2026-11-18 |
 | `c-grammatik-1` | C (also shown at D) | Grammar | 5 lessons | 31 exercises | Reviewed by Anna, 2026-11-18 |
+| `d-skriva-1` | D | Skriva | 4 tasks (2 informal, 2 formal) | – | Reviewed by Anna, 2026-11-18 |
+| `check-sentences` | – | Sentences the writing checks are tested with | 35 sentences | – | Reviewed by Anna, 2026-11-18 |
 
 ## How to review a pack
 
@@ -47,4 +49,14 @@ Grammar packs are in `content/grammar/`. Try them in the app with `npm run dev`,
   - `gap` and `transform`: `accept` must list **every** right answer. Anything not listed is marked wrong.
   - `mc`: exactly one right option, at `answer` (counting from 0).
 - `explain`: the English explanation shown after an answer.
+
+## Reviewing a writing pack
+
+Writing packs are in `content/writing/`. Try them in the app (Exam → Skriva). For each task please check:
+
+- `task` and `points`: the situation and what to write about, in Swedish as on the test.
+- `model.lines`: a text that would **pass** at this level. It should sound natural but need not be perfect.
+- `model.notes`: each `quote` is a phrase from the model answer, and `note` says in English why it works.
+
+Please also check `content/check-sentences.yaml`. Every sentence under `flag` should contain the mistake named (verb not second, or *inte* after the verb in a subordinate clause), and every sentence under `ok` should be correct Swedish. The app's writing hints are tested against these sentences. When they are approved, set `status: reviewed` at the top of the file.
 

@@ -1,0 +1,48 @@
+# Sentences the writing checks (src/domain/writingChecks.ts) are tested with.
+# A reviewer confirms that every sentence under "flag" has the mistake and
+# every sentence under "ok" is correct Swedish. The tests then make sure the
+# check flags the first list and none of the second.
+status: reviewed
+reviewedBy: Anna
+reviewedAt: '2026-11-18'
+v2:
+  flag:
+    - I går jag var hos läkaren.
+    - Idag jag jobbar hemma.
+    - Därför jag kom för sent till mötet.
+    - Förra året vi flyttade till en ny lägenhet.
+    - Nu jag har en fast anställning.
+    - I Sverige man dricker mycket kaffe.
+    - På jobbet jag pratar svenska hela dagen.
+    - När jag kom hem, jag lagade middag.
+    - Om du har tid, vi kan ses på lördag.
+  ok:
+    - I går var jag hos läkaren.
+    - Idag jobbar jag hemma.
+    - Därför kom jag för sent till mötet.
+    - Därför att jag var sjuk stannade jag hemma.
+    - Förra året flyttade vi till en ny lägenhet.
+    - I Sverige dricker man mycket kaffe.
+    - På jobbet pratar jag svenska hela dagen.
+    - När jag kom hem, lagade jag middag.
+    - Om du har tid, kan vi ses på lördag.
+    - Sedan jag flyttade hit har jag lärt mig mycket.
+    - Jag jobbar hemma i dag.
+    - På det sättet lär man sig snabbt.
+biff:
+  flag:
+    - Jag tycker att det är inte bra.
+    - Jag är ledsen eftersom jag kan inte komma.
+    - Ring mig om du hittar inte adressen.
+    - Hon säger att hon röker aldrig.
+    - Jag har en kollega som jobbar inte på fredagar.
+    - Jag vet att han kommer alltid i tid.
+  ok:
+    - Jag tycker att det inte är bra.
+    - Jag är ledsen eftersom jag inte kan komma.
+    - Ring mig om du inte hittar adressen.
+    - Hon säger att hon aldrig röker.
+    - Jag har en kollega som inte jobbar på fredagar.
+    - Jag kan inte komma i morgon.
+    - Han kommer alltid i tid.
+    - Jag hoppas att du mår bra.

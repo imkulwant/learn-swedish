@@ -17,6 +17,8 @@ const SCREENS: [string, string][] = [
   ['learn', 'Learn'],
   ['learn/ord', 'Words'],
   ['learn/grammatik', 'Grammar'],
+  ['exam/skriva', 'Skriva – writing'],
+  ['exam/skriva/s-felanmalan', 'Mejl till hyresvärden'],
   ['learn/grammatik/g-v2', 'Verbet på plats två'],
 ]
 
@@ -66,5 +68,28 @@ test('checked grammar exercises stay accessible', async ({ page }) => {
   await order.getByRole('button', { name: 'Check' }).click()
   await expect(order.getByRole('status')).toBeVisible()
   const { violations } = await new AxeBuilder({ page }).analyze()
+  expect(violations.map((v) => `${v.id}: ${v.help}`)).toEqual([])
+})
+
+test('a handed-in text with its checks and rubric stays accessible', async ({
+  page,
+}) => {
+  await page.goto('exam/skriva/s-felanmalan')
+  await page
+    .getByRole('textbox', { name: 'Your text' })
+    .fill('Hej,\n\nKranen läcker.\n\nKram')
+  await page.getByRole('button', { name: 'Check my text' }).click()
+  await expect(page.getByRole('region', { name: 'Check this' })).toBeVisible()
+  let { violations } = await new AxeBuilder({ page }).analyze()
+  expect(violations.map((v) => `${v.id}: ${v.help}`)).toEqual([])
+  await page.getByRole('button', { name: 'Hand in' }).click()
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Hand in' })
+    .click()
+  await expect(
+    page.getByRole('heading', { name: 'Assess your text' }),
+  ).toBeVisible()
+  ;({ violations } = await new AxeBuilder({ page }).analyze())
   expect(violations.map((v) => `${v.id}: ${v.help}`)).toEqual([])
 })

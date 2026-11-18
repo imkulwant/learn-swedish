@@ -34,6 +34,7 @@ import {
   publishedAudioPath,
   readAudioSources,
   readGrammarSources,
+  readWritingSources,
   readLock,
   sourceAudioFile,
   wordSource,
@@ -62,9 +63,11 @@ for (const file of (await readdir(READING_SOURCES))
 const audio = await readAudioSources()
 packs.push(...audio.listening, ...audio.vocab)
 problems.push(...audio.problems)
-const grammar = await readGrammarSources()
-packs.push(...grammar.packs)
-problems.push(...grammar.problems)
+for (const read of [readGrammarSources, readWritingSources]) {
+  const sources = await read()
+  packs.push(...sources.packs)
+  problems.push(...sources.problems)
+}
 problems.push(...packProblems(packs))
 
 const shipped = publishable(packs, includeDrafts)
@@ -143,7 +146,7 @@ for (const pack of shipped) {
     title: pack.title,
     unitCount: units.length,
     itemCount:
-      pack.skill === 'ord'
+      pack.skill === 'ord' || pack.skill === 'skriva'
         ? units.length
         : units.reduce((n, u) => n + u.items.length, 0),
     hasDrafts: units.some((u) => u.status === 'draft'),

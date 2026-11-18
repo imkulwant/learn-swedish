@@ -10,6 +10,8 @@ import { VocabScreen } from '../features/learn/VocabScreen'
 import { ComingSoonScreen } from '../features/placeholder/ComingSoonScreen'
 import { SettingsScreen } from '../features/settings/SettingsScreen'
 import { TodayScreen } from '../features/today/TodayScreen'
+import { WritingPartScreen } from '../features/writing/WritingPartScreen'
+import { WritingScreen } from '../features/writing/WritingScreen'
 import { EmptyState } from '../ui/EmptyState'
 import { Screen } from '../ui/Screen'
 import { AppShell } from './AppShell'
@@ -40,6 +42,8 @@ export function AppRoutes() {
         <Route path="exam/lasa/:packId" element={<ReadingDrillScreen />} />
         <Route path="exam/hora" element={<PartScreen skill="hora" />} />
         <Route path="exam/hora/:packId" element={<ListeningDrillScreen />} />
+        <Route path="exam/skriva" element={<WritingPartScreen />} />
+        <Route path="exam/skriva/:promptId" element={<WritingScreen />} />
         <Route path="learn" element={<LearnScreen />} />
         <Route path="learn/ord" element={<VocabScreen />} />
         <Route path="learn/grammatik" element={<GrammarScreen />} />

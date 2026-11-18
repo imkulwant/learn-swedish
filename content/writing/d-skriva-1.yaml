@@ -1,0 +1,182 @@
+# Writing pack 1, level D: two informal and two formal tasks.
+# The task and model answer are in Swedish; `en` and the notes are in English.
+# Each note's `quote` must appear word for word in the model answer.
+# Model answers are meant to pass at D, not to be perfect.
+id: d-skriva-1
+version: 1
+level: D
+skill: skriva
+title: Skriva D – paket 1
+prompts:
+  - id: s-kompis-sfi
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27:
+      [
+        samtala.berattelser-presentationer,
+        samtala.onskemal-asikter,
+        sprak.textstruktur,
+      ]
+    theme: studier
+    register: informal
+    title: Mejl till en kompis
+    en: An email to a friend who is starting SFI
+    task:
+      - Din kompis Lina har skrivit till dig. Hon ska börja läsa svenska på SFI och är lite nervös. Svara på hennes mejl.
+    points:
+      - Berätta hur det var för dig att börja på SFI.
+      - Vad var svårast för dig?
+      - Ge Lina två tips.
+      - Föreslå att ni träffas.
+    model:
+      lines:
+        - Hej Lina!
+        - Tack för ditt mejl. Det var roligt att höra att du ska börja på SFI. Jag började för två år sedan, och nu läser jag kurs D.
+        - Det svåraste för mig var att förstå när folk pratade snabbt. Därför lyssnade jag på radio varje dag, först på lätt svenska och sedan på vanliga nyheter. Det hjälpte mycket.
+        - Jag har två tips till dig. För det första ska du inte vara rädd för att göra fel. Prata så mycket du kan, till exempel i affären eller med grannarna. För det andra är det bra att skriva nya ord i en bok och repetera dem varje kväll.
+        - Om du vill kan vi ses på en fika och prata svenska tillsammans. Passar det på lördag?
+        - Kram
+        - Samira
+      notes:
+        - quote: Hej Lina!
+          note: A friendly greeting with the first name fits a friend.
+        - quote: Det svåraste för mig var att förstå när folk pratade snabbt.
+          note: Answers the question about what was hardest, in a paragraph of its own.
+        - quote: Därför lyssnade jag på radio
+          note: Därför links a cause to a result, and the verb lyssnade comes right after it.
+        - quote: För det första
+          note: '"För det första … För det andra" puts the two tips in a clear order.'
+        - quote: Passar det på lördag?
+          note: Ends with a concrete suggestion, as the task asks.
+        - quote: Kram
+          note: A warm closing for a friend. In a formal text, use "Med vänliga hälsningar".
+
+  - id: s-ny-lagenhet
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27:
+      [
+        samtala.berattelser-presentationer,
+        samtala.onskemal-asikter,
+        sprak.textstruktur,
+      ]
+    theme: boende
+    register: informal
+    title: Mejl om din nya lägenhet
+    en: An email to a friend about your new flat
+    task:
+      - Du har flyttat till en ny lägenhet i en annan stad. Skriv ett mejl till din vän Erik.
+    points:
+      - Beskriv din nya lägenhet.
+      - Berätta vad du tycker om området.
+      - Berätta vad som har varit svårt med flytten.
+      - Bjud hem Erik och föreslå en dag.
+    model:
+      lines:
+        - Hej Erik!
+        - Nu har vi flyttat! Vi bor i en trea på fjärde våningen, och från köket ser vi en sjö. Lägenheten är ljus och större än den gamla, men den är också lite dyrare.
+        - Jag tycker om området eftersom det är lugnt och nära naturen. Det finns en park med lekplats där barnen leker varje dag. Dessutom tar det bara tio minuter att gå till mitt nya jobb.
+        - Det svåraste med flytten var alla papper. Jag behövde göra en flyttanmälan till Skatteverket och byta adress hos banken. Det tog lång tid, men nu är allt klart.
+        - Vill du komma och hälsa på? Du kan sova i vardagsrummet. Passar det helgen den 14 mars?
+        - Ha det bra!
+        - Ahmed
+      notes:
+        - quote: Nu har vi flyttat!
+          note: A lively start that goes straight to the news. Nu is in place 1, so the verb har comes before vi.
+        - quote: en trea på fjärde våningen
+          note: Concrete details describe the flat, which the task asks for.
+        - quote: eftersom det är lugnt och nära naturen
+          note: Gives a reason for an opinion, which the D criteria ask for.
+        - quote: Dessutom tar det bara tio minuter
+          note: Dessutom adds a point, and the verb tar comes right after it.
+        - quote: Det tog lång tid, men nu är allt klart.
+          note: Men shows a contrast between two parts of the sentence.
+        - quote: Ha det bra!
+          note: A friendly closing that fits a friend.
+
+  - id: s-felanmalan
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27: [samtala.anpassning, samtala.onskemal-asikter, sprak.textstruktur]
+    theme: boende
+    register: formal
+    title: Mejl till hyresvärden
+    en: A formal email reporting a fault to your landlord
+    task:
+      - Kranen i ditt kök har läckt i en vecka, och i går kom det vatten på golvet. Skriv ett mejl till din hyresvärd, Lindgårdens Fastigheter.
+    points:
+      - Beskriv problemet.
+      - Berätta när det började och vad du redan har gjort.
+      - Skriv vad du vill att hyresvärden ska göra.
+      - Skriv när du är hemma.
+    model:
+      lines:
+        - Hej,
+        - Jag bor på Sjövägen 12, lägenhet 1103, och vill göra en felanmälan. Kranen i köket läcker. Det droppar hela tiden, och i går kom det vatten på golvet under diskbänken.
+        - Problemet började för ungefär en vecka sedan. Jag har stängt av vattnet under diskbänken när jag inte använder kranen, men det hjälper inte så mycket. Jag är orolig för att golvet ska skadas.
+        - Jag skulle vilja att en reparatör kommer och lagar kranen så snart som möjligt. Jag är hemma varje vardag efter klockan 16. Om det passar bättre på förmiddagen, får ni gärna använda er huvudnyckel.
+        - Tack på förhand.
+        - Med vänliga hälsningar
+        - Maria Hassan
+      notes:
+        - quote: Jag bor på Sjövägen 12, lägenhet 1103,
+          note: Gives the address and flat number first, so the landlord knows where to go.
+        - quote: vill göra en felanmälan
+          note: Says the purpose in the first sentence, as a formal message should.
+        - quote: Problemet började för ungefär en vecka sedan.
+          note: Answers when it began, in a new paragraph for a new point.
+        - quote: när jag inte använder kranen
+          note: In the subordinate clause after när, inte comes before the verb (BIFF).
+        - quote: Jag skulle vilja att
+          note: A polite way to ask for something, more formal than "Jag vill att".
+        - quote: Om det passar bättre på förmiddagen, får ni gärna
+          note: After the om clause, the verb får comes first.
+        - quote: Med vänliga hälsningar
+          note: The usual formal closing, followed by the full name.
+
+  - id: s-ansokan
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27:
+      [
+        samtala.anpassning,
+        samtala.fragor-vagledning-intervju,
+        sprak.textstruktur,
+      ]
+    theme: arbete
+    register: formal
+    title: Ansökan om jobb
+    en: A short job application
+    task:
+      - Restaurang Ekdala Gästgiveri söker ett köksbiträde på deltid. Skriv en kort ansökan till restaurangchefen Petra Lund.
+    points:
+      - Presentera dig.
+      - Berätta om din erfarenhet.
+      - Förklara varför du vill ha jobbet.
+      - Skriv när du kan börja och hur hon når dig.
+    model:
+      lines:
+        - Hej Petra Lund,
+        - Jag heter Daniel Tesfaye och vill söka jobbet som köksbiträde. Jag såg annonsen på Arbetsförmedlingens webbplats.
+        - Jag är 34 år och kommer från Eritrea. Där arbetade jag i fem år på ett hotell, först i disken och sedan som kock. I Sverige har jag gjort praktik i två månader i ett skolkök. Där lärde jag mig mycket om hygien och regler i ett svenskt kök.
+        - Jag vill gärna arbeta hos er eftersom jag tycker om att laga mat och att arbeta i ett team. Jag är noggrann, kommer alltid i tid och lär mig snabbt.
+        - Jag kan börja den 1 februari. Du når mig på e-post, daniel.tesfaye@example.com, och jag kommer gärna på en intervju.
+        - Med vänliga hälsningar
+        - Daniel Tesfaye
+      notes:
+        - quote: Hej Petra Lund,
+          note: Greets with the full name. That is polite and normal in a formal Swedish email.
+        - quote: vill söka jobbet som köksbiträde
+          note: States the purpose at once and names the job.
+        - quote: först i disken och sedan som kock
+          note: Först and sedan put the experience in order.
+        - quote: Där lärde jag mig
+          note: Där is in place 1, so the verb lärde comes next.
+        - quote: eftersom jag tycker om att laga mat
+          note: Gives a reason for wanting the job, as the task asks.
+        - quote: jag kommer gärna på en intervju
+          note: A polite, active ending that fits an application.

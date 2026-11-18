@@ -56,6 +56,7 @@ export function TodayScreen() {
       <ExamCountdown examDate={settings.examDate} />
       <ReadinessCard level={settings.level} skill="lasa" />
       <ReadinessCard level={settings.level} skill="hora" />
+      <ReadinessCard level={settings.level} skill="skriva" />
       <VocabStatusCard />
       <GrammarStatusCard />
       <div className="flex gap-2">

@@ -27,10 +27,7 @@ words:
     forms: [en läkare, läkaren, läkare, läkarna]
     en: doctor
     example:
-      {
-        sv: 'Läkaren skrev ut medicin.',
-        en: 'The doctor prescribed medicine.',
-      }
+      { sv: 'Läkaren skrev ut medicin.', en: 'The doctor prescribed medicine.' }
   - id: sjukskoterska
     status: reviewed
     reviewedBy: Anna

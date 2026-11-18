@@ -4,6 +4,8 @@ import {
   ContentManifest,
   GrammarPack,
   ReadingPack,
+  WritingPack,
+  type WritingPrompt,
   type GrammarLesson,
   type Level,
   type PackSummary,
@@ -77,6 +79,29 @@ export async function loadListeningPack(
 
 export async function loadVocabPack(id: string): Promise<CompiledVocabPack> {
   return CompiledVocabPack.parse(await packFile(id, 'ord'))
+}
+
+export interface OfferedPrompt {
+  prompt: WritingPrompt
+  pack: Pick<WritingPack, 'id' | 'version' | 'level'>
+}
+
+/** Every writing prompt of one level, in pack order. */
+export async function loadPrompts(level: Level): Promise<OfferedPrompt[]> {
+  const summaries = (await loadManifest()).packs.filter(
+    (p) => p.skill === 'skriva' && p.level === level,
+  )
+  const packs = await Promise.all(
+    summaries.map(async (p) =>
+      WritingPack.parse(await packFile(p.id, 'skriva')),
+    ),
+  )
+  return packs.flatMap((pack) =>
+    pack.prompts.map((prompt) => ({
+      prompt,
+      pack: { id: pack.id, version: pack.version, level: pack.level },
+    })),
+  )
 }
 
 export async function loadGrammarPack(id: string): Promise<GrammarPack> {

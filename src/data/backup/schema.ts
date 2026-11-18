@@ -1,14 +1,24 @@
 import { z } from 'zod'
 import { ATTEMPT_SKILLS, LEVELS } from '../../domain/content/schema'
 import { isLocalDate } from '../../domain/dates'
-import type { Attempt, Setting, StudyDay, VocabCard } from '../../domain/types'
+import type {
+  Attempt,
+  Setting,
+  StudyDay,
+  VocabCard,
+  Writing,
+} from '../../domain/types'
+import { RUBRIC } from '../../domain/writing'
 
 // Importing the content schema also sets Zod to jitless mode, which the
 // Content-Security-Policy needs.
 
 export const BACKUP_FORMAT = 'sfi-prep-backup'
-/** Version 2 adds word cards and study days. Version 1 files still import. */
-export const BACKUP_SCHEMA_VERSION = 2
+/**
+ * Version 2 adds word cards and study days, version 3 written texts. Older
+ * files still import.
+ */
+export const BACKUP_SCHEMA_VERSION = 3
 
 // The largest time a JavaScript Date can hold.
 const MAX_DATE_MS = 8.64e15
@@ -117,6 +127,29 @@ const studyDay = z.strictObject({
   newWords: count,
 })
 
+const rubricScore = z.union([z.literal(0), z.literal(1), z.literal(2)])
+
+const writing = z.strictObject({
+  id: shortId,
+  promptId: shortId,
+  packId: shortId,
+  packVersion: z.number().int().min(1),
+  level: z.enum(LEVELS),
+  text: z.string().max(20_000),
+  createdAt: epochMs,
+  updatedAt: epochMs,
+  submittedAt: epochMs.nullable(),
+  rubric: z
+    .strictObject(
+      Object.fromEntries(RUBRIC.map((c) => [c.id, rubricScore])) as Record<
+        (typeof RUBRIC)[number]['id'],
+        typeof rubricScore
+      >,
+    )
+    .nullable(),
+  assessedAt: epochMs.nullable(),
+})
+
 const header = {
   format: z.literal(BACKUP_FORMAT),
   exportedAt: epochMs,
@@ -132,9 +165,9 @@ const backupV1 = z.strictObject({
   }),
 })
 
-export const backupSchema = z.strictObject({
+const backupV2 = z.strictObject({
   ...header,
-  schemaVersion: z.literal(BACKUP_SCHEMA_VERSION),
+  schemaVersion: z.literal(2),
   data: z.strictObject({
     attempts: z.array(attempt),
     settings: z.array(setting),
@@ -143,11 +176,24 @@ export const backupSchema = z.strictObject({
   }),
 })
 
+export const backupSchema = z.strictObject({
+  ...header,
+  schemaVersion: z.literal(BACKUP_SCHEMA_VERSION),
+  data: z.strictObject({
+    attempts: z.array(attempt),
+    settings: z.array(setting),
+    cards: z.array(card),
+    studyDays: z.array(studyDay),
+    writings: z.array(writing),
+  }),
+})
+
 export interface BackupData {
   attempts: Attempt[]
   settings: Setting[]
   cards: VocabCard[]
   studyDays: StudyDay[]
+  writings: Writing[]
 }
 
 export interface Backup {
@@ -192,10 +238,18 @@ export function parseBackup(
           .transform((v1) => ({
             ...v1,
             schemaVersion: BACKUP_SCHEMA_VERSION,
-            data: { ...v1.data, cards: [], studyDays: [] },
+            data: { ...v1.data, cards: [], studyDays: [], writings: [] },
           }))
           .safeParse(json)
-      : backupSchema.safeParse(json)
+      : version === 2
+        ? backupV2
+            .transform((v2) => ({
+              ...v2,
+              schemaVersion: BACKUP_SCHEMA_VERSION,
+              data: { ...v2.data, writings: [] },
+            }))
+            .safeParse(json)
+        : backupSchema.safeParse(json)
   if (!parsed.success) {
     const issue = parsed.error.issues[0]
     const where = issue?.path.length ? ` at ${issue.path.join('.')}` : ''
@@ -216,6 +270,12 @@ export function parseBackup(
       c.createdAt,
       c.updatedAt,
       c.lastReviewAt ?? 0,
+    ]),
+    ...backup.data.writings.flatMap((w) => [
+      w.createdAt,
+      w.updatedAt,
+      w.submittedAt ?? 0,
+      w.assessedAt ?? 0,
     ]),
     ...backup.data.settings.flatMap((s) =>
       s.key === 'lastBackupAt' && s.value !== null
@@ -240,6 +300,9 @@ export function parseBackup(
   const cardIds = backup.data.cards.map((c) => c.id)
   if (new Set(cardIds).size !== cardIds.length)
     return { ok: false, error: 'The backup repeats a word card.' }
+  const writingIds = backup.data.writings.map((w) => w.id)
+  if (new Set(writingIds).size !== writingIds.length)
+    return { ok: false, error: 'The backup repeats a text.' }
   const dates = backup.data.studyDays.map((d) => d.date)
   if (new Set(dates).size !== dates.length)
     return { ok: false, error: 'The backup repeats a study day.' }

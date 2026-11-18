@@ -12,6 +12,7 @@ import {
   audioHash,
   readAudioSources,
   readGrammarSources,
+  readWritingSources,
   readLock,
   sourceAudioFile,
 } from '../scripts/lib/listening.ts'
@@ -65,5 +66,17 @@ describe('the grammar content in this repository', () => {
       'sprak.textbindning',
     ] as const)
       expect(covered.has(point), point).toBe(true)
+  })
+})
+
+describe('the writing content in this repository', () => {
+  it('parses, has no problems, and has an informal and a formal task', async () => {
+    const { packs, problems } = await readWritingSources()
+    expect(problems).toEqual([])
+    expect(packProblems(packs)).toEqual([])
+    const registers = new Set(
+      packs.flatMap((p) => p.prompts.map((q) => q.register)),
+    )
+    expect([...registers].sort()).toEqual(['formal', 'informal'])
   })
 })

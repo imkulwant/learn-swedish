@@ -1,4 +1,5 @@
 import type { AttemptSkill, Level } from './content/schema.ts'
+import type { Rubric } from './writing.ts'
 
 export type Id = string
 export type EpochMs = number
@@ -66,4 +67,23 @@ export interface StudyDay {
   reviews: number
   /** Words seen for the first time. */
   newWords: number
+}
+
+/**
+ * One text written for one writing prompt. It is a draft until submitted;
+ * after that the text is fixed and the learner assesses it against the rubric.
+ */
+export interface Writing {
+  id: Id
+  promptId: string
+  packId: string
+  packVersion: number
+  level: Level
+  text: string
+  createdAt: EpochMs
+  /** The last change of any kind: text, submission or assessment. */
+  updatedAt: EpochMs
+  submittedAt: EpochMs | null
+  rubric: Rubric | null
+  assessedAt: EpochMs | null
 }

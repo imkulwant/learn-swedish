@@ -4,6 +4,12 @@ import { db } from '../db'
 import { recordAttempt, type NewAttempt } from '../repositories/attempts'
 import { answerCard, startWord } from '../repositories/vocab'
 import {
+  assessWriting,
+  createWriting,
+  saveWritingText,
+  submitWriting,
+} from '../repositories/writings'
+import {
   completeOnboarding,
   getSetting,
   setSetting,
@@ -170,7 +176,7 @@ describe('backup', () => {
       days: await db.studyDays.toArray(),
     }
     const backup = await roundTrip()
-    expect(backup.schemaVersion).toBe(2)
+    expect(backup.schemaVersion).toBe(3)
     await resetDb()
     await replaceWithBackup(backup)
     expect(await db.cards.toArray()).toEqual(before.cards)
@@ -194,6 +200,43 @@ describe('backup', () => {
     expect(day).toMatchObject({ newWords: 9, reviews: 1 })
   })
 
+  it('carries texts through a round trip, and merge keeps the later change', async () => {
+    const source = {
+      promptId: 's1',
+      packId: 'd-skriva-1',
+      packVersion: 1,
+      level: 'D',
+    } as const
+    const draft = await createWriting(source, 'Hej', 1000)
+    const done = await createWriting(source, 'Hej Sara', 1000)
+    await submitWriting(done.id, 'Hej Sara!', 1100)
+    const rubric = {
+      task: 2,
+      register: 2,
+      structure: 1,
+      linking: 1,
+      grammar: 1,
+      variation: 0,
+    } as const
+    await assessWriting(done.id, rubric, 1200)
+    const backup = await roundTrip()
+    expect(backup.data.writings).toHaveLength(2)
+
+    // This device writes more in the draft after the backup was made.
+    await saveWritingText(draft.id, 'Hej igen', 1300)
+    expect(await mergeBackup(backup)).toBe(0)
+    expect((await db.writings.get(draft.id))?.text).toBe('Hej igen')
+
+    await resetDb()
+    await replaceWithBackup(backup)
+    expect(await db.writings.get(done.id)).toMatchObject({
+      text: 'Hej Sara!',
+      submittedAt: 1100,
+      rubric,
+    })
+    expect(summariseBackup(backup).writings).toBe(2)
+  })
+
   it('names files after the local date', () => {
     expect(backupFileName(new Date(2026, 10, 17, 23, 30).getTime())).toBe(
       'sfi-prep-2026-11-17.json',
@@ -204,15 +247,26 @@ describe('backup', () => {
 describe('parseBackup', () => {
   const valid = (): Record<string, unknown> => ({
     format: 'sfi-prep-backup',
-    schemaVersion: 2,
+    schemaVersion: 3,
     exportedAt: 1,
     appVersion: '1.0.0',
-    data: { attempts: [], settings: [], cards: [], studyDays: [] },
+    data: {
+      attempts: [],
+      settings: [],
+      cards: [],
+      studyDays: [],
+      writings: [],
+    },
   })
   // Test files name only the tables they are about; the rest are empty.
   const parse = (value: unknown) => {
     const v = value as { data?: Record<string, unknown> }
-    const data = v.data && { cards: [], studyDays: [], ...v.data }
+    const data = v.data && {
+      cards: [],
+      studyDays: [],
+      writings: [],
+      ...v.data,
+    }
     return parseBackup(JSON.stringify(v.data ? { ...v, data } : v))
   }
 
@@ -238,7 +292,22 @@ describe('parseBackup', () => {
     const result = parseBackup(JSON.stringify(v1))
     expect(result).toMatchObject({
       ok: true,
-      backup: { schemaVersion: 2, data: { cards: [], studyDays: [] } },
+      backup: {
+        schemaVersion: 3,
+        data: { cards: [], studyDays: [], writings: [] },
+      },
+    })
+  })
+
+  it('imports a version 2 file, which has no texts', () => {
+    const v2 = {
+      ...valid(),
+      schemaVersion: 2,
+      data: { attempts: [], settings: [], cards: [], studyDays: [] },
+    }
+    expect(parseBackup(JSON.stringify(v2))).toMatchObject({
+      ok: true,
+      backup: { schemaVersion: 3, data: { writings: [] } },
     })
   })
 
@@ -260,7 +329,7 @@ describe('parseBackup', () => {
     })
   })
 
-  it('refuses a version 2 file without its word cards', () => {
+  it('refuses a version 3 file without its word cards', () => {
     const noCards = { ...valid(), data: { attempts: [], settings: [] } }
     expect(parseBackup(JSON.stringify(noCards)).ok).toBe(false)
   })

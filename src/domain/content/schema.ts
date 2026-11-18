@@ -219,6 +219,50 @@ export const CompiledVocabPack = VocabPack.extend({
 }).strict()
 export type CompiledVocabPack = z.infer<typeof CompiledVocabPack>
 
+export const REGISTERS = ['informal', 'formal'] as const
+
+/** A remark on one phrase of a model answer, saying why it works. */
+const ModelNote = z.object({ quote: text, note: text }).strict()
+
+export const WritingPrompt = z
+  .object({
+    id,
+    ...reviewFields,
+    kp27: z.array(z.enum(KP27_POINT_IDS)).min(1),
+    theme: text,
+    register: z.enum(REGISTERS),
+    /** The task's name in Swedish, such as "Mejl till hyresvärden". */
+    title: text,
+    /** What it is, in English. */
+    en: text,
+    /** The situation, in Swedish as on the test. */
+    task: z.array(text).min(1),
+    /** What the text must cover, in Swedish. */
+    points: z.array(text).min(1),
+    /** A text that passes at this level: each line a line or paragraph. */
+    model: z
+      .object({
+        lines: z.array(text).min(1),
+        /** Each quote must appear in the lines. */
+        notes: z.array(ModelNote).min(1),
+      })
+      .strict(),
+  })
+  .strict()
+export type WritingPrompt = z.infer<typeof WritingPrompt>
+
+export const WritingPack = z
+  .object({
+    id,
+    version: z.number().int().min(1),
+    level: z.enum(LEVELS),
+    skill: z.literal('skriva'),
+    title: text,
+    prompts: z.array(WritingPrompt).min(1),
+  })
+  .strict()
+export type WritingPack = z.infer<typeof WritingPack>
+
 /** The gap in a gap exercise's sentence. */
 export const GAP = '___'
 
