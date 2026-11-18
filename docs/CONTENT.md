@@ -10,6 +10,7 @@ Every pack is drafted, checked by `npm run content`, and reviewed by a native sp
 | `d-ord-halsa` | D | Words: health and care | 30 words | – | Reviewed by Anna, 2026-11-18 |
 | `c-grammatik-1` | C (also shown at D) | Grammar | 5 lessons | 31 exercises | Reviewed by Anna, 2026-11-18 |
 | `d-skriva-1` | D | Skriva | 4 tasks (2 informal, 2 formal) | – | Reviewed by Anna, 2026-11-18 |
+| `d-tala-1` | D | Tala | 3 solo tasks | – | Reviewed by Anna, 2026-11-18 |
 | `check-sentences` | – | Sentences the writing checks are tested with | 35 sentences | – | Reviewed by Anna, 2026-11-18 |
 
 ## How to review a pack
@@ -59,4 +60,14 @@ Writing packs are in `content/writing/`. Try them in the app (Exam → Skriva). 
 - `model.notes`: each `quote` is a phrase from the model answer, and `note` says in English why it works.
 
 Please also check `content/check-sentences.yaml`. Every sentence under `flag` should contain the mistake named (verb not second, or *inte* after the verb in a subordinate clause), and every sentence under `ok` should be correct Swedish. The app's writing hints are tested against these sentences. When they are approved, set `status: reviewed` at the top of the file.
+
+## Reviewing a speaking pack
+
+Speaking packs are in `content/speaking/`. Try them in the app (Exam → Tala). For each task please check:
+
+- `task` and `points`: the situation and what to talk about, in Swedish as on the test.
+- `phrases`: phrases that help with this task.
+- `model`: an answer that would **pass** at D, as the voice reads it. Please listen to it in the app as well (record anything to reach the review), and note words the voice says wrongly. `say` is what the voice reads when it differs from the transcript, for example "elva sjuttiosju" for 1177.
+
+After a change to `model`, run `npm run audio`, as for listening packs.
 

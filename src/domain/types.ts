@@ -1,4 +1,5 @@
 import type { AttemptSkill, Level } from './content/schema.ts'
+import type { SpeakingRubric } from './speaking.ts'
 import type { Rubric } from './writing.ts'
 
 export type Id = string
@@ -85,5 +86,26 @@ export interface Writing {
   updatedAt: EpochMs
   submittedAt: EpochMs | null
   rubric: Rubric | null
+  assessedAt: EpochMs | null
+}
+
+/**
+ * One spoken answer to a speaking task, kept on this device only: recordings
+ * are not in backups. The audio is stored as bytes, not as a Blob, because
+ * WebKit cannot store a Blob in IndexedDB in a private session.
+ */
+export interface Recording {
+  id: Id
+  taskId: string
+  packId: string
+  packVersion: number
+  level: Level
+  createdAt: EpochMs
+  durationMs: number
+  mimeType: string
+  audio: ArrayBuffer
+  /** A starred recording is never deleted by the clean-up. */
+  starred: boolean
+  rubric: SpeakingRubric | null
   assessedAt: EpochMs | null
 }

@@ -35,6 +35,7 @@ import {
   readAudioSources,
   readGrammarSources,
   readWritingSources,
+  speakingSource,
   readLock,
   sourceAudioFile,
   wordSource,
@@ -61,7 +62,7 @@ for (const file of (await readdir(READING_SOURCES))
       problems.push(`${file}: ${issue.path.join('.')}: ${issue.message}`)
 }
 const audio = await readAudioSources()
-packs.push(...audio.listening, ...audio.vocab)
+packs.push(...audio.listening, ...audio.vocab, ...audio.speaking)
 problems.push(...audio.problems)
 for (const read of [readGrammarSources, readWritingSources]) {
   const sources = await read()
@@ -133,7 +134,11 @@ for (const pack of shipped) {
         ? await publishAudio(
             pack.words.map((w) => ({ id: w.id, source: wordSource(w) })),
           )
-        : null
+        : pack.skill === 'tala'
+          ? await publishAudio(
+              pack.tasks.map((t) => ({ id: t.id, source: speakingSource(t) })),
+            )
+          : null
   await writeFile(
     join(OUT, file),
     JSON.stringify(published ? { ...pack, audio: published.paths } : pack),
@@ -146,7 +151,7 @@ for (const pack of shipped) {
     title: pack.title,
     unitCount: units.length,
     itemCount:
-      pack.skill === 'ord' || pack.skill === 'skriva'
+      pack.skill === 'ord' || pack.skill === 'skriva' || pack.skill === 'tala'
         ? units.length
         : units.reduce((n, u) => n + u.items.length, 0),
     hasDrafts: units.some((u) => u.status === 'draft'),

@@ -1,0 +1,136 @@
+# Speaking pack 1, level D: the solo task "Berätta och ge råd".
+# Each model answer is read by the alma voice; `say` is what the voice reads
+# when it must differ from the transcript, for example numbers.
+# A model answer passes at D. It is calmer and shorter than a real answer of
+# 3–4 minutes, which has more pauses.
+id: d-tala-1
+version: 1
+level: D
+skill: tala
+title: Tala D – paket 1
+tasks:
+  - id: t-nytt-jobb
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27:
+      [
+        samtala.berattelser-presentationer,
+        samtala.onskemal-asikter,
+        samtala.anpassning,
+        sprak.uttal,
+      ]
+    theme: arbete
+    title: Att börja på ett nytt jobb
+    en: Starting a new job – tell and give advice
+    task:
+      - En person du känner ska börja på sitt första jobb i Sverige och undrar hur det är.
+    points:
+      - Berätta om när du började på ett nytt jobb eller en ny kurs.
+      - Vad var bra, och vad var svårt?
+      - Ge råd till personen som ska börja på ett nytt jobb.
+    phrases:
+      - Jag ska berätta om …
+      - Det första jag minns är …
+      - Det som var svårast var …
+      - Mitt första råd är att …
+      - Om jag var du skulle jag …
+      - Till sist vill jag säga …
+    model:
+      - voice: alma
+        text: Jag ska berätta om när jag började på mitt första jobb i Sverige. Det var för två år sedan, på ett äldreboende i Ekdala.
+      - voice: alma
+        text: Den första dagen var jag väldigt nervös. Jag förstod inte allt som mina kollegor sa, eftersom de pratade snabbt och använde många ord som jag inte kände till. Men min chef var snäll. Hon visade mig runt och presenterade mig för alla.
+      - voice: alma
+        text: Det som var bra var att jag fick en handledare. Hon hette Karin, och hon hjälpte mig de första veckorna. Det som var svårt var fikan. Alla pratade om tv-program och sport, och jag visste inte vad jag skulle säga.
+      - voice: alma
+        text: Efter några månader blev det lättare. Jag lärde mig orden för arbetet, och jag började förstå skämten på fikarasten.
+      - voice: alma
+        text: Nu ska jag ge några råd till dig som ska börja på ett nytt jobb. Mitt första råd är att fråga när du inte förstår. Svenskar tycker inte att det är dumt att fråga. Tvärtom visar det att du vill lära dig.
+      - voice: alma
+        text: Mitt andra råd är att gå på fikan, även om det känns svårt. Där lär man känna sina kollegor, och man lär sig mycket svenska. Du kan också fråga om någon vill äta lunch med dig.
+      - voice: alma
+        text: Till sist tycker jag att du ska skriva ner nya ord som du hör på jobbet. Om jag var du skulle jag repetera dem på bussen hem. Lycka till!
+
+  - id: t-ny-i-sverige
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27:
+      [
+        samtala.berattelser-presentationer,
+        samtala.onskemal-asikter,
+        samtala.anpassning,
+        sprak.uttal,
+      ]
+    theme: samhälle
+    title: Ny i Sverige
+    en: New in Sweden – tell and give advice
+    task:
+      - En familj har just flyttat till din stad från ett annat land. De vill veta hur det var för dig att komma till Sverige.
+    points:
+      - Berätta om dina första månader i Sverige.
+      - Vad hjälpte dig mest?
+      - Ge råd till familjen.
+    phrases:
+      - I början …
+      - Efter ett tag …
+      - Det som hjälpte mig mest var …
+      - För det första … För det andra …
+      - Det är viktigt att …
+      - Lycka till!
+    model:
+      - voice: alma
+        text: Jag ska berätta om mina första månader i Sverige. Jag kom hit i november för tre år sedan, och det första jag minns är mörkret. Klockan tre på eftermiddagen var det redan mörkt ute.
+      - voice: alma
+        text: I början bodde jag hos min kusin. Jag behövde ordna många saker, till exempel personnummer, bankkonto och en plats på SFI. Allt tog lång tid, och ibland kände jag mig ensam.
+      - voice: alma
+        text: Det som hjälpte mig mest var att jag började träna i en idrottsförening. Där träffade jag människor som pratade svenska med mig, och efter ett tag fick jag mina första svenska vänner.
+      - voice: alma
+        text: Nu vill jag ge några råd till er som är nya i Sverige. För det första ska ni börja på SFI så snart som möjligt. Språket är nyckeln till jobb och vänner.
+      - voice: alma
+        text: För det andra tycker jag att ni ska gå ut, även när det är mörkt och kallt. Köp bra kläder för vintern och ta en promenad varje dag. Det är bra för humöret.
+      - voice: alma
+        text: Till sist är det viktigt att vara tålmodig. Det tar tid att lära känna svenskar, men när man väl har blivit vän med någon, är vänskapen ofta stark. Lycka till!
+
+  - id: t-ma-bra
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-18'
+    kp27:
+      [
+        samtala.berattelser-presentationer,
+        samtala.onskemal-asikter,
+        samtala.anpassning,
+        sprak.uttal,
+      ]
+    theme: hälsa
+    title: Att må bra
+    en: Feeling well – tell and give advice
+    task:
+      - Din vän är mycket stressad och sover dåligt. Hon frågar dig vad hon kan göra.
+    points:
+      - Berätta om en gång när du var stressad eller trött.
+      - Berätta vad du gör för att må bra.
+      - Ge råd till din vän.
+    phrases:
+      - Förra året …
+      - Till slut …
+      - Därför …
+      - Mitt råd är att …
+      - Du kan också …
+      - Ta hand om dig!
+    model:
+      - voice: alma
+        text: Jag ska berätta om vad jag gör för att må bra. Förra året var jag mycket stressad. Jag jobbade heltid, läste svenska på kvällarna och tog hand om mina barn.
+      - voice: alma
+        text: Till slut sov jag dåligt och hade ont i huvudet varje dag. Därför ringde jag till vårdcentralen och fick prata med en sjuksköterska. Hon sa att jag behövde vila mer och röra på mig.
+      - voice: alma
+        text: Nu promenerar jag i trettio minuter varje dag, och jag går och lägger mig tidigare. Dessutom har jag slutat titta på mobilen innan jag ska sova. Jag mår mycket bättre nu.
+      - voice: alma
+        text: Till dig som är stressad vill jag säga att du ska ta det på allvar. Mitt första råd är att prata med någon, till exempel en vän, din chef eller vården. Du kan också ringa 1177 om du behöver råd om din hälsa.
+        say: Till dig som är stressad vill jag säga att du ska ta det på allvar. Mitt första råd är att prata med någon, till exempel en vän, din chef eller vården. Du kan också ringa elva sjuttiosju om du behöver råd om din hälsa.
+      - voice: alma
+        text: Mitt andra råd är att planera din vecka. Skriv vad du måste göra och vad som kan vänta. Om jag var du skulle jag också säga nej oftare. Man behöver inte göra allt.
+      - voice: alma
+        text: Till sist ska du inte glömma att göra något roligt varje vecka. Det är lika viktigt som jobbet. Ta hand om dig!

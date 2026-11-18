@@ -57,6 +57,7 @@ export function TodayScreen() {
       <ReadinessCard level={settings.level} skill="lasa" />
       <ReadinessCard level={settings.level} skill="hora" />
       <ReadinessCard level={settings.level} skill="skriva" />
+      <ReadinessCard level={settings.level} skill="tala" />
       <VocabStatusCard />
       <GrammarStatusCard />
       <div className="flex gap-2">

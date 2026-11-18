@@ -26,8 +26,8 @@ export function BackupSection() {
       </p>
       <p className="text-muted">
         Your progress lives only on this device. Save a backup to Files now and
-        then, and use it to move to a new phone. The file holds your answers as
-        readable text.
+        then, and use it to move to a new phone. The file holds your answers,
+        words and texts as readable text. Recordings are not included.
       </p>
       <SaveBackupButton />
       <ImportBackup />

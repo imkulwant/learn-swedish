@@ -3,6 +3,7 @@ import { Screen } from '../../ui/Screen'
 import { UpdateBanner } from '../updates/UpdateBanner'
 import { BackupSection } from './BackupSection'
 import { GoalSection } from './GoalSection'
+import { RecordingsSection } from './RecordingsSection'
 import { StorageStatus } from './StorageStatus'
 
 export function SettingsScreen() {
@@ -11,6 +12,7 @@ export function SettingsScreen() {
       <UpdateBanner />
       <GoalSection />
       <BackupSection />
+      <RecordingsSection />
       <StorageStatus />
       <section
         aria-labelledby="about-heading"
@@ -30,7 +32,8 @@ export function SettingsScreen() {
           Listening audio is made with Piper text-to-speech and two Swedish
           voices from the rhasspy/piper-voices collection: “nst” (CC0) and
           “alma” (CC BY 4.0). Both are trained on the NST Swedish speech
-          database from Språkbanken.
+          database from Språkbanken. The model answers for speaking are read by
+          “alma”.
         </p>
       </section>
     </Screen>

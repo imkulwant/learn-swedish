@@ -8,10 +8,12 @@ import { parse } from 'yaml'
 import {
   GrammarPack,
   ListeningPack,
+  SpeakingPack,
   VocabPack,
   WritingPack,
   type Line,
   type ListeningClip,
+  type SpeakingTask,
   type Voice,
   type Word,
 } from '../../src/domain/content/schema.ts'
@@ -21,6 +23,7 @@ export const LISTENING_SOURCES = join(ROOT, 'content/listening')
 export const VOCAB_SOURCES = join(ROOT, 'content/vocab')
 export const GRAMMAR_SOURCES = join(ROOT, 'content/grammar')
 export const WRITING_SOURCES = join(ROOT, 'content/writing')
+export const SPEAKING_SOURCES = join(ROOT, 'content/speaking')
 /** Where the made audio is kept, committed: one `<clip id>.m4a` per clip. */
 export const AUDIO_DIR = join(ROOT, 'content/audio')
 /** Where the build publishes the audio of shipped clips (generated). */
@@ -48,6 +51,13 @@ export const wordSource = (word: Word): AudioSource => ({
   id: `ord-${word.id}`,
   kind: 'ord',
   lines: [{ voice: WORD_VOICE, text: word.forms[0]!, say: word.say }],
+})
+
+/** A speaking task's model answer, read like a clip. */
+export const speakingSource = (task: SpeakingTask): AudioSource => ({
+  id: `tala-${task.id}`,
+  kind: 'tala',
+  lines: task.model,
 })
 
 /** The fingerprint of what a source's audio says and how it was made. */
@@ -121,27 +131,40 @@ export const readGrammarSources = () =>
 export const readWritingSources = () =>
   readPacks<WritingPack>(WRITING_SOURCES, WritingPack)
 
+export const readSpeakingSources = () =>
+  readPacks<SpeakingPack>(SPEAKING_SOURCES, SpeakingPack)
+
 /** Every audio source of every pack, drafts included. */
 export async function readAudioSources(): Promise<{
   sources: AudioSource[]
   listening: ListeningPack[]
   vocab: VocabPack[]
+  speaking: SpeakingPack[]
   problems: string[]
 }> {
   const l = await readListeningSources()
   const v = await readVocabSources()
+  const t = await readSpeakingSources()
   const sources = [
     ...l.packs.flatMap((p) => p.clips.map(clipSource)),
     ...v.packs.flatMap((p) => p.words.map(wordSource)),
+    ...t.packs.flatMap((p) => p.tasks.map(speakingSource)),
   ]
-  const problems = [...l.problems, ...v.problems]
-  // Clip ids and word audio ids ("ord-…") share one folder of files.
+  const problems = [...l.problems, ...v.problems, ...t.problems]
+  // Clip ids and word and speaking audio ids ("ord-…", "tala-…") share one
+  // folder of files.
   const seen = new Set<string>()
   for (const s of sources) {
     if (seen.has(s.id)) problems.push(`audio ${s.id} is made by two sources`)
     seen.add(s.id)
   }
-  return { sources, listening: l.packs, vocab: v.packs, problems }
+  return {
+    sources,
+    listening: l.packs,
+    vocab: v.packs,
+    speaking: t.packs,
+    problems,
+  }
 }
 
 /** The made audio of a clip, in content/audio/. */

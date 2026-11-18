@@ -9,6 +9,7 @@ import {
   rubricPercent,
   rubricPoints,
 } from '../../domain/writing'
+import { assessWriting } from '../../data/repositories/writings'
 import { saveFile } from '../../platform/share'
 import { Button } from '../../ui/Button'
 import { EmptyState } from '../../ui/EmptyState'
@@ -166,7 +167,11 @@ function Prompt({ offered }: { offered: OfferedPrompt }) {
           <Button onClick={() => setRound((r) => r + 1)}>Write it again</Button>
         </>
       ) : (
-        <RubricForm writingId={writing.id} />
+        <RubricForm
+          criteria={RUBRIC}
+          intro="Compare your text with the model answer. Be strict: the test is. Your answers make up your Skriva readiness."
+          onSave={(rubric) => assessWriting(writing.id, rubric)}
+        />
       )}
     </>
   )

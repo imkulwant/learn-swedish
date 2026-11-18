@@ -9,6 +9,7 @@ import {
   type ListeningPack,
   type ReadingPack,
   type ReadingText,
+  type SpeakingPack,
   type VocabPack,
   type Word,
   type WritingPack,
@@ -16,12 +17,18 @@ import {
 import { normalizeAnswer } from '../answerCheck.ts'
 import { acceptedOrders, shuffledChunks, wordBag } from '../grammar.ts'
 import { parseLesson } from '../lessonText.ts'
+import { MODEL_WORDS } from '../speaking.ts'
 import { WRITING_WORDS } from '../writing.ts'
 import { countWords as countTextWords } from '../writingChecks.ts'
 import { KP27_POINT_IDS, type Kp27Point } from './kp27.ts'
 
 export type Pack =
-  ReadingPack | ListeningPack | VocabPack | GrammarPack | WritingPack
+  | ReadingPack
+  | ListeningPack
+  | VocabPack
+  | GrammarPack
+  | WritingPack
+  | SpeakingPack
 
 /**
  * Word-count range of one reading text per level. C texts stay short; D allows
@@ -78,6 +85,15 @@ export function packUnits(pack: Pack): Unit[] {
     }))
   if (pack.skill === 'grammatik')
     return pack.lessons.map((l) => ({ ...l, words: 0, range: null }))
+  // A speaking task has no questions; its model answer is about three
+  // minutes of speech.
+  if (pack.skill === 'tala')
+    return pack.tasks.map((t) => ({
+      ...t,
+      items: [],
+      words: t.model.reduce((n, l) => n + countWords(l.say ?? l.text), 0),
+      range: MODEL_WORDS,
+    }))
   // A writing prompt has no questions; its model answer must fit the length
   // the app suggests to the learner.
   if (pack.skill === 'skriva')
@@ -247,7 +263,9 @@ export function publishable<P extends Pack>(
             ? { ...pack, lessons: keep(pack.lessons, includeDrafts) }
             : pack.skill === 'skriva'
               ? { ...pack, prompts: keep(pack.prompts, includeDrafts) }
-              : { ...pack, words: keep(pack.words, includeDrafts) },
+              : pack.skill === 'tala'
+                ? { ...pack, tasks: keep(pack.tasks, includeDrafts) }
+                : { ...pack, words: keep(pack.words, includeDrafts) },
     )
     .filter((pack) => packUnits(pack).length > 0) as P[]
 }

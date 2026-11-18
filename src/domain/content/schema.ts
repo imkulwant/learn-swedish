@@ -219,6 +219,48 @@ export const CompiledVocabPack = VocabPack.extend({
 }).strict()
 export type CompiledVocabPack = z.infer<typeof CompiledVocabPack>
 
+/**
+ * The solo speaking task, "Berätta och ge råd". The model answer is read by a
+ * voice, so it is lines like a listening clip.
+ */
+export const SpeakingTask = z
+  .object({
+    id,
+    ...reviewFields,
+    kp27: z.array(z.enum(KP27_POINT_IDS)).min(1),
+    theme: text,
+    /** In Swedish, such as "Att börja ett nytt jobb". */
+    title: text,
+    en: text,
+    /** The situation, in Swedish as on the test. */
+    task: z.array(text).min(1),
+    /** What to talk about, in Swedish. */
+    points: z.array(text).min(1),
+    /** Phrases that help with this task, in Swedish. */
+    phrases: z.array(text).min(1),
+    model: z.array(Line).min(1),
+  })
+  .strict()
+export type SpeakingTask = z.infer<typeof SpeakingTask>
+
+export const SpeakingPack = z
+  .object({
+    id,
+    version: z.number().int().min(1),
+    level: z.enum(LEVELS),
+    skill: z.literal('tala'),
+    title: text,
+    tasks: z.array(SpeakingTask).min(1),
+  })
+  .strict()
+export type SpeakingPack = z.infer<typeof SpeakingPack>
+
+/** A speaking pack as the app receives it, with where each model answer's audio is. */
+export const CompiledSpeakingPack = SpeakingPack.extend({
+  audio: z.record(z.string(), z.string().regex(/^audio\/[a-z0-9-]+\.m4a$/)),
+}).strict()
+export type CompiledSpeakingPack = z.infer<typeof CompiledSpeakingPack>
+
 export const REGISTERS = ['informal', 'formal'] as const
 
 /** A remark on one phrase of a model answer, saying why it works. */

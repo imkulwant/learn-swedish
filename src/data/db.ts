@@ -1,6 +1,7 @@
 import Dexie, { type EntityTable } from 'dexie'
 import type {
   Attempt,
+  Recording,
   Setting,
   StudyDay,
   VocabCard,
@@ -17,6 +18,7 @@ export class SfiDb extends Dexie {
   cards!: EntityTable<VocabCard, 'id'>
   studyDays!: EntityTable<StudyDay, 'date'>
   writings!: EntityTable<Writing, 'id'>
+  recordings!: EntityTable<Recording, 'id'>
   settings!: EntityTable<Setting, 'key'>
 
   constructor(name: string = DB_NAME) {

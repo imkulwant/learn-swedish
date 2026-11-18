@@ -18,6 +18,8 @@ const SCREENS: [string, string][] = [
   ['learn/ord', 'Words'],
   ['learn/grammatik', 'Grammar'],
   ['exam/skriva', 'Skriva – writing'],
+  ['exam/tala', 'Tala – speaking'],
+  ['exam/tala/t-nytt-jobb', 'Att börja på ett nytt jobb'],
   ['exam/skriva/s-felanmalan', 'Mejl till hyresvärden'],
   ['learn/grammatik/g-v2', 'Verbet på plats två'],
 ]
@@ -88,7 +90,7 @@ test('a handed-in text with its checks and rubric stays accessible', async ({
     .getByRole('button', { name: 'Hand in' })
     .click()
   await expect(
-    page.getByRole('heading', { name: 'Assess your text' }),
+    page.getByRole('heading', { name: 'Assess your answer' }),
   ).toBeVisible()
   ;({ violations } = await new AxeBuilder({ page }).analyze())
   expect(violations.map((v) => `${v.id}: ${v.help}`)).toEqual([])

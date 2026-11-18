@@ -1,5 +1,6 @@
 import {
   CompiledListeningPack,
+  CompiledSpeakingPack,
   CompiledVocabPack,
   ContentManifest,
   GrammarPack,
@@ -7,6 +8,7 @@ import {
   WritingPack,
   type WritingPrompt,
   type GrammarLesson,
+  type SpeakingTask,
   type Level,
   type PackSummary,
   type Skill,
@@ -79,6 +81,32 @@ export async function loadListeningPack(
 
 export async function loadVocabPack(id: string): Promise<CompiledVocabPack> {
   return CompiledVocabPack.parse(await packFile(id, 'ord'))
+}
+
+export interface OfferedTask {
+  task: SpeakingTask
+  pack: Pick<CompiledSpeakingPack, 'id' | 'version' | 'level'>
+  /** Where the model answer's audio is served, relative to the base. */
+  audioPath: string
+}
+
+/** Every speaking task of one level, in pack order. */
+export async function loadSpeakingTasks(level: Level): Promise<OfferedTask[]> {
+  const summaries = (await loadManifest()).packs.filter(
+    (p) => p.skill === 'tala' && p.level === level,
+  )
+  const packs = await Promise.all(
+    summaries.map(async (p) =>
+      CompiledSpeakingPack.parse(await packFile(p.id, 'tala')),
+    ),
+  )
+  return packs.flatMap((pack) =>
+    pack.tasks.map((task) => ({
+      task,
+      pack: { id: pack.id, version: pack.version, level: pack.level },
+      audioPath: pack.audio[task.id]!,
+    })),
+  )
 }
 
 export interface OfferedPrompt {

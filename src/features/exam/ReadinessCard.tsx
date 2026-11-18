@@ -38,7 +38,9 @@ export function ReadinessCard({
       {!state ? null : state.status === 'insufficient' ? (
         <p className="text-muted">
           {selfAssessed
-            ? `Write and assess ${state.needed} texts`
+            ? skill === 'tala'
+              ? `Record and assess ${state.needed} answers`
+              : `Write and assess ${state.needed} texts`
             : `Answer ${state.needed} questions`}{' '}
           to see how ready you are ({state.count} so far).
         </p>
@@ -52,7 +54,7 @@ export function ReadinessCard({
           </p>
           <p className="text-sm text-muted">
             {selfAssessed
-              ? `Your own assessment of your last ${state.count} texts, not an official score.`
+              ? `Your own assessment of your last ${state.count} ${skill === 'tala' ? 'recordings' : 'texts'}, not an official score.`
               : `An estimate from your last ${state.count} answers, not an official score.`}
           </p>
         </>
