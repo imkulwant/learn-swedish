@@ -15,7 +15,7 @@ export function UpdateBanner() {
   return (
     <section
       aria-label="Update"
-      className="flex flex-col gap-2 rounded-card border border-accent bg-surface p-4"
+      className="flex flex-col gap-2 rounded-card border border-accent-fg bg-surface p-4"
     >
       <p className="font-semibold">A new version is ready</p>
       <p className="text-sm text-muted">

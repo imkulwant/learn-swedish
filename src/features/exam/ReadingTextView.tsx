@@ -21,7 +21,7 @@ export function ReadingTextView({ text }: { text: ReadingText }) {
               <h3 className="font-semibold">{block.heading}</h3>
             )}
             {block.author && (
-              <p className="text-sm font-semibold text-accent">
+              <p className="text-sm font-semibold text-accent-fg">
                 {block.author}
               </p>
             )}

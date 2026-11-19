@@ -48,7 +48,9 @@ export function CheckPanel({
               <li key={c.id} className="flex gap-2">
                 <span
                   aria-hidden="true"
-                  className={c.status === 'ok' ? 'text-accent' : 'text-warning'}
+                  className={
+                    c.status === 'ok' ? 'text-accent-fg' : 'text-warning'
+                  }
                 >
                   {c.status === 'ok' ? '✓' : '!'}
                 </span>

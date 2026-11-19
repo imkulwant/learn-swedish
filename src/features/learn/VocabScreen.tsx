@@ -168,7 +168,7 @@ function Session({ vocab }: { vocab: OfferedVocab }) {
                 : 'All words are learned for today. Come back tomorrow.'
             }
             action={
-              <Link to="/learn" className="font-semibold text-accent">
+              <Link to="/learn" className="font-semibold text-accent-fg">
                 Back to Learn
               </Link>
             }

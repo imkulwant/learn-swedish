@@ -59,7 +59,7 @@ export function OrderQuestion({
         className={`flex min-h-14 flex-wrap items-center gap-2 rounded-control border border-dashed p-2 ${
           checked
             ? right
-              ? 'border-accent'
+              ? 'border-accent-fg'
               : 'border-danger'
             : 'border-border'
         }`}
@@ -71,7 +71,7 @@ export function OrderQuestion({
             disabled={checked}
             aria-label={`Remove ${item.chunks[i]}`}
             onClick={() => setPicked((p) => p.filter((c) => c !== i))}
-            className={`${chunkClass} border-accent bg-surface-2 text-text`}
+            className={`${chunkClass} border-accent-fg bg-surface-2 text-text`}
           >
             {item.chunks[i]}
           </button>

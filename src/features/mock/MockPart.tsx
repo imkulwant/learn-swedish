@@ -95,7 +95,7 @@ function MockPair({ pair, run }: { pair: OfferedPair; run: MockRun }) {
   const [done, setDone] = useState(false)
   if (linkedBefore || done)
     return (
-      <p role="status" className="text-accent">
+      <p role="status" className="text-accent-fg">
         ✓ Your discussion is recorded.
       </p>
     )
@@ -258,7 +258,7 @@ export function MockPart({
                 </ul>
               </div>
               {run.speaking[t.task.id] && (
-                <p role="status" className="text-accent">
+                <p role="status" className="text-accent-fg">
                   ✓ Recorded. Record again to replace it.
                 </p>
               )}

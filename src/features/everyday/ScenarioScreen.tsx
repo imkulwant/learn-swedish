@@ -50,7 +50,7 @@ function Phrases({ offered }: { offered: OfferedScenario }) {
               onClick={() => play(i)}
               className="tap-target flex w-full items-center gap-3 rounded-card border border-border bg-surface p-3 text-left active:bg-surface-2"
             >
-              <span aria-hidden="true" className="text-accent">
+              <span aria-hidden="true" className="text-accent-fg">
                 ▶
               </span>
               <span className="sr-only">Play: </span>

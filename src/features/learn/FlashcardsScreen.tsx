@@ -107,7 +107,7 @@ export function FlashcardsScreen() {
             title={`No words for level ${level} yet`}
             description="Word packs appear here once a reviewer has checked them."
             action={
-              <Link to="/learn" className="font-semibold text-accent">
+              <Link to="/learn" className="font-semibold text-accent-fg">
                 Back to Learn
               </Link>
             }

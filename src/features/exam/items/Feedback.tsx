@@ -13,9 +13,11 @@ export function Feedback({
   return (
     <div
       role="status"
-      className={`rounded-control border p-3 ${right ? 'border-accent' : 'border-danger'}`}
+      className={`rounded-control border p-3 ${right ? 'border-accent-fg' : 'border-danger'}`}
     >
-      <p className={`font-semibold ${right ? 'text-accent' : 'text-danger'}`}>
+      <p
+        className={`font-semibold ${right ? 'text-accent-fg' : 'text-danger'}`}
+      >
         {title}
       </p>
       {children && (

@@ -23,7 +23,7 @@ export function BackupReminder() {
       <p className="font-semibold">Time for a backup</p>
       <p className="text-sm text-muted">
         Your progress is only on this device.{' '}
-        <Link to="/settings" className="font-semibold text-accent">
+        <Link to="/settings" className="font-semibold text-accent-fg">
           Save a backup in Settings
         </Link>
       </p>

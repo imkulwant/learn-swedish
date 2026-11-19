@@ -23,7 +23,7 @@ test.describe('manifest and head', () => {
       start_url: BASE,
       scope: BASE,
       display: 'standalone',
-      theme_color: '#0B0D10',
+      theme_color: '#142638',
     })
     expect(manifest.icons).toEqual(
       expect.arrayContaining([

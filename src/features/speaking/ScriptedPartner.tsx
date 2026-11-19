@@ -213,7 +213,7 @@ export function ScriptedPartner({
         </div>
       )}
       {phase.name === 'answer' && (
-        <div className="flex flex-col gap-2 rounded-card border border-accent bg-surface p-4">
+        <div className="flex flex-col gap-2 rounded-card border border-accent-fg bg-surface p-4">
           <p className="font-semibold">Your turn</p>
           <Hint script={script} turn={phase.turn} />
           <Button onClick={() => void answer(phase.turn)}>Answer</Button>

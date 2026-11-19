@@ -13,7 +13,7 @@ export function ExamCountdown({ examDate }: { examDate: LocalDate | null }) {
     return (
       <p className="text-muted">
         Know your test date?{' '}
-        <Link to="/settings" className="font-semibold text-accent">
+        <Link to="/settings" className="font-semibold text-accent-fg">
           Add it in Settings
         </Link>{' '}
         to see a countdown.
@@ -38,7 +38,7 @@ export function ExamCountdown({ examDate }: { examDate: LocalDate | null }) {
       {countdown.kind === 'past' && (
         <p className="font-semibold">
           Your test date has passed.{' '}
-          <Link to="/settings" className="text-accent">
+          <Link to="/settings" className="text-accent-fg">
             Update it in Settings
           </Link>
         </p>

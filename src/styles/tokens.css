@@ -1,22 +1,28 @@
 /* Design tokens. `static` emits every variable, so SVG and plain CSS can use
-   var(--color-accent) even where no Tailwind utility mentions it. */
+   var(--color-accent) even where no Tailwind utility mentions it.
+   These are the Night (dark) colours. The Day (light) colours override them
+   below, under `data-theme='light'`, which src/platform/theme.ts sets. */
 @theme static {
-  --color-bg: #0b0d10;
-  --color-surface: #14181d;
-  --color-surface-2: #1c2128;
-  --color-border: #2a313a;
+  --color-bg: #142638;
+  --color-surface: #1b3248;
+  --color-surface-2: #234059;
+  --color-border: #38546f;
   --color-text: #f2f4f7;
-  --color-muted: #9aa4b2;
-  --color-accent: #ffcd3c;
-  --color-accent-strong: #e6b52e;
+  --color-muted: #a9b9ca;
+  /* The yellow: buttons and other fills. */
+  --color-accent: #ffcc00;
+  --color-accent-strong: #e6b800;
   --color-on-accent: #1a1400;
+  /* The yellow where it is text, a border or a control's tick: it must stay
+     readable on the page, which Day mode needs a darker colour for. */
+  --color-accent-fg: #ffcc00;
   --color-danger: #ff6b6b;
   --color-warning: #f5b84b;
 
   /* One sequential scale for every heatmap: the same hue, rising lightness, so
      it reads in order and survives colour blindness. Level 0 is "none". */
-  --color-heat-0: #1c2128;
-  --color-heat-1: #1f4a43;
+  --color-heat-0: #234059;
+  --color-heat-1: #1f5a50;
   --color-heat-2: #26796a;
   --color-heat-3: #36b08c;
   --color-heat-4: #8af5c6;
@@ -31,4 +37,29 @@
 
   /* Screen transitions stay well under the plan's 200 ms limit. */
   --duration-screen: 150ms;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+/* Day mode. Unlayered, so it beats the theme layer above. The heat scale runs
+   the other way: the strongest day is the darkest. */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --color-bg: #f3f6f9;
+  --color-surface: #ffffff;
+  --color-surface-2: #e5ecf3;
+  --color-border: #b9c7d5;
+  --color-text: #142638;
+  --color-muted: #475b6f;
+  --color-accent-fg: #735500;
+  --color-danger: #b3261e;
+  --color-warning: #8a5a00;
+
+  --color-heat-0: #e5ecf3;
+  --color-heat-1: #b5ddd2;
+  --color-heat-2: #6fbfa8;
+  --color-heat-3: #2f9479;
+  --color-heat-4: #14604c;
 }

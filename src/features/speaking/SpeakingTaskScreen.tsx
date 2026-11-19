@@ -66,7 +66,7 @@ function TaskCard({ offered: { task } }: { offered: OfferedTask }) {
         </ul>
       </div>
       <details className="text-sm">
-        <summary className="tap-target flex items-center font-semibold text-accent">
+        <summary className="tap-target flex items-center font-semibold text-accent-fg">
           Useful phrases
         </summary>
         <ul lang="sv" className="flex flex-col gap-1 pt-1">

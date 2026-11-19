@@ -94,8 +94,8 @@ export default defineConfig(({ command, isPreview }) => {
           start_url: base,
           scope: base,
           display: 'standalone',
-          theme_color: '#0B0D10',
-          background_color: '#0B0D10',
+          theme_color: '#142638',
+          background_color: '#142638',
           icons: [
             {
               src: `${base}icons/icon-192.png`,

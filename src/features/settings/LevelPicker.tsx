@@ -22,7 +22,7 @@ export function LevelPicker({
         <label
           key={level}
           className={`tap-target flex items-start gap-3 rounded-control border bg-surface p-3 ${
-            value === level ? 'border-accent' : 'border-border'
+            value === level ? 'border-accent-fg' : 'border-border'
           }`}
         >
           <input
@@ -30,7 +30,7 @@ export function LevelPicker({
             name="target-level"
             checked={value === level}
             onChange={() => onChange(level)}
-            className="mt-1 size-5 accent-[var(--color-accent)]"
+            className="mt-1 size-5 accent-[var(--color-accent-fg)]"
           />
           <span className="flex flex-col">
             <span className="font-semibold">SFI {level}</span>

@@ -58,7 +58,7 @@ export function TypedQuestion({
       enterKeyHint="done"
       className={`tap-target rounded-control border bg-surface px-3 text-text ${
         item.type === 'gap' ? 'w-36' : 'w-full'
-      } ${checked ? (right ? 'border-accent' : 'border-danger') : 'border-border'}`}
+      } ${checked ? (right ? 'border-accent-fg' : 'border-danger') : 'border-border'}`}
     />
   )
   const [before, after] =

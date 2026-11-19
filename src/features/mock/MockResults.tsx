@@ -64,7 +64,7 @@ function Review({ items, run }: { items: Item[]; run: MockRun }) {
           <li
             key={item.id}
             className={`flex flex-col gap-1 rounded-control border p-3 text-sm ${
-              right ? 'border-accent' : 'border-danger'
+              right ? 'border-accent-fg' : 'border-danger'
             }`}
           >
             <p lang="sv" className="font-semibold">

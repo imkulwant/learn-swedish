@@ -6,9 +6,9 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { devices, webkit } from '@playwright/test'
 
-const BG = '#0B0D10'
+const BG = '#142638'
 const BLUE = '#2F6FD6'
-const YELLOW = '#FFCD3C'
+const YELLOW = '#FFCC00'
 const OUT = new URL('../public/', import.meta.url)
 
 // An original glyph, drawn on a 1024 x 1024 grid: a speech bubble with a

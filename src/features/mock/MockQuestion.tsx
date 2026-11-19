@@ -35,7 +35,7 @@ export function MockQuestion({
           <label
             key={i}
             className={`tap-target flex items-center gap-3 rounded-control border bg-surface px-3 py-2 ${
-              local === i ? 'border-accent' : 'border-border'
+              local === i ? 'border-accent-fg' : 'border-border'
             }`}
           >
             <input
@@ -44,7 +44,7 @@ export function MockQuestion({
               checked={local === i}
               disabled={disabled}
               onChange={() => choose(i)}
-              className="size-5 accent-[var(--color-accent)]"
+              className="size-5 accent-[var(--color-accent-fg)]"
             />
             <span lang="sv">{option}</span>
           </label>

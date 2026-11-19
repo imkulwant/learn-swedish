@@ -64,7 +64,7 @@ export function RubricForm<C extends readonly Criterion[]>({
                 key={s.value}
                 className={`tap-target flex flex-1 items-center justify-center gap-2 rounded-control border px-2 ${
                   scores[c.id] === s.value
-                    ? 'border-accent bg-surface-2'
+                    ? 'border-accent-fg bg-surface-2'
                     : 'border-border bg-surface'
                 }`}
               >
@@ -75,7 +75,7 @@ export function RubricForm<C extends readonly Criterion[]>({
                   onChange={() =>
                     setScores((all) => ({ ...all, [c.id]: s.value }))
                   }
-                  className="size-4 accent-[var(--color-accent)]"
+                  className="size-4 accent-[var(--color-accent-fg)]"
                 />
                 {s.label}
               </label>

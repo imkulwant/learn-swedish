@@ -63,7 +63,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             {toast.actionLabel && (
               <button
                 type="button"
-                className="tap-target rounded-control px-3 font-semibold text-accent active:bg-surface"
+                className="tap-target rounded-control px-3 font-semibold text-accent-fg active:bg-surface"
                 onClick={() => {
                   toast.onAction?.()
                   dismiss()

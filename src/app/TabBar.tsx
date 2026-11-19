@@ -74,7 +74,7 @@ export function TabBar() {
           end={tab.end}
           className={({ isActive }) =>
             `tap-target flex flex-1 flex-col items-center gap-0.5 py-2 text-xs font-medium ${
-              isActive ? 'text-accent' : 'text-muted'
+              isActive ? 'text-accent-fg' : 'text-muted'
             }`
           }
         >

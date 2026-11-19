@@ -97,7 +97,7 @@ function ReadyFor({
   return (
     <section
       aria-label={`Ready for ${level}`}
-      className={`flex flex-col gap-1 rounded-card border p-4 ${ready ? 'border-accent' : 'border-border'} bg-surface`}
+      className={`flex flex-col gap-1 rounded-card border p-4 ${ready ? 'border-accent-fg' : 'border-border'} bg-surface`}
     >
       <h2 className="text-lg font-semibold">
         {ready
@@ -167,7 +167,7 @@ function Archive() {
           {counts.recordings} recording{counts.recordings === 1 ? '' : 's'} and{' '}
           {counts.discussions} discussion{counts.discussions === 1 ? '' : 's'}{' '}
           on this phone.{' '}
-          <Link to="/exam/tala" className="font-semibold text-accent">
+          <Link to="/exam/tala" className="font-semibold text-accent-fg">
             Listen under Tala
           </Link>
         </p>
@@ -223,7 +223,7 @@ export function ProgressScreen() {
         {history.length === 0 ? (
           <p className="text-muted">
             No mock finished yet.{' '}
-            <Link to="/exam" className="font-semibold text-accent">
+            <Link to="/exam" className="font-semibold text-accent-fg">
               Find one under Exam
             </Link>
           </p>

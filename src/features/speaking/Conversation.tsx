@@ -130,7 +130,7 @@ export function ConversationPlayer({
             key={i}
             aria-current={playing === i ? 'true' : undefined}
             className={`rounded-control border p-2 text-sm ${
-              playing === i ? 'border-accent' : 'border-border'
+              playing === i ? 'border-accent-fg' : 'border-border'
             } ${part.who === 'you' ? 'ml-6' : 'mr-6'}`}
           >
             <span className="font-semibold">

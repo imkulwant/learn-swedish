@@ -12,7 +12,7 @@ export function BackButton({ fallback }: { fallback: string }) {
     <button
       type="button"
       aria-label="Back"
-      className="tap-target -ml-2 flex items-center gap-1 rounded-control px-2 text-accent active:bg-surface-2"
+      className="tap-target -ml-2 flex items-center gap-1 rounded-control px-2 text-accent-fg active:bg-surface-2"
       onClick={goBack}
     >
       <svg

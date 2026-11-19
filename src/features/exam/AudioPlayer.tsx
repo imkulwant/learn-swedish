@@ -181,7 +181,7 @@ export function AudioPlayer({
         aria-label="Played"
         max={1}
         value={progress}
-        className="h-2 w-full accent-[var(--color-accent)]"
+        className="h-2 w-full accent-[var(--color-accent-fg)]"
       />
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm text-muted">

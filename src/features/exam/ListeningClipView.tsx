@@ -36,7 +36,7 @@ export function ListeningClipView({
             {clip.lines.map((line, i) => (
               <p key={i}>
                 {line.speaker && (
-                  <span className="font-semibold text-accent">
+                  <span className="font-semibold text-accent-fg">
                     {line.speaker}:{' '}
                   </span>
                 )}

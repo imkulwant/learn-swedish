@@ -30,7 +30,7 @@ function NotFoundScreen() {
         title="There is nothing here"
         description="This address does not match a screen."
         action={
-          <Link className="font-semibold text-accent" to="/">
+          <Link className="font-semibold text-accent-fg" to="/">
             Go to Today
           </Link>
         }

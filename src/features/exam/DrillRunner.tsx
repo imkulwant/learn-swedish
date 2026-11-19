@@ -80,7 +80,7 @@ export function DrillRunner({
           </p>
         </section>
         <ReadinessCard level={pack.level} skill={pack.skill} />
-        <Link to={backTo} className="font-semibold text-accent">
+        <Link to={backTo} className="font-semibold text-accent-fg">
           Choose another pack
         </Link>
       </div>

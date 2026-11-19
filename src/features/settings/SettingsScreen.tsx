@@ -1,6 +1,7 @@
 import { APP_VERSION } from '../../app/version'
 import { Screen } from '../../ui/Screen'
 import { UpdateBanner } from '../updates/UpdateBanner'
+import { AppearanceSection } from './AppearanceSection'
 import { BackupSection } from './BackupSection'
 import { GoalSection } from './GoalSection'
 import { RecordingsSection } from './RecordingsSection'
@@ -11,6 +12,7 @@ export function SettingsScreen() {
     <Screen title="Settings" back="/">
       <UpdateBanner />
       <GoalSection />
+      <AppearanceSection />
       <BackupSection />
       <RecordingsSection />
       <StorageStatus />

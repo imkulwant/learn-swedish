@@ -40,7 +40,7 @@ export function MindMap({ offered: { topic } }: { offered: OfferedPair }) {
       )}
       <p
         lang="sv"
-        className="rounded-card border-2 border-accent px-4 py-3 text-center text-lg font-bold"
+        className="rounded-card border-2 border-accent-fg px-4 py-3 text-center text-lg font-bold"
       >
         {topic.question}
       </p>
@@ -64,7 +64,7 @@ export function MindMap({ offered: { topic } }: { offered: OfferedPair }) {
 export function PhraseCards({ offered }: { offered: OfferedPair }) {
   return (
     <details className="rounded-card border border-border bg-surface p-4">
-      <summary className="tap-target flex items-center font-semibold text-accent">
+      <summary className="tap-target flex items-center font-semibold text-accent-fg">
         Phrases for the discussion
       </summary>
       <div className="grid grid-cols-1 gap-3 pt-2 sm:grid-cols-2">

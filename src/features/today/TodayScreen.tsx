@@ -65,7 +65,7 @@ export function TodayScreen() {
         <ReadinessCard level={settings.level} skill="hora" linked />
         <ReadinessCard level={settings.level} skill="skriva" linked />
         <ReadinessCard level={settings.level} skill="tala" linked />
-        <Link to="/progress" className="font-semibold text-accent">
+        <Link to="/progress" className="font-semibold text-accent-fg">
           See all your progress
         </Link>
       </section>

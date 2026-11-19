@@ -86,7 +86,10 @@ function Lesson({
               Next lesson: <span lang="sv">{next.lesson.title}</span>
             </Link>
           ) : (
-            <Link to="/learn/grammatik" className="font-semibold text-accent">
+            <Link
+              to="/learn/grammatik"
+              className="font-semibold text-accent-fg"
+            >
               All lessons
             </Link>
           )}

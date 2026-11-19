@@ -42,7 +42,7 @@ export function McQuestion({
             key={i}
             className={`tap-target flex items-center gap-3 rounded-control border px-3 py-2 ${
               checked && i === item.answer
-                ? 'border-accent'
+                ? 'border-accent-fg'
                 : checked && i === choice
                   ? 'border-danger'
                   : 'border-border'
@@ -54,7 +54,7 @@ export function McQuestion({
               checked={choice === i}
               disabled={checked}
               onChange={() => setChoice(i)}
-              className="size-5 accent-[var(--color-accent)]"
+              className="size-5 accent-[var(--color-accent-fg)]"
             />
             <span lang="sv">
               {option}

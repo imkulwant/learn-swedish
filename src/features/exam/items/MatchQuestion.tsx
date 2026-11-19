@@ -82,7 +82,7 @@ export function MatchQuestion({
               className={`tap-target rounded-control border bg-surface px-3 text-text ${
                 checked
                   ? right
-                    ? 'border-accent'
+                    ? 'border-accent-fg'
                     : 'border-danger'
                   : 'border-border'
               }`}
