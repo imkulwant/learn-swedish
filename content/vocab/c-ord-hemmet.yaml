@@ -1,0 +1,177 @@
+# Vocabulary: home, family and neighbours. Forms follow FORM_COUNT in src/domain/content/schema.ts.
+# Drafted 2026-11-19; reviewed by Anna 2026-11-19 (docs/CONTENT.md).
+id: c-ord-hemmet
+version: 1
+level: C
+skill: ord
+title: Ord – hemmet och familjen
+theme: boende
+words:
+  - id: lagenhet
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en lägenhet, lägenheten, lägenheter, lägenheterna]
+    en: flat, apartment
+    example: { sv: 'Vi bor i en lägenhet med tre rum och kök.', en: 'We live in a flat with three rooms and a kitchen.' }
+  - id: hyra
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en hyra, hyran, hyror, hyrorna]
+    en: rent
+    example: { sv: 'Hyran ska betalas senast den sista varje månad.', en: 'The rent must be paid by the last day of each month.' }
+  - id: granne
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en granne, grannen, grannar, grannarna]
+    en: neighbour
+    example: { sv: 'Min granne vattnar mina blommor när jag är bortrest.', en: 'My neighbour waters my plants when I am away.' }
+  - id: tvattstuga
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en tvättstuga, tvättstugan, tvättstugor, tvättstugorna]
+    en: laundry room
+    example: { sv: 'Jag har bokat tvättstugan på tisdag.', en: 'I have booked the laundry room for Tuesday.' }
+  - id: kok
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [ett kök, köket, kök, köken]
+    en: kitchen
+    example: { sv: 'Vi äter frukost i köket.', en: 'We have breakfast in the kitchen.' }
+  - id: rum
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [ett rum, rummet, rum, rummen]
+    en: room
+    example: { sv: 'Barnen delar rum.', en: 'The children share a room.' }
+  - id: nyckel
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en nyckel, nyckeln, nycklar, nycklarna]
+    en: key
+    example: { sv: 'Jag har glömt nycklarna hemma.', en: 'I have left the keys at home.' }
+  - id: familj
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en familj, familjen, familjer, familjerna]
+    en: family
+    example: { sv: 'Min familj kom till Sverige 2023.', en: 'My family came to Sweden in 2023.' }
+  - id: barn
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [ett barn, barnet, barn, barnen]
+    en: child
+    example: { sv: 'Hur många barn har du?', en: 'How many children do you have?' }
+  - id: foralder
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en förälder, föräldern, föräldrar, föräldrarna]
+    en: parent
+    example: { sv: 'Alla föräldrar är välkomna på mötet.', en: 'All parents are welcome at the meeting.' }
+  - id: syskon
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [ett syskon, syskonet, syskon, syskonen]
+    en: sibling, brother or sister
+    example: { sv: 'Jag har fyra syskon.', en: 'I have four brothers and sisters.' }
+  - id: kompis
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en kompis, kompisen, kompisar, kompisarna]
+    en: friend, mate
+    example: { sv: 'Jag ska träffa en kompis på ett café.', en: 'I am meeting a friend at a café.' }
+  - id: forskola
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en förskola, förskolan, förskolor, förskolorna]
+    en: preschool
+    example: { sv: 'Vår dotter går på förskolan på dagarna.', en: 'Our daughter goes to preschool in the daytime.' }
+  - id: bo
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: verb
+    forms: [att bo, bor, bodde, bott, bo]
+    en: to live (somewhere)
+    example: { sv: 'Var bor du?', en: 'Where do you live?' }
+  - id: flytta
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: verb
+    forms: [att flytta, flyttar, flyttade, flyttat, flytta]
+    en: to move (house)
+    example: { sv: 'Vi flyttade hit för två år sedan.', en: 'We moved here two years ago.' }
+  - id: stada
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: verb
+    forms: [att städa, städar, städade, städat, städa]
+    en: to clean, to tidy
+    example: { sv: 'Vi städar lägenheten på lördagar.', en: 'We clean the flat on Saturdays.' }
+  - id: tvatta
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: verb
+    forms: [att tvätta, tvättar, tvättade, tvättat, tvätta]
+    en: to wash (clothes)
+    example: { sv: 'Jag tvättar kläder två gånger i veckan.', en: 'I do the laundry twice a week.' }
+  - id: traffa
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: verb
+    forms: [att träffa, träffar, träffade, träffat, träffa]
+    en: to meet
+    example: { sv: 'Vi träffar grannarna på gården.', en: 'We meet the neighbours in the courtyard.' }
+  - id: hamta
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: verb
+    forms: [att hämta, hämtar, hämtade, hämtat, hämta]
+    en: to fetch, to pick up
+    example: { sv: 'Jag hämtar barnen på förskolan klockan fyra.', en: 'I pick the children up from preschool at four.' }
+  - id: stor
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: adjective
+    forms: [stor, stort, stora]
+    en: big, large
+    example: { sv: 'Vi har ett stort kök.', en: 'We have a big kitchen.' }
+  - id: trevlig
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: adjective
+    forms: [trevlig, trevligt, trevliga]
+    en: nice, pleasant
+    example: { sv: 'Grannarna är väldigt trevliga.', en: 'The neighbours are very nice.' }

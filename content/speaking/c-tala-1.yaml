@@ -1,0 +1,82 @@
+# Speaking pack 1, level C: the individual conversation with the test leader.
+# The task is what the leader asks; the points are the leader's follow-up
+# questions. Each model answer is read by the alma voice.
+# A model answer passes at C: simple, understandable, partly connected.
+# Drafted 2026-11-19; reviewed by Anna 2026-11-19 (docs/CONTENT.md).
+id: c-tala-1
+version: 1
+level: C
+skill: tala
+title: Tala C – paket 1
+tasks:
+  - id: c-t-vanlig-dag
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [samtala.berattelser-presentationer, samtala.fragor-vagledning-intervju, sprak.uttal]
+    theme: vardag
+    title: En vanlig dag
+    en: An ordinary day – tell the test leader about it
+    task:
+      - Samtalsledaren ber dig berätta om hur en vanlig dag ser ut för dig.
+    points:
+      - Vad gör du på morgonen?
+      - Vad gör du på dagen, till exempel i skolan eller på jobbet?
+      - Vad brukar du göra på kvällen?
+      - Vilken del av dagen tycker du bäst om? Varför?
+    phrases:
+      - Jag brukar …
+      - Först … sedan …
+      - Efter lunch …
+      - På kvällen …
+      - Det bästa med dagen är … eftersom …
+      - På helgerna är det annorlunda, för då …
+    model:
+      - voice: alma
+        text: Jag ska berätta om en vanlig dag för mig. Jag brukar vakna klockan sex, eftersom mina barn börjar skolan tidigt.
+      - voice: alma
+        text: Först äter vi frukost tillsammans. Jag dricker te och äter en smörgås med ost. Sedan följer jag barnen till skolan, och efter det tar jag bussen till sfi.
+      - voice: alma
+        text: Lektionerna börjar klockan halv nio och slutar klockan tolv. Vi läser, skriver och pratar mycket i grupp. Jag tycker mest om när vi pratar, för då lär jag mig nya ord.
+      - voice: alma
+        text: Efter lunch handlar jag mat och hämtar barnen. På eftermiddagen hjälper jag dem med läxorna. Ibland är det svårt, eftersom läxorna är på svenska och jag inte förstår allt. Men vi hjälps åt.
+      - voice: alma
+        text: På kvällen lagar jag middag. Efter middagen tittar vi på tv eller går en promenad. Barnen lägger sig klockan åtta, och sedan pluggar jag en stund innan jag går och lägger mig.
+      - voice: alma
+        text: Den bästa delen av dagen är kvällen, när hela familjen är hemma. På helgerna är det annorlunda. Då sover vi längre och träffar ofta våra vänner.
+
+  - id: c-t-framtiden
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [samtala.berattelser-presentationer, samtala.fragor-vagledning-intervju, samtala.onskemal-asikter, sprak.uttal]
+    theme: arbete
+    title: Mina planer
+    en: Your plans for work and studies – tell the test leader
+    task:
+      - Samtalsledaren vill veta vad du har gjort tidigare och vad du vill göra i framtiden.
+    points:
+      - Vad gjorde du innan du kom till Sverige, eller innan du började på sfi?
+      - Vad vill du arbeta med eller studera i framtiden? Varför?
+      - Vad behöver du göra för att nå ditt mål?
+      - Vem kan hjälpa dig?
+    phrases:
+      - Innan jag kom hit …
+      - I mitt hemland jobbade jag som …
+      - I framtiden vill jag …
+      - Jag vill bli … eftersom …
+      - För att nå mitt mål måste jag …
+      - Jag ska prata med en studievägledare.
+    model:
+      - voice: alma
+        text: Innan jag kom till Sverige bodde jag i en liten stad. Där jobbade jag i min pappas affär i sju år. Jag sålde mat och kläder, och jag pratade med kunderna hela dagarna.
+      - voice: alma
+        text: Jag tyckte om jobbet, för jag gillar att träffa människor. Men det var långa dagar, och vi var nästan aldrig lediga.
+      - voice: alma
+        text: I framtiden vill jag bli busschaufför. Jag tycker om att köra, och jag vill ha ett jobb där jag träffar många människor varje dag. Jag har också hört att det behövs fler busschaufförer i Sverige.
+      - voice: alma
+        text: För att nå mitt mål måste jag först bli klar med sfi. Sedan måste jag ta körkort, och efter det kan jag gå en utbildning till busschaufför.
+      - voice: alma
+        text: Nästa vecka ska jag prata med en studievägledare på skolan. Hon kan berätta vilka kurser jag behöver och hur lång tid det tar.
+      - voice: alma
+        text: Jag vet att det tar lång tid, men jag tror att jag klarar det. Min familj tycker också att det är en bra idé.

@@ -161,10 +161,11 @@ test('an answer is stored the moment it is checked', async ({ page }) => {
   ])
 })
 
-test('level C has no reviewed texts yet and says so', async ({ page }) => {
+test('level C lists its own texts', async ({ page }) => {
   await page.goto('exam/lasa')
   await page.getByRole('button', { name: 'Level C' }).click()
-  await expect(page.getByText('No reading texts for C yet')).toBeVisible()
+  await expect(page.getByText('No reading texts for C yet')).toHaveCount(0)
+  await expect(page.getByText('Läsa C – paket 1')).toBeVisible()
 })
 
 /** Makes the next write to IndexedDB fail with the named error, once. */

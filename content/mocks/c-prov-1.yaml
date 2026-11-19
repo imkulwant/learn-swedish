@@ -1,0 +1,353 @@
+# Mock exam 1, level C. Everything here is written for this mock only: no
+# item is used in a drill, so a remembered answer cannot inflate a score.
+# The parts follow the test: Läsa, Höra, Skriva (one informal task) and
+# Tala (an individual conversation and a pair conversation). Places and firms are fictional.
+# Drafted 2026-11-19; reviewed by Anna 2026-11-19 (docs/CONTENT.md).
+id: c-prov-1
+version: 1
+level: C
+skill: prov
+title: Provövning C – 1
+lasa:
+  - id: cm1-simhall
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [lyssna-lasa.tabeller-diagram-kartor]
+    theme: kultur och fritid
+    instruction: Läs informationen och svara på frågorna.
+    title: Ekdala simhall – öppettider
+    blocks:
+      - heading: Vanliga veckor
+        lines:
+          - Måndag–fredag 6.30–20.00
+          - Lördag och söndag 9.00–16.00
+      - heading: Jul och nyår
+        lines:
+          - Julafton och juldagen är simhallen stängd. Nyårsafton har vi öppet 9.00–13.00.
+      - heading: Priser
+        lines:
+          - Vuxen 60 kronor. Barn under 16 år 30 kronor. Barn under 4 år badar gratis.
+    items:
+      - type: mc
+        id: cm1-simhall-lordag
+        prompt: När stänger simhallen på lördagar?
+        options:
+          - Klockan 13.00
+          - Klockan 16.00
+          - Klockan 20.00
+        answer: 1
+        explain: '"Lördag och söndag 9.00–16.00" – it closes at 16.00.'
+      - type: mc
+        id: cm1-simhall-jul
+        prompt: Vilken dag är simhallen stängd?
+        options:
+          - Juldagen
+          - Nyårsafton
+          - Söndagar
+        answer: 0
+        explain: '"Julafton och juldagen är simhallen stängd." On New Year''s Eve it is open in the morning.'
+      - type: short
+        id: cm1-simhall-pris
+        prompt: Vad kostar det för ett barn som är tio år?
+        accept:
+          - 30 kronor
+          - '30'
+          - 30 kr
+          - trettio kronor
+        model: 30 kronor.
+        explain: '"Barn under 16 år 30 kronor." A ten-year-old is under 16.'
+
+  - id: cm1-meddelanden
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [lyssna-lasa.berattelser-nyheter-instruktioner]
+    theme: vardag
+    instruction: Läs meddelandena. Vad vill personerna? Välj det alternativ som passar bäst.
+    title: Två meddelanden
+    blocks:
+      - heading: A
+        author: Peter, fastighetsskötare
+        lines:
+          - Hej! Jag kommer och lagar ert kylskåp på onsdag mellan 8 och 12. Kan någon vara hemma och öppna dörren? Svara på det här sms:et.
+      - heading: B
+        author: Lena
+        lines:
+          - Tack för en jättetrevlig kväll i går! Maten var så god. Nästa gång bjuder jag hem er till oss!
+    items:
+      - type: mc
+        id: cm1-meddelanden-a
+        prompt: A. Vad vill Peter?
+        options:
+          - Att någon öppnar dörren för honom
+          - Att någon lagar kylskåpet
+          - Att någon ringer honom på onsdag
+        answer: 0
+        explain: '"Kan någon vara hemma och öppna dörren?" Peter will fix the fridge himself.'
+      - type: mc
+        id: cm1-meddelanden-b
+        prompt: B. Vad vill Lena?
+        options:
+          - Fråga om ett recept
+          - Tacka för en middag
+          - Be om ursäkt
+        answer: 1
+        explain: '"Tack för en jättetrevlig kväll … Maten var så god." Lena thanks you for a dinner.'
+
+  - id: cm1-lekpark
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27:
+      [
+        lyssna-lasa.berattelser-nyheter-instruktioner,
+        lyssna-lasa.skonlitteratur-sakprosa,
+      ]
+    theme: samhälle
+    instruction: Läs texten från Ekdala kommuns webbplats och svara på frågorna.
+    title: Ny lekpark vid sjön
+    blocks:
+      - lines:
+          - Nu är den nya lekparken vid Ekdalasjön klar. Den har gungor, en stor sandlåda och en klätterställning som ser ut som ett skepp. Det finns också bänkar och bord, så att familjer kan äta sin matsäck i parken.
+          - Kommunen har byggt lekparken eftersom många föräldrar har frågat efter en lekplats nära sjön. Barnen på två förskolor har fått vara med och bestämma hur den skulle se ut.
+          - Lekparken öppnar lördagen den 6 maj klockan 11. Då bjuder kommunen på saft och bullar, och det blir musik för barnen. Alla är välkomna!
+    items:
+      - type: mc
+        id: cm1-lekpark-varfor
+        prompt: Varför har kommunen byggt lekparken?
+        options:
+          - Det fanns en gammal lekpark som var trasig.
+          - Många föräldrar ville ha en lekplats nära sjön.
+          - Förskolorna behövde en ny gård.
+        answer: 1
+        explain: '"… eftersom många föräldrar har frågat efter en lekplats nära sjön." Eftersom gives the reason.'
+      - type: mc
+        id: cm1-lekpark-barnen
+        prompt: Vad har barnen på förskolorna gjort?
+        options:
+          - De har byggt klätterställningen.
+          - De har varit med och bestämt hur parken ska se ut.
+          - De har bakat bullar till öppningen.
+        answer: 1
+        explain: '"Barnen … har fått vara med och bestämma hur den skulle se ut."'
+      - type: short
+        id: cm1-lekpark-oppnar
+        prompt: Vilken dag öppnar lekparken?
+        accept:
+          - lördagen den 6 maj
+          - den 6 maj
+          - 6 maj
+          - lördag den 6 maj
+          - lördagen den sjätte maj
+          - den sjätte maj
+          - på lördag den 6 maj
+        model: Lördagen den 6 maj.
+        explain: '"Lekparken öppnar lördagen den 6 maj klockan 11."'
+hora:
+  - id: cm1-bibliotek-utrop
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [lyssna-lasa.berattelser-nyheter-instruktioner]
+    theme: kultur och fritid
+    kind: utrop
+    instruction: Du är på biblioteket och hör ett meddelande. Lyssna och svara på frågorna.
+    title: Ett meddelande på biblioteket
+    lines:
+      - voice: alma
+        text: Hej alla besökare! Biblioteket stänger om femton minuter. Om du vill låna böcker, gå till automaten vid entrén nu. Datorerna stängs av klockan 19.45. Välkommen tillbaka i morgon klockan tio!
+        say: Hej alla besökare! Biblioteket stänger om femton minuter. Om du vill låna böcker, gå till automaten vid entrén nu. Datorerna stängs av klockan nitton och fyrtiofem. Välkommen tillbaka i morgon klockan tio!
+    items:
+      - type: mc
+        id: cm1-bibliotek-utrop-nar
+        prompt: När stänger biblioteket?
+        options:
+          - Om fem minuter
+          - Om femton minuter
+          - Om en timme
+        answer: 1
+        explain: '"Biblioteket stänger om femton minuter."'
+      - type: mc
+        id: cm1-bibliotek-utrop-lana
+        prompt: Vad ska man göra om man vill låna böcker?
+        options:
+          - Gå till automaten vid entrén
+          - Fråga personalen vid datorerna
+          - Komma tillbaka i morgon
+        answer: 0
+        explain: '"Om du vill låna böcker, gå till automaten vid entrén nu."'
+  - id: cm1-tandvard
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27:
+      [
+        lyssna-lasa.berattelser-nyheter-instruktioner,
+        samtala.fragor-vagledning-intervju,
+      ]
+    theme: hälsa
+    kind: dialog
+    instruction: Yusuf ringer till tandvården. Lyssna på samtalet och svara på frågorna.
+    title: Ett samtal till tandvården
+    lines:
+      - voice: alma
+        speaker: Receptionisten
+        text: Ekdala tandvård, det är Kerstin.
+      - voice: nst
+        speaker: Yusuf
+        text: Hej, jag heter Yusuf Ahmadi. Jag har tid hos tandläkaren på torsdag klockan tio, men jag kan inte komma då. Kan jag få en annan tid?
+      - voice: alma
+        speaker: Receptionisten
+        text: Ja, det går bra. Vi har en tid på måndag klockan två, eller på tisdag klockan halv nio.
+      - voice: nst
+        speaker: Yusuf
+        text: På tisdag morgon är jag i skolan. Jag tar måndag klockan två.
+      - voice: alma
+        speaker: Receptionisten
+        text: Då har du tid på måndag klockan fjorton. Kom tio minuter innan, så att du hinner fylla i ett papper.
+      - voice: nst
+        speaker: Yusuf
+        text: Okej, tack så mycket. Hej då!
+    items:
+      - type: mc
+        id: cm1-tandvard-varfor
+        prompt: Varför ringer Yusuf?
+        options:
+          - Han har ont i en tand.
+          - Han vill byta sin tid.
+          - Han vill ha en ny tandläkare.
+        answer: 1
+        explain: '"Jag kan inte komma då. Kan jag få en annan tid?" He wants to change his appointment.'
+      - type: short
+        id: cm1-tandvard-ny-tid
+        prompt: När är Yusufs nya tid?
+        accept:
+          - måndag klockan två
+          - på måndag klockan två
+          - måndag klockan 14
+          - på måndag klockan 14
+          - måndag kl. 14
+          - måndag 14.00
+          - måndag klockan fjorton
+          - på måndag
+          - måndag
+        model: På måndag klockan två (14.00).
+        explain: '"Jag tar måndag klockan två." Tuesday morning does not work, because he is at school.'
+skriva:
+  - id: cm1-skriv-flytt
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [samtala.berattelser-presentationer, samtala.onskemal-asikter, sprak.textstruktur]
+    theme: boende
+    register: informal
+    title: Mejl till en vän som hjälpte dig
+    en: An email to thank a friend who helped you move
+    task:
+      - Du har flyttat till en ny lägenhet. Din vän Omar hjälpte dig med flytten i lördags. Skriv ett mejl till Omar.
+    points:
+      - Tacka Omar för hjälpen.
+      - Berätta hur du har det i den nya lägenheten.
+      - Berätta vad du ska göra i lägenheten nu.
+      - Bjud hem Omar och föreslå en dag.
+    model:
+      lines:
+        - Hej Omar!
+        - Tack så mycket för att du hjälpte mig med flytten i lördags! Utan dig hade det tagit hela dagen.
+        - Nu har jag bott här i en vecka, och jag trivs jättebra. Lägenheten är ljus och köket är större än i min gamla lägenhet. Grannarna verkar trevliga också.
+        - Jag har inte packat upp allt än. Nästa vecka ska jag köpa en ny soffa och sätta upp gardiner, eftersom det är så ljust på morgonen.
+        - Vill du komma och äta middag hos mig på fredag? Då lagar jag din favoritmat!
+        - Hälsningar
+        - Jamal
+      notes:
+        - quote: Tack så mycket för att du hjälpte mig
+          note: Thanks Omar right at the start. That is the first point and the reason for the email.
+        - quote: Nu har jag bott här i en vecka
+          note: Nu takes place 1, so the verb har comes second. The perfect fits, because Jamal still lives there.
+        - quote: köket är större än i min gamla lägenhet
+          note: A comparison (större än) makes the description more varied.
+        - quote: eftersom det är så ljust på morgonen
+          note: Eftersom gives the reason for the curtains.
+        - quote: Vill du komma och äta middag hos mig på fredag?
+          note: An invitation with a day, as the last point asks.
+tala:
+  tasks:
+    - id: cm1-tala-mat
+      status: reviewed
+      reviewedBy: Anna
+      reviewedAt: '2026-11-19'
+      kp27: [samtala.berattelser-presentationer, samtala.fragor-vagledning-intervju, sprak.uttal]
+      theme: mat
+      title: Mat och måltider
+      en: Food and meals – tell the test leader
+      task:
+        - Samtalsledaren ber dig berätta om mat och måltider i ditt liv.
+      points:
+        - Vad brukar du äta till frukost och till middag?
+        - Var handlar du mat? Varför där?
+        - Berätta om en måltid som du minns särskilt.
+        - Är maten i Sverige annorlunda än maten du åt förut? Hur?
+      phrases:
+        - Till frukost brukar jag …
+        - Jag handlar oftast på … eftersom …
+        - Jag minns en gång när …
+        - Maten här är mer … än …
+      model:
+        - voice: alma
+          text: Till frukost brukar jag äta bröd med ost och gurka, och jag dricker te med mjölk. På helgerna äter vi ägg och sitter länge vid bordet.
+        - voice: alma
+          text: Till middag lagar jag ofta ris eller pasta med kyckling och grönsaker. Mina barn tycker mest om pizza, men den äter vi bara på fredagar. Vi äter alltid tillsammans, och alla berättar om sin dag.
+        - voice: alma
+          text: Jag handlar oftast i en stor affär nära mitt hus, eftersom den är billig och har många olika varor. Ibland går jag till torget, för där är frukten färsk.
+        - voice: alma
+          text: Jag minns särskilt min brors bröllop. Vi var mer än tvåhundra gäster, och vi åt i flera timmar. Min mamma och mina mostrar hade lagat maten i tre dagar. Det var en fantastisk fest, och vi pratar fortfarande om den.
+        - voice: alma
+          text: Maten i Sverige är annorlunda. Den är inte lika stark, och man äter middag tidigare, ofta klockan fem eller sex. Men jag tycker om svensk fika, särskilt kanelbullar!
+  pairs:
+    - id: cm1-par-omrade
+      status: reviewed
+      reviewedBy: Anna
+      reviewedAt: '2026-11-19'
+      kp27: [samtala.samtal-diskussioner, samtala.onskemal-asikter, sprak.uttal]
+      theme: boende
+      title: Ett bra bostadsområde
+      en: What makes a good place to live?
+      question: Vad är viktigt i ett bra bostadsområde?
+      mindmap:
+        - affärer nära
+        - bra bussar
+        - parker och natur
+        - skolor och förskolor
+        - trevliga grannar
+        - lugnt och tyst
+      goal: Berätta vad ni tycker och kom överens om vad som är viktigast.
+      partner:
+        - voice: nst
+          text: Hej! Ska vi börja? Jag tycker att det är viktigt att ha affärer nära, för jag har ingen bil. Hur är det för dig?
+        - voice: nst
+          text: Okej. Hur är det där du bor? Vad tycker du om ditt område?
+        - voice: nst
+          text: Jag tycker också om parker. Det är skönt att gå ut i naturen på helgen. Vad tycker du?
+        - voice: nst
+          text: Nu måste vi välja. Vad är viktigast, tycker vi?
+      closing:
+        voice: nst
+        text: Bra, då är vi överens. Tack för samtalet!
+  phraseCards:
+    - title: Ask what your partner thinks
+      phrases:
+        - Vad tycker du?
+        - Och du?
+    - title: Say what you think
+      phrases:
+        - Jag tycker att …
+        - För mig är … viktigast.
+    - title: Ask again
+      phrases:
+        - Förlåt, kan du säga det igen?
+        - Menar du att …?
+    - title: Finish together
+      phrases:
+        - Ska vi säga …?
+        - Då är vi överens.

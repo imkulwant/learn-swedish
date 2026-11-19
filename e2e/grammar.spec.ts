@@ -22,7 +22,7 @@ test('a grammar lesson is read, practised and stored, and Today moves on to the 
   await openToday(page)
   await page.goto('learn')
   const card = page.getByRole('region', { name: 'Grammar' })
-  await expect(card).toContainText('Next: lesson 1 of 5, Verbet på plats två')
+  await expect(card).toContainText('Next: lesson 1 of 9, Verbet på plats två')
   await card.getByRole('link', { name: 'Open lesson' }).click()
   await expect(heading(page, 'Verbet på plats två')).toBeVisible()
   // The explanation, with its table.

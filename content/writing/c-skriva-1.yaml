@@ -1,0 +1,129 @@
+# Writing pack 1, level C: three informal tasks (the C test has one informal task).
+# The task and model answer are in Swedish; `en` and the notes are in English.
+# Each note's `quote` must appear word for word in the model answer.
+# Model answers are meant to pass at C, not to be perfect.
+# Drafted 2026-11-19; reviewed by Anna 2026-11-19 (docs/CONTENT.md).
+id: c-skriva-1
+version: 1
+level: C
+skill: skriva
+title: Skriva C – paket 1
+prompts:
+  - id: c-s-kurskamrat
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27:
+      [
+        samtala.berattelser-presentationer,
+        samtala.sammanfattningar,
+        sprak.textstruktur,
+      ]
+    theme: studier
+    register: informal
+    title: Mejl till en kurskamrat
+    en: An email to a classmate who has been ill
+    task:
+      - Din kurskamrat Ali har varit sjuk i tre dagar och har inte varit på sfi. Han skriver till dig och frågar vad ni har gjort i skolan. Svara på hans mejl.
+    points:
+      - Fråga hur Ali mår.
+      - Berätta vad ni har gjort på lektionerna.
+      - Berätta om läxan.
+      - Föreslå att ni pluggar tillsammans.
+    model:
+      lines:
+        - Hej Ali!
+        - Tack för ditt mejl. Vad tråkigt att du har varit sjuk! Hur mår du nu?
+        - I måndags läste vi en text om hur man bokar en tid på vårdcentralen. Sedan övade vi på att ringa i par. I går lyssnade vi på nyheter på lätt svenska, och det var ganska svårt.
+        - Läxan är att skriva tio meningar om vad du gör på helgen. Vi ska lämna den till läraren på fredag.
+        - Om du vill kan vi plugga tillsammans på biblioteket i morgon efter lektionen. Passar det?
+        - Krya på dig!
+        - Hälsningar
+        - Sara
+      notes:
+        - quote: Hur mår du nu?
+          note: Answers the first point early, with a question that shows you care.
+        - quote: I måndags läste vi
+          note: The time word comes first, so the verb läste comes second and vi after it (V2). Läste is the past tense of läsa.
+        - quote: Sedan övade vi
+          note: Sedan (then) puts the events in order, and the verb still comes second.
+        - quote: Om du vill kan vi plugga
+          note: A subordinate clause takes place 1, so the verb kan comes right after it.
+        - quote: Krya på dig!
+          note: The usual phrase to someone who is ill, "get well soon".
+
+  - id: c-s-inbjudan
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [samtala.onskemal-asikter, samtala.anpassning, sprak.textbindning]
+    theme: familj och vänner
+    register: informal
+    title: Svar på en inbjudan
+    en: A reply to a party invitation
+    task:
+      - Din granne Maria har bjudit dig på sin 40-årsfest på lördag. Du kan komma, men du kommer lite senare. Skriv ett mejl till Maria.
+    points:
+      - Tacka för inbjudan.
+      - Säg att du kommer, och förklara varför du kommer senare.
+      - Fråga om du kan ta med något.
+      - Fråga om något som du undrar över, till exempel kläder.
+    model:
+      lines:
+        - Hej Maria!
+        - Tack så mycket för inbjudan till din fest! Jag kommer gärna.
+        - Tyvärr kommer jag lite senare, eftersom jag jobbar till klockan sju på lördag. Jag tror att jag är hos dig ungefär halv åtta. Är det okej?
+        - Ska jag ta med något? Jag kan baka en kaka eller göra en sallad, om du vill.
+        - Jag undrar också en sak. Ska man ha fina kläder, eller går det bra med vanliga kläder?
+        - Jag ser fram emot att fira dig!
+        - Kram
+        - Amir
+      notes:
+        - quote: Jag kommer gärna.
+          note: Gärna is a friendly way to say yes to an invitation.
+        - quote: Tyvärr kommer jag lite senare
+          note: Tyvärr (unfortunately) takes place 1, so the verb kommer comes second.
+        - quote: eftersom jag jobbar till klockan sju
+          note: Eftersom gives the reason, as the task asks.
+        - quote: Ska jag ta med något?
+          note: A short, clear question for the third point.
+        - quote: Jag ser fram emot att fira dig!
+          note: A warm ending before the closing. "Kram" fits a neighbour you know well.
+
+  - id: c-s-helgen
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [samtala.berattelser-presentationer, sprak.ordforrad-bojning, sprak.textstruktur]
+    theme: fritid
+    register: informal
+    title: Mejl om din helg
+    en: An email to a friend about your weekend
+    task:
+      - Din vän Lisa bor i en annan stad. Hon har skrivit och frågat vad du gjorde i helgen. Svara på hennes mejl.
+    points:
+      - Berätta vad du gjorde på lördagen och på söndagen.
+      - Berätta vad som var roligast.
+      - Fråga vad Lisa gjorde.
+      - Föreslå något som ni kan göra tillsammans.
+    model:
+      lines:
+        - Hej Lisa!
+        - Tack för ditt mejl! Min helg var jättebra.
+        - På lördagen var det fint väder, så jag åkte till stranden med mina barn. Vi badade, åt glass och spelade fotboll. På kvällen lagade jag mat till min syster och hennes familj.
+        - På söndagen var jag trött, och därför stannade jag hemma. Jag städade lite och läste en bok.
+        - Det roligaste var stranden, eftersom barnen var så glada.
+        - Vad gjorde du i helgen? Har du lust att hälsa på oss nästa månad? Då kan vi gå på museum tillsammans.
+        - Kram
+        - Fatima
+      notes:
+        - quote: så jag åkte till stranden
+          note: Så shows a result. After så, the subject comes before the verb.
+        - quote: Vi badade, åt glass och spelade fotboll.
+          note: Three verbs in the past tense, including åt, the past of äta.
+        - quote: och därför stannade jag hemma
+          note: Därför (so, that is why) takes place 1, so the verb stannade comes second.
+        - quote: Det roligaste var stranden, eftersom
+          note: Answers "what was the most fun" and gives a reason.
+        - quote: Har du lust att hälsa på oss nästa månad?
+          note: A friendly suggestion, as the last point asks.

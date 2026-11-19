@@ -1,0 +1,177 @@
+# Vocabulary: shopping, money and time. Forms follow FORM_COUNT in src/domain/content/schema.ts.
+# Drafted 2026-11-19; reviewed by Anna 2026-11-19 (docs/CONTENT.md).
+id: c-ord-handla
+version: 1
+level: C
+skill: ord
+title: Ord – handla och tid
+theme: handla
+words:
+  - id: affar
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en affär, affären, affärer, affärerna]
+    en: shop, store
+    example: { sv: 'Affären på hörnet har öppet till klockan 22.', en: 'The shop on the corner is open until 10 pm.' }
+  - id: pris
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [ett pris, priset, priser, priserna]
+    en: price
+    example: { sv: 'Priset står på skylten.', en: 'The price is on the sign.' }
+  - id: kassa
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en kassa, kassan, kassor, kassorna]
+    en: checkout, till
+    example: { sv: 'Du betalar i kassan vid utgången.', en: 'You pay at the checkout by the exit.' }
+  - id: kvitto
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [ett kvitto, kvittot, kvitton, kvittona]
+    en: receipt
+    example: { sv: 'Spara kvittot om du vill lämna tillbaka tröjan.', en: 'Keep the receipt if you want to return the jumper.' }
+  - id: erbjudande
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [ett erbjudande, erbjudandet, erbjudanden, erbjudandena]
+    en: offer, special offer
+    example: { sv: 'Veckans erbjudande är kaffe för 39 kronor.', en: "This week's offer is coffee for 39 kronor." }
+  - id: pase
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en påse, påsen, påsar, påsarna]
+    en: bag (plastic or paper)
+    example: { sv: 'Vill du köpa en påse?', en: 'Would you like to buy a bag?' }
+  - id: rakning
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en räkning, räkningen, räkningar, räkningarna]
+    en: bill, invoice
+    example: { sv: 'Jag betalar alla räkningar i appen.', en: 'I pay all bills in the app.' }
+  - id: klocka
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en klocka, klockan, klockor, klockorna]
+    en: clock, watch; (klockan) the time, o'clock
+    example: { sv: 'Ursäkta, vad är klockan?', en: 'Excuse me, what time is it?' }
+  - id: kvart
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en kvart, kvarten, kvartar, kvartarna]
+    en: quarter of an hour
+    example: { sv: 'Bussen kommer om en kvart.', en: 'The bus comes in a quarter of an hour.' }
+  - id: vecka
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en vecka, veckan, veckor, veckorna]
+    en: week
+    example: { sv: 'Kursen börjar nästa vecka.', en: 'The course starts next week.' }
+  - id: manad
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en månad, månaden, månader, månaderna]
+    en: month
+    example: { sv: 'Hyran betalar man en gång i månaden.', en: 'You pay the rent once a month.' }
+  - id: helg
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: noun
+    forms: [en helg, helgen, helger, helgerna]
+    en: weekend; holiday
+    example: { sv: 'Vad gjorde du i helgen?', en: 'What did you do at the weekend?' }
+  - id: kosta
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: verb
+    forms: [att kosta, kostar, kostade, kostat, kosta]
+    en: to cost
+    example: { sv: 'Hur mycket kostar bananerna?', en: 'How much do the bananas cost?' }
+  - id: betala
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: verb
+    forms: [att betala, betalar, betalade, betalat, betala]
+    en: to pay
+    example: { sv: 'Kan jag betala med kort?', en: 'Can I pay by card?' }
+  - id: handla
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: verb
+    forms: [att handla, handlar, handlade, handlat, handla]
+    en: to shop, to buy groceries
+    example: { sv: 'Vi handlar mat på lördagar.', en: 'We buy groceries on Saturdays.' }
+  - id: kopa
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: verb
+    forms: [att köpa, köper, köpte, köpt, köp]
+    en: to buy
+    example: { sv: 'Jag köpte en ny jacka i går.', en: 'I bought a new jacket yesterday.' }
+  - id: salja
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: verb
+    forms: [att sälja, säljer, sålde, sålt, sälj]
+    en: to sell
+    example: { sv: 'Han säljer sin gamla cykel.', en: 'He is selling his old bike.' }
+  - id: billig
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: adjective
+    forms: [billig, billigt, billiga]
+    en: cheap
+    example: { sv: 'Grönsakerna är billiga på torget.', en: 'The vegetables are cheap at the market.' }
+  - id: dyr
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: adjective
+    forms: [dyr, dyrt, dyra]
+    en: expensive
+    example: { sv: 'Det är dyrt att äta på restaurang.', en: 'It is expensive to eat at a restaurant.' }
+  - id: oppen
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: adjective
+    forms: [öppen, öppet, öppna]
+    en: open
+    example: { sv: 'Apoteket är öppet till klockan 19.', en: 'The pharmacy is open until 7 pm.' }
+  - id: stangd
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    pos: adjective
+    forms: [stängd, stängt, stängda]
+    en: closed
+    example: { sv: 'Banken är stängd på söndagar.', en: 'The bank is closed on Sundays.' }

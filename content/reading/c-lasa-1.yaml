@@ -1,0 +1,256 @@
+# C reading pack 1. Original texts in the official task formats.
+# Drafted 2026-11-19; reviewed by Anna 2026-11-19 (docs/CONTENT.md).
+id: c-lasa-1
+version: 1
+level: C
+skill: lasa
+title: Läsa C – paket 1
+texts:
+  - id: c-lasa-1-buss
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [lyssna-lasa.tabeller-diagram-kartor]
+    theme: trafik
+    instruction: Här ser du en del av en busstidtabell. Svara på frågorna med hjälp av tidtabellen.
+    title: Buss 12 – Centrum till Ekdala sjukhus
+    blocks:
+      - heading: Måndag–fredag
+        lines:
+          - Centrum 07.10 – Skolgatan 07.16 – Ekdala sjukhus 07.30
+          - Centrum 07.40 – Skolgatan 07.46 – Ekdala sjukhus 08.00
+          - Centrum 08.10 – Skolgatan 08.16 – Ekdala sjukhus 08.30
+      - heading: Lördag och söndag
+        lines:
+          - Bussen går en gång i timmen, från klockan 9.10 till klockan 18.10.
+      - heading: Bra att veta
+        lines:
+          - Du kan inte köpa biljett på bussen. Köp biljetten i appen eller i automaten vid hållplatsen.
+    items:
+      - type: short
+        id: c-lasa-1-buss-sista
+        prompt: Du ska vara på sjukhuset klockan 8.15 en tisdag. Vilken är den sista bussen från Centrum som du kan ta?
+        accept:
+          - '07.40'
+          - '7.40'
+          - '07:40'
+          - '7:40'
+          - kl. 07.40
+          - kl. 7.40
+          - klockan 07.40
+          - klockan 7.40
+          - bussen 07.40
+          - bussen 7.40
+        model: Bussen 07.40.
+        explain: The 07.40 bus is at the hospital at 08.00. The next one, 08.10, gets there at 08.30, which is too late.
+      - type: mc
+        id: c-lasa-1-buss-tid
+        prompt: Hur lång tid tar resan från Centrum till sjukhuset?
+        options:
+          - 6 minuter
+          - 14 minuter
+          - 20 minuter
+          - 30 minuter
+        answer: 2
+        explain: The bus leaves Centrum at 07.10 and is at the hospital at 07.30, so the trip takes 20 minutes.
+      - type: mc
+        id: c-lasa-1-buss-sondag
+        prompt: Hur ofta går bussen på söndagar?
+        options:
+          - Var trettionde minut
+          - En gång i timmen
+          - Två gånger om dagen
+          - Den går inte på söndagar
+        answer: 1
+        explain: '"Lördag och söndag: Bussen går en gång i timmen" – once an hour.'
+
+  - id: c-lasa-1-meddelanden
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [lyssna-lasa.berattelser-nyheter-instruktioner]
+    theme: vardag
+    instruction: Här kan du läsa fyra korta meddelanden. Vad vill personerna? Välj det alternativ som passar bäst.
+    title: Fyra meddelanden
+    blocks:
+      - heading: A
+        author: Sara
+        lines:
+          - Hej! Jag står i affären nu. Vill du ha vanlig mjölk eller laktosfri? Svara snabbt, jag ska betala snart!
+      - heading: B
+        author: Vårdcentralen Ekdala
+        lines:
+          - 'Påminnelse: Du har en tid hos sjuksköterskan torsdag den 14 mars klockan 10.20. Om du inte kan komma, ring oss senast dagen innan.'
+      - heading: C
+        author: Jonas
+        lines:
+          - Förlåt att jag glömde din födelsedag i går! Jag skäms. Får jag bjuda dig på lunch i helgen?
+      - heading: D
+        author: Mirja i 2A
+        lines:
+          - Hej grannar! Jag ska flytta på lördag. Är det någon som kan hjälpa mig att bära möbler på förmiddagen? Jag bjuder på pizza!
+    items:
+      - type: mc
+        id: c-lasa-1-meddelanden-a
+        prompt: A. Vad vill Sara?
+        options:
+          - Be om hjälp
+          - Be om ursäkt
+          - Påminna om något
+          - Fråga om något
+        answer: 3
+        explain: Sara asks which milk you want ("Vill du ha …?"). She is asking a question.
+      - type: mc
+        id: c-lasa-1-meddelanden-b
+        prompt: B. Vad vill vårdcentralen?
+        options:
+          - Be om hjälp
+          - Be om ursäkt
+          - Påminna om något
+          - Fråga om något
+        answer: 2
+        explain: '"Påminnelse" means reminder. The health centre reminds you of your appointment.'
+      - type: mc
+        id: c-lasa-1-meddelanden-c
+        prompt: C. Vad vill Jonas?
+        options:
+          - Be om hjälp
+          - Be om ursäkt
+          - Påminna om något
+          - Fråga om något
+        answer: 1
+        explain: '"Förlåt att jag glömde …" – Jonas says sorry that he forgot your birthday.'
+      - type: mc
+        id: c-lasa-1-meddelanden-d
+        prompt: D. Vad vill Mirja?
+        options:
+          - Be om hjälp
+          - Be om ursäkt
+          - Påminna om något
+          - Fråga om något
+        answer: 0
+        explain: '"Är det någon som kan hjälpa mig …?" – Mirja asks for help with carrying furniture.'
+
+  - id: c-lasa-1-anslag
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [lyssna-lasa.berattelser-nyheter-instruktioner, digitalt.kallkritik]
+    theme: kultur och fritid
+    instruction: Här är fem annonser från anslagstavlan på biblioteket. Vilken annons passar vilken person? En annons blir över.
+    title: Anslagstavlan på Ekdala bibliotek
+    blocks:
+      - heading: A. Språkcafé
+        lines:
+          - Vill du prata mer svenska? Kom till biblioteket varje onsdag klockan 18–19.30. Vi fikar och pratar om olika ämnen. Gratis!
+      - heading: B. Sagostund
+        lines:
+          - Varje lördag klockan 10.30 läser vi sagor för barn mellan 3 och 6 år. Föräldrar är välkomna att sitta med.
+      - heading: C. Säljes – barncykel
+        lines:
+          - Röd cykel för barn som är 5–7 år. Den är i bra skick. Pris 300 kronor. Ring Ali på kvällen.
+      - heading: D. Hjälp med mobilen och datorn
+        lines:
+          - Har du problem med e-post, BankID eller 1177 i mobilen? Varje tisdag klockan 13–15 hjälper vi dig. Du behöver inte anmäla dig.
+      - heading: E. Promenadgruppen
+        lines:
+          - Vi går en lång promenad i skogen varje söndag klockan 10. Vi träffas på parkeringen vid sjön. Ta med bra skor och kaffe!
+    items:
+      - type: match
+        id: c-lasa-1-anslag-para
+        prompt: Vilken annons passar vilken person?
+        pairs:
+          - q: Amina vill lära sig att logga in på 1177 i mobilen.
+            answer: 3
+          - q: Tomas vill röra på sig och vara ute i naturen.
+            answer: 4
+          - q: Leila har en dotter på fyra år som älskar böcker.
+            answer: 1
+          - q: Karim vill träna på att prata svenska med andra.
+            answer: 0
+        options:
+          - A. Språkcafé
+          - B. Sagostund
+          - C. Säljes – barncykel
+          - D. Hjälp med mobilen och datorn
+          - E. Promenadgruppen
+        explain: Look for one key word for each person. 1177 and the mobile match D, the forest (skogen) matches E, a four-year-old matches B (children aged 3–6), and speaking Swedish matches A. The bike (C) is left over.
+      - type: short
+        id: c-lasa-1-anslag-dator
+        prompt: Vilken dag kan man få hjälp med mobilen?
+        accept:
+          - tisdag
+          - tisdagar
+          - på tisdag
+          - på tisdagar
+          - varje tisdag
+          - tisdagar klockan 13–15
+          - på tisdagar klockan 13–15
+        model: På tisdagar, klockan 13–15.
+        explain: 'Ad D says "Varje tisdag klockan 13–15 hjälper vi dig."'
+
+  - id: c-lasa-1-amal
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27:
+      [
+        lyssna-lasa.berattelser-nyheter-instruktioner,
+        lyssna-lasa.skonlitteratur-sakprosa,
+        lyssna-lasa.strategier,
+      ]
+    theme: arbete
+    instruction: Läs texten om Amal och svara på frågorna.
+    title: Amal börjar om
+    blocks:
+      - lines:
+          - Amal är 38 år och kommer från Syrien. Hon har bott i Ekdala i två år tillsammans med sin man och deras två söner. I hemlandet arbetade hon som frisör i femton år. Hon hade en egen salong med tre anställda.
+          - När Amal kom till Sverige kunde hon bara säga hej och tack på svenska. Det första året var svårt. Hon förstod inte breven från skolan, och hon kände sig ofta ensam när barnen var i skolan och mannen var på sin kurs.
+          - Nu läser hon sfi på förmiddagarna. Hon tycker om sin lärare, som pratar långsamt och tydligt. – Jag lär mig mest när jag måste prata, säger Amal. Därför går hon också på språkcafé på biblioteket varje onsdag.
+          - Sedan augusti gör Amal praktik på en frisersalong i centrum två eftermiddagar i veckan. Hon klipper och färgar hår, men hon svarar också i telefon och bokar tider åt kunderna. I början var det svårt att prata i telefon, men nu går det bättre.
+          - Amal har en dröm. Om några år vill hon öppna en egen salong igen, den här gången i Ekdala. – Men först måste jag bli bättre på svenska, säger hon och skrattar.
+    items:
+      - type: mc
+        id: c-lasa-1-amal-yrke
+        prompt: Vad arbetade Amal med i sitt hemland?
+        options:
+          - Hon var lärare.
+          - Hon var frisör.
+          - Hon var sjuksköterska.
+          - Hon arbetade i en affär.
+        answer: 1
+        explain: '"I hemlandet arbetade hon som frisör i femton år" – she was a hairdresser.'
+      - type: mc
+        id: c-lasa-1-amal-svart
+        prompt: Varför var det första året svårt?
+        options:
+          - Hon hade inget jobb och inga pengar.
+          - Hon förstod inte så mycket och var ofta ensam.
+          - Hennes söner ville inte gå i skolan.
+          - Hon bodde långt från centrum.
+        answer: 1
+        explain: 'The second paragraph says she did not understand the letters from school ("förstod inte breven") and often felt lonely ("kände sig ofta ensam").'
+      - type: short
+        id: c-lasa-1-amal-sprakcafe
+        prompt: Varför går Amal på språkcafé?
+        accept:
+          - hon lär sig mest när hon måste prata
+          - för att hon lär sig mest när hon måste prata
+          - eftersom hon lär sig mest när hon måste prata
+          - för att prata
+          - för att prata svenska
+          - för att öva på att prata
+          - för att träna på att prata
+          - hon vill prata svenska
+        model: Hon lär sig mest när hon måste prata.
+        explain: '"Jag lär mig mest när jag måste prata … Därför går hon också på språkcafé." "Därför" (that is why) links the reason to the café.'
+      - type: mc
+        id: c-lasa-1-amal-drom
+        prompt: Vad vill Amal göra i framtiden?
+        options:
+          - Flytta tillbaka till sitt hemland.
+          - Bli lärare på sfi.
+          - Öppna en egen salong i Ekdala.
+          - Arbeta på biblioteket.
+        answer: 2
+        explain: '"Om några år vill hon öppna en egen salong igen, den här gången i Ekdala."'
