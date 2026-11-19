@@ -1,0 +1,232 @@
+# C listening pack 1. Original clips in the official kinds: an announcement,
+# a dialogue, news and a monologue. Audio is made by `npm run audio`.
+# Drafted 2026-11-19; reviewed by Anna 2026-11-19 (docs/CONTENT.md).
+id: c-hora-1
+version: 1
+level: C
+skill: hora
+title: Höra C – paket 1
+clips:
+  - id: c-hora-1-affar
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [lyssna-lasa.berattelser-nyheter-instruktioner]
+    theme: handla
+    kind: utrop
+    instruction: Du handlar mat och hör ett meddelande i affären. Lyssna och svara på frågorna.
+    title: Ett meddelande i affären
+    lines:
+      - voice: nst
+        text: Hej och välkommen till Ekdala Livs! Just nu har vi ett bra erbjudande på frukt. Alla äpplen kostar 19,90 kronor kilot. Vi vill också påminna om att butiken stänger klockan 20 i kväll. Kassorna stänger fem minuter innan. Tack för att du handlar hos oss!
+        say: Hej och välkommen till Ekdala Livs! Just nu har vi ett bra erbjudande på frukt. Alla äpplen kostar nitton kronor och nittio öre kilot. Vi vill också påminna om att butiken stänger klockan tjugo i kväll. Kassorna stänger fem minuter innan. Tack för att du handlar hos oss!
+    items:
+      - type: mc
+        id: c-hora-1-affar-vad
+        prompt: Vad kostar äpplena?
+        options:
+          - 9,90 kronor kilot
+          - 19,90 kronor kilot
+          - 29,90 kronor kilot
+          - 19,90 kronor styck
+        answer: 1
+        explain: '"Alla äpplen kostar 19,90 kronor kilot" – 19.90 kronor a kilo. "Styck" would mean each.'
+      - type: short
+        id: c-hora-1-affar-stanger
+        prompt: När stänger butiken i kväll?
+        accept:
+          - '20'
+          - '20.00'
+          - klockan 20
+          - kl. 20
+          - kl 20
+          - klockan tjugo
+          - klockan åtta
+          - åtta
+        model: Klockan 20.
+        explain: '"Butiken stänger klockan 20 i kväll." Klockan 20 is the same as klockan åtta på kvällen.'
+      - type: mc
+        id: c-hora-1-affar-kassor
+        prompt: Vad händer klockan 19.55?
+        options:
+          - Butiken öppnar.
+          - Kassorna stänger.
+          - Frukten blir billigare.
+          - Det kommer nya äpplen.
+        answer: 1
+        explain: '"Kassorna stänger fem minuter innan" – the tills close five minutes before 20.00, at 19.55.'
+
+  - id: c-hora-1-vagen
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27:
+      [
+        lyssna-lasa.berattelser-nyheter-instruktioner,
+        lyssna-lasa.tabeller-diagram-kartor,
+      ]
+    theme: trafik
+    kind: dialog
+    instruction: Hassan frågar en kvinna om vägen. Lyssna på samtalet och svara på frågorna.
+    title: Var ligger vårdcentralen?
+    lines:
+      - voice: nst
+        speaker: Hassan
+        text: Ursäkta, kan du hjälpa mig? Jag letar efter vårdcentralen.
+      - voice: alma
+        speaker: Eva
+        text: Ja, visst. Gå rakt fram till rondellen. Där svänger du till vänster, in på Storgatan.
+      - voice: nst
+        speaker: Hassan
+        text: Till vänster vid rondellen. Och sedan?
+      - voice: alma
+        speaker: Eva
+        text: Sedan går du förbi en skola och ett apotek. Vårdcentralen ligger i det stora gula huset bredvid apoteket.
+      - voice: nst
+        speaker: Hassan
+        text: Är det långt härifrån?
+      - voice: alma
+        speaker: Eva
+        text: Nej, det tar ungefär tio minuter att gå.
+      - voice: nst
+        speaker: Hassan
+        text: Tack så mycket!
+      - voice: alma
+        speaker: Eva
+        text: Ingen orsak.
+    items:
+      - type: mc
+        id: c-hora-1-vagen-svang
+        prompt: Vart ska Hassan svänga vid rondellen?
+        options:
+          - Till höger
+          - Till vänster
+          - Rakt fram
+          - Tillbaka
+        answer: 1
+        explain: '"Där svänger du till vänster" – he turns left at the roundabout.'
+      - type: mc
+        id: c-hora-1-vagen-var
+        prompt: Var ligger vårdcentralen?
+        options:
+          - Bredvid apoteket
+          - Bredvid skolan
+          - Vid rondellen
+          - Mittemot stationen
+        answer: 0
+        explain: '"Vårdcentralen ligger i det stora gula huset bredvid apoteket" – next to the pharmacy.'
+      - type: short
+        id: c-hora-1-vagen-tid
+        prompt: Hur lång tid tar det att gå till vårdcentralen?
+        accept:
+          - tio minuter
+          - ungefär tio minuter
+          - cirka tio minuter
+          - 10 minuter
+          - ungefär 10 minuter
+          - cirka 10 minuter
+          - tio
+          - '10'
+        model: Ungefär tio minuter.
+        explain: '"Det tar ungefär tio minuter att gå."'
+
+  - id: c-hora-1-sno
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [lyssna-lasa.berattelser-nyheter-instruktioner]
+    theme: samhälle
+    kind: nyhet
+    instruction: Du hör en kort nyhet på radion. Lyssna och svara på frågorna.
+    title: Nyheter från Radio Ekdala
+    lines:
+      - voice: nst
+        text: Nyheter från Radio Ekdala. Det har snöat mycket i natt, och i dag går många bussar sent. Buss 3 och buss 7 går inte alls före klockan 10. Kommunen ber alla som kan att gå eller att ta tåget i stället. Skolorna är öppna som vanligt. I morgon blir det kallare, men det ska inte snöa mer.
+        say: Nyheter från Radio Ekdala. Det har snöat mycket i natt, och i dag går många bussar sent. Buss tre och buss sju går inte alls före klockan tio. Kommunen ber alla som kan att gå eller att ta tåget i stället. Skolorna är öppna som vanligt. I morgon blir det kallare, men det ska inte snöa mer.
+    items:
+      - type: mc
+        id: c-hora-1-sno-varfor
+        prompt: Varför går bussarna sent?
+        options:
+          - Det är fel på bussarna.
+          - Det har snöat mycket.
+          - Det finns inga chaufförer.
+          - Vägen är avstängd.
+        answer: 1
+        explain: '"Det har snöat mycket i natt, och i dag går många bussar sent."'
+      - type: short
+        id: c-hora-1-sno-bussar
+        prompt: Vilka bussar går inte före klockan tio?
+        accept:
+          - buss 3 och buss 7
+          - buss 3 och 7
+          - 3 och 7
+          - bussarna 3 och 7
+          - buss tre och buss sju
+          - buss tre och sju
+          - tre och sju
+        model: Buss 3 och buss 7.
+        explain: '"Buss 3 och buss 7 går inte alls före klockan 10." "Inte alls" means not at all.'
+      - type: mc
+        id: c-hora-1-sno-morgon
+        prompt: Hur blir vädret i morgon?
+        options:
+          - Varmare och mer snö
+          - Kallare, men ingen ny snö
+          - Regn och blåst
+          - Sol och varmt
+        answer: 1
+        explain: '"I morgon blir det kallare, men det ska inte snöa mer."'
+
+  - id: c-hora-1-nadia
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27:
+      [
+        lyssna-lasa.berattelser-nyheter-instruktioner,
+        samtala.berattelser-presentationer,
+      ]
+    theme: studier
+    kind: monolog
+    instruction: Det är första dagen på en ny sfi-kurs. Läraren presenterar sig. Lyssna och svara på frågorna.
+    title: En ny lärare
+    lines:
+      - voice: alma
+        speaker: Nadia
+        text: Hej allihop! Jag heter Nadia, och jag är er nya lärare i den här gruppen. Jag kommer från Ekdala, men jag har bott i Spanien i fem år. Där arbetade jag på en svensk skola. På fritiden tycker jag om att baka och att vandra i fjällen.
+      - voice: alma
+        speaker: Nadia
+        text: Nu ska jag berätta lite om kursen. Vi träffas måndag till torsdag, klockan nio till tolv. På fredagar har ni ingen lektion här, men då kan ni gå till läxhjälpen på biblioteket. Glöm inte att ta med en ordbok eller en översättningsapp till lektionerna. Har ni några frågor?
+    items:
+      - type: mc
+        id: c-hora-1-nadia-vem
+        prompt: Vem är Nadia?
+        options:
+          - En ny elev
+          - En ny lärare
+          - En bibliotekarie
+          - En studievägledare
+        answer: 1
+        explain: '"Jag är er nya lärare i den här gruppen."'
+      - type: short
+        id: c-hora-1-nadia-dagar
+        prompt: Vilka dagar har gruppen lektion?
+        accept:
+          - måndag till torsdag
+          - från måndag till torsdag
+          - måndagar till torsdagar
+          - måndag–torsdag
+          - måndag-torsdag
+        model: Måndag till torsdag.
+        explain: '"Vi träffas måndag till torsdag." On Fridays there is no lesson.'
+      - type: mc
+        id: c-hora-1-nadia-ta-med
+        prompt: Vad ska eleverna ta med till lektionerna?
+        options:
+          - En dator
+          - En ordbok eller en översättningsapp
+          - Sina läxor från biblioteket
+          - Något att fika
+        answer: 1
+        explain: '"Glöm inte att ta med en ordbok eller en översättningsapp till lektionerna."'

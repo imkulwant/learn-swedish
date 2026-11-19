@@ -1,0 +1,66 @@
+# Speaking pack 2, level C: the pair conversation.
+# The partner (nst voice) says one line at a time; the learner answers after
+# each line. The lines are general on purpose, so they fit any answer.
+# Drafted 2026-11-19; reviewed by Anna 2026-11-19 (docs/CONTENT.md).
+id: c-tala-2
+version: 1
+level: C
+skill: tala
+title: Tala C – samtal i par
+phraseCards:
+  - title: Ask what your partner thinks
+    phrases:
+      - Vad tycker du?
+      - Hur gör du?
+      - Och du?
+  - title: Say what you think
+    phrases:
+      - Jag tycker att …
+      - Jag tror att … eftersom …
+      - För mig är … viktigast.
+  - title: Agree or not
+    phrases:
+      - Jag håller med.
+      - Det tycker jag också.
+      - Jag tycker inte riktigt så.
+  - title: Ask again
+    phrases:
+      - Förlåt, kan du säga det igen?
+      - Vad betyder …?
+      - Menar du att …?
+  - title: Finish together
+    phrases:
+      - Ska vi säga …?
+      - Då är vi överens.
+pairs:
+  - id: c-p-handla
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [samtala.samtal-diskussioner, samtala.onskemal-asikter, sprak.uttal]
+    theme: handla
+    title: Att handla
+    en: Shopping in a shop or online – which is better?
+    question: Är det bättre att handla i en vanlig affär eller på nätet?
+    mindmap:
+      - priset
+      - att känna på och prova varorna
+      - tiden
+      - att få hjälp av personalen
+      - att lämna tillbaka varor
+      - miljön
+    goal: Berätta vad ni tycker och kom överens om vad som är viktigast när man handlar.
+    partner:
+      - voice: nst
+        text: Hej! Ska vi börja? Jag handlar ofta kläder på nätet, eftersom det går snabbt. Hur brukar du handla?
+      - voice: nst
+        text: Okej. Jag tycker att det är svårt att veta om kläderna passar, när man handlar på nätet. Vad tycker du?
+      - voice: nst
+        text: Mm, det förstår jag. Och priset? Är det billigare på nätet, tycker du?
+      - voice: nst
+        text: Jag tänker också på miljön. Det blir många transporter när alla får paket hem. Håller du med?
+      - voice: nst
+        text: Nu måste vi bestämma oss. Vad är viktigast när man handlar, tycker vi?
+    closing:
+      voice: nst
+      text: Bra, då säger vi det. Tack för ett trevligt samtal!

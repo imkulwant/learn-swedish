@@ -47,15 +47,15 @@ test('words are learned in Swedish first, then heard, and kept across a reload',
   // The first new word, Swedish to English.
   await expect(page.getByText('New word')).toBeVisible()
   await expect(card(page)).toContainText('What does it mean?')
-  await expect(card(page)).toContainText('en arbetsgivare')
-  await expect(card(page)).not.toContainText('employer')
+  await expect(card(page)).toContainText('en affär')
+  await expect(card(page)).not.toContainText('shop')
   await expect(card(page)).toBeVisible()
   await page.getByRole('button', { name: 'Show answer' }).click()
-  await expect(card(page)).toContainText('employer')
+  await expect(card(page)).toContainText('shop')
   // Focus moves to the most common answer, so a keyboard user can go on.
   await expect(page.getByRole('button', { name: /^Good/ })).toBeFocused()
-  await expect(card(page)).toContainText('arbetsgivarna')
-  await expect(card(page)).toContainText('Min arbetsgivare betalar för kursen.')
+  await expect(card(page)).toContainText('affärerna')
+  await expect(card(page)).toContainText('Affären på hörnet har öppet till klockan 22.')
   // Each answer shows when the card comes back.
   const grades = page.getByRole('group', { name: 'How well did you know it?' })
   await expect(grades.getByRole('button', { name: /^Good/ })).toContainText(
@@ -66,20 +66,20 @@ test('words are learned in Swedish first, then heard, and kept across a reload',
   // Knowing it once opens listening for that word, due straight away.
   await expect(page.getByText('Review')).toBeVisible()
   await expect(card(page)).toContainText('Listen. What does it mean?')
-  await expect(card(page)).not.toContainText('arbetsgivare')
+  await expect(card(page)).not.toContainText('affär')
   await rate(page, 'Good')
 
   // Then the next new word.
-  await expect(card(page)).toContainText('en anställning')
+  await expect(card(page)).toContainText('ett pris')
   await rate(page, 'Again')
 
   // The next new word is on screen, so it has started too, unanswered.
-  await expect(card(page)).toContainText('en lön')
+  await expect(card(page)).toContainText('en kassa')
   expect(await storedCards(page)).toEqual([
-    'anstallning:sv-en:1',
-    'arbetsgivare:audio:1',
-    'arbetsgivare:sv-en:1',
-    'lon:sv-en:0',
+    'affar:audio:1',
+    'affar:sv-en:1',
+    'kassa:sv-en:0',
+    'pris:sv-en:1',
   ])
 
   await page.reload()
@@ -112,25 +112,25 @@ test('flashcards flip, move on and shuffle without touching the schedule', async
     .getByRole('link', { name: /Flashcards/ })
     .click()
   await expect(heading(page, 'Flashcards')).toBeVisible()
-  await expect(page.getByText('Card 1 of 60')).toBeVisible()
-  await expect(card(page)).toContainText('en arbetsgivare')
-  await expect(card(page)).not.toContainText('employer')
+  await expect(page.getByText('Card 1 of 102')).toBeVisible()
+  await expect(card(page)).toContainText('en affär')
+  await expect(card(page)).not.toContainText('shop')
 
   await page.getByRole('button', { name: 'Show answer' }).click()
-  await expect(card(page)).toContainText('employer')
+  await expect(card(page)).toContainText('shop')
 
   // The next card starts face down.
   await page.getByRole('button', { name: 'Next', exact: true }).click()
-  await expect(page.getByText('Card 2 of 60')).toBeVisible()
-  await expect(card(page)).not.toContainText('employer')
+  await expect(page.getByText('Card 2 of 102')).toBeVisible()
+  await expect(card(page)).not.toContainText('shop')
   await page.getByRole('button', { name: 'Previous' }).click()
-  await expect(page.getByText('Card 1 of 60')).toBeVisible()
+  await expect(page.getByText('Card 1 of 102')).toBeVisible()
   // Going back from the first card wraps to the last.
   await page.getByRole('button', { name: 'Previous' }).click()
-  await expect(page.getByText('Card 60 of 60')).toBeVisible()
+  await expect(page.getByText('Card 102 of 102')).toBeVisible()
 
   await page.getByRole('button', { name: 'Shuffle' }).click()
-  await expect(page.getByText('Card 1 of 60')).toBeVisible()
+  await expect(page.getByText('Card 1 of 102')).toBeVisible()
 
   await page.getByRole('button', { name: 'English to Swedish' }).click()
   await expect(card(page)).toContainText('How do you say it in Swedish?')
@@ -139,14 +139,14 @@ test('flashcards flip, move on and shuffle without touching the schedule', async
   expect(await storedCards(page)).toEqual([])
 })
 
-test('a level without word packs says so instead of hiding the words', async ({
-  page,
-}) => {
+test('a level C learner gets the two C word packs', async ({ page }) => {
   await openToday(page, { level: 'C' })
   await page.goto('learn')
-  const words = page.getByRole('region', { name: 'Words' })
-  await expect(words).toContainText('no words for your level yet')
-  await expect(words.getByRole('link')).toHaveCount(0)
+  const packs = page.getByRole('region', { name: 'Word packs' })
+  await expect(packs).toContainText('Ord – handla och tid')
+  await expect(packs).toContainText('Ord – hemmet och familjen')
+  await expect(packs).toContainText('Level C · 21 words')
+  await expect(packs).not.toContainText('Ord – arbete')
   await page.goto('learn/ord/kort')
-  await expect(page.getByText('No words for level C yet')).toBeVisible()
+  await expect(page.getByText('Card 1 of 42')).toBeVisible()
 })

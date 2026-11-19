@@ -14,6 +14,15 @@ Every pack is drafted, checked by `npm run content`, and reviewed by a native sp
 | `d-tala-2` | D | Tala, pairs | 2 discussions | – | Reviewed by Anna, 2026-11-18 |
 | `vardag-1` | all | Everyday | 3 scenarios | 12 | Reviewed by Anna, 2026-11-18 |
 | `d-prov-1` | D | Mock exam | 4 texts, 3 clips, 2 writing tasks, 1 solo, 1 pair | 17 | Reviewed by Anna, 2026-11-18 |
+| `c-lasa-1` | C | Läsa | 4 | 13 | Reviewed by Anna, 2026-11-19 |
+| `c-hora-1` | C | Höra | 4 clips | 12 | Reviewed by Anna, 2026-11-19 |
+| `c-ord-handla` | C | Words: shopping and time | 21 words | – | Reviewed by Anna, 2026-11-19 |
+| `c-ord-hemmet` | C | Words: home and family | 21 words | – | Reviewed by Anna, 2026-11-19 |
+| `c-grammatik-2` | C | Grammar: basics | 4 lessons | 26 exercises | Reviewed by Anna, 2026-11-19 |
+| `c-skriva-1` | C | Skriva | 3 informal tasks | – | Reviewed by Anna, 2026-11-19 |
+| `c-tala-1` | C | Tala | 2 solo tasks | – | Reviewed by Anna, 2026-11-19 |
+| `c-tala-2` | C | Tala, pairs | 1 discussion | – | Reviewed by Anna, 2026-11-19 |
+| `c-prov-1` | C | Mock exam | 3 texts, 2 clips, 1 writing task, 1 solo, 1 pair | 12 | Reviewed by Anna, 2026-11-19 |
 | `check-sentences` | – | Sentences the writing checks are tested with | 35 sentences | – | Reviewed by Anna, 2026-11-18 |
 
 ## How to review a pack

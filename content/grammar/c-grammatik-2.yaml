@@ -1,0 +1,360 @@
+# Grammar pack 2: the basics that KP27 course 3C names (it begins study path 3).
+# Explanations are in English, in the Markdown subset of
+# src/domain/lessonText.ts: *Swedish* in single stars, **bold** in double.
+# Instructions to the learner (prompt) are in Swedish, as on the test; the
+# explanation after an answer (explain) is in English.
+# Drafted 2026-11-19; reviewed by Anna 2026-11-19 (docs/CONTENT.md).
+id: c-grammatik-2
+version: 1
+level: C
+skill: grammatik
+title: Grammatik – grunderna
+lessons:
+  - id: c-g-substantiv
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [sprak.ordforrad-bojning]
+    title: En eller ett, och plural
+    en: 'Nouns: en or ett, the definite form and the plural'
+    body: |
+      Every Swedish noun is an *en* word or an *ett* word. About three of four nouns are *en* words. There is no rule that always works, so learn the article with the word: *en bil*, *ett hus*.
+
+      ## The definite form
+
+      For "the", Swedish adds an ending to the noun. En words take *-en* or *-n*, and ett words take *-et* or *-t*.
+
+      | Indefinite | Definite |
+      | --- | --- |
+      | *en bil* | *bilen* |
+      | *en lampa* | *lampan* |
+      | *ett hus* | *huset* |
+      | *ett äpple* | *äpplet* |
+
+      ## The plural
+
+      There are five common plural endings. The end of the word often shows which one to use.
+
+      | Ending | Singular | Plural | Plural, definite |
+      | --- | --- | --- | --- |
+      | *-or* | *en flicka* | *flickor* | *flickorna* |
+      | *-ar* | *en bil* | *bilar* | *bilarna* |
+      | *-er* | *en månad* | *månader* | *månaderna* |
+      | *-n* | *ett äpple* | *äpplen* | *äpplena* |
+      | no ending | *ett hus* | *hus* | *husen* |
+
+      - En words that end in *-a* usually take *-or*: *en lampa*, *två lampor*.
+      - Ett words that end in a consonant usually take no ending: *ett barn*, *tre barn*.
+      - Some common words change their vowel: *en man*, *två män*; *en bok*, *två böcker*.
+
+      ## After my and your
+
+      After *min*, *din* and other possessives, the noun has no ending: *min bil*, not *min bilen*.
+    items:
+      - type: mc
+        id: c-g-substantiv-1
+        prompt: En eller ett? ___ hus
+        options:
+          - en
+          - ett
+        answer: 1
+        explain: Hus is an ett word, ett hus. Learn the article with the noun.
+      - type: gap
+        id: c-g-substantiv-2
+        prompt: Skriv ordet i plural.
+        sentence: Jag har köpt två ___ i dag.
+        hint: en tröja
+        accept: [tröjor]
+        explain: Tröja is an en word that ends in -a, so the plural ends in -or, tröjor.
+      - type: gap
+        id: c-g-substantiv-3
+        prompt: Skriv ordet i bestämd form.
+        sentence: Var är ___? Jag hittar den inte.
+        hint: en nyckel
+        accept: [nyckeln]
+        explain: Nyckel is an en word that ends in -el, so the definite form adds only -n, nyckeln.
+      - type: gap
+        id: c-g-substantiv-4
+        prompt: Skriv ordet i plural.
+        sentence: Vi har tre ___, två döttrar och en son.
+        hint: ett barn
+        accept: [barn]
+        explain: Barn is an ett word that ends in a consonant, so the plural has no ending, tre barn.
+      - type: mc
+        id: c-g-substantiv-5
+        prompt: Vilken form passar? Jag har läst ___ som du gav mig. Den var bra.
+        options:
+          - en bok
+          - boken
+          - böcker
+          - böckerna
+        answer: 1
+        explain: It is one book that you both know about, so the definite singular boken fits. Den shows that it is one en word.
+      - type: transform
+        id: c-g-substantiv-6
+        prompt: Skriv meningen i plural.
+        from: Bilen är ny.
+        accept: [Bilarna är nya.]
+        explain: Bil takes -ar in the plural, and the definite plural is bilarna. An adjective after a plural ends in -a, nya.
+
+  - id: c-g-preteritum
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [sprak.ordforrad-bojning]
+    title: Vad hände? Preteritum
+    en: The past tense
+    body: |
+      Use the past tense (*preteritum*) for something that happened at a finished time, for example *i går*, *i måndags*, *förra veckan* or *för två år sedan*.
+
+      ## Four patterns
+
+      Look at the present tense to find the pattern.
+
+      | Group | Present | Past | Example |
+      | --- | --- | --- | --- |
+      | 1 | *-ar* | *-ade* | *jobbar*, *jobbade* |
+      | 2 | *-er* | *-de* | *stänger*, *stängde* |
+      | 2 | *-er* after k, p, s, t or x | *-te* | *köper*, *köpte* |
+      | 3 | a short verb | *-dde* | *bor*, *bodde* |
+
+      ## Verbs to learn one by one
+
+      Many common verbs change their vowel, or are irregular in another way.
+
+      | Infinitive | Present | Past |
+      | --- | --- | --- |
+      | *vara* | *är* | *var* |
+      | *ha* | *har* | *hade* |
+      | *gå* | *går* | *gick* |
+      | *komma* | *kommer* | *kom* |
+      | *äta* | *äter* | *åt* |
+      | *skriva* | *skriver* | *skrev* |
+      | *se* | *ser* | *såg* |
+      | *ta* | *tar* | *tog* |
+
+      ## Word order
+
+      A time word at the start takes place 1, so the verb comes next: *I går **jobbade** jag.*
+    items:
+      - type: gap
+        id: c-g-preteritum-1
+        prompt: Skriv verbet i preteritum.
+        sentence: I går ___ jag hela dagen.
+        hint: jobba
+        accept: [jobbade]
+        explain: Jobbar ends in -ar (group 1), so the past tense is jobbade.
+      - type: gap
+        id: c-g-preteritum-2
+        prompt: Skriv verbet i preteritum.
+        sentence: Vi ___ till Sverige för tre år sedan.
+        hint: flytta
+        accept: [flyttade]
+        explain: Flyttar is group 1, so the past tense is flyttade. "För tre år sedan" names a finished time.
+      - type: gap
+        id: c-g-preteritum-3
+        prompt: Skriv verbet i preteritum.
+        sentence: Hon ___ en ny jacka i lördags.
+        hint: köpa
+        accept: [köpte]
+        explain: Köper ends in -er after p, so the past tense ends in -te, köpte.
+      - type: gap
+        id: c-g-preteritum-4
+        prompt: Skriv verbet i preteritum.
+        sentence: Förra året ___ vi i Göteborg.
+        hint: bo
+        accept: [bodde]
+        explain: Bo is a short verb (group 3), so the past tense is bodde.
+      - type: gap
+        id: c-g-preteritum-5
+        prompt: Skriv verbet i preteritum.
+        sentence: I morse ___ jag frukost klockan sju.
+        hint: äta
+        accept: [åt]
+        explain: Äta changes its vowel. The past tense is åt.
+      - type: mc
+        id: c-g-preteritum-6
+        prompt: Vilken form passar? I lördags ___ vi på bio.
+        options:
+          - går
+          - gick
+          - gått
+        answer: 1
+        explain: I lördags means last Saturday, a finished time, so the past tense gick fits. Gått needs har before it.
+      - type: transform
+        id: c-g-preteritum-7
+        prompt: Skriv meningen i preteritum.
+        from: Han skriver ett sms till sin bror.
+        accept: [Han skrev ett sms till sin bror.]
+        explain: Skriva changes its vowel. The past tense is skrev.
+
+  - id: c-g-pronomen
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [sprak.ordforrad-bojning, sprak.meningsbyggnad]
+    title: Jag, mig och min
+    en: Personal and possessive pronouns
+    body: |
+      A pronoun has one form as the subject and another as the object. The possessive shows who owns something.
+
+      | Subject | Object | Possessive |
+      | --- | --- | --- |
+      | *jag* | *mig* | *min*, *mitt*, *mina* |
+      | *du* | *dig* | *din*, *ditt*, *dina* |
+      | *han* | *honom* | *hans* |
+      | *hon* | *henne* | *hennes* |
+      | *vi* | *oss* | *vår*, *vårt*, *våra* |
+      | *ni* | *er* | *er*, *ert*, *era* |
+      | *de* | *dem* | *deras* |
+
+      People often say *mej*, *dej* and *dom*, but write *mig*, *dig* and *de* or *dem*.
+
+      ## Min, mitt, mina
+
+      The possessive follows the thing you own: *min bil* (an en word), *mitt hus* (an ett word), *mina barn* (plural).
+
+      ## Sin, sitt, sina
+
+      When the subject owns the thing, use *sin*, *sitt* or *sina* instead of *hans*, *hennes* or *deras*.
+
+      - *Ali ringer **sin** mamma.* Ali calls his own mother.
+      - *Ali ringer **hans** mamma.* Ali calls another man's mother.
+    items:
+      - type: gap
+        id: c-g-pronomen-1
+        prompt: Skriv rätt form av "jag".
+        sentence: Kan du hjälpa ___ med läxan?
+        accept: [mig, mej]
+        explain: The pronoun is the object of hjälpa, so it is mig. People often say "mej".
+      - type: gap
+        id: c-g-pronomen-2
+        prompt: Skriv rätt form av "min".
+        sentence: Var är ___ nycklar?
+        accept: [mina]
+        explain: Nycklar is plural, so the possessive is mina.
+      - type: gap
+        id: c-g-pronomen-3
+        prompt: Skriv rätt form av "vår".
+        sentence: Vi har sålt ___ hus.
+        accept: [vårt]
+        explain: Hus is an ett word, so the possessive is vårt.
+      - type: mc
+        id: c-g-pronomen-4
+        prompt: Vilken mening är rätt?
+        options:
+          - Jag träffade de i affären.
+          - Jag träffade dem i affären.
+        answer: 1
+        explain: The pronoun is the object of träffade, so it is dem. Both are said "dom".
+      - type: mc
+        id: c-g-pronomen-5
+        prompt: Sara hämtar ___ son på förskolan. (Det är Saras egen son.)
+        options:
+          - hennes
+          - sin
+          - sitt
+        answer: 1
+        explain: Sara is the subject and owns the thing, so use sin. Son is an en word, so it is sin, not sitt.
+      - type: mc
+        id: c-g-pronomen-6
+        prompt: Vilken mening är rätt?
+        options:
+          - Min lägenheten är stor.
+          - Min lägenhet är stor.
+          - Mitt lägenhet är stor.
+        answer: 1
+        explain: Lägenhet is an en word, so min. After a possessive, the noun has no ending, so lägenhet, not lägenheten.
+
+  - id: c-g-tid
+    status: reviewed
+    reviewedBy: Anna
+    reviewedAt: '2026-11-19'
+    kp27: [sprak.ordforrad-bojning, sprak.textbindning]
+    title: Klockan, datum och tid
+    en: The clock, dates and time words
+    body: |
+      ## The clock
+
+      - *Klockan är tre.* 3.00
+      - *Den är kvart över tre.* 3.15
+      - *Den är halv fyra.* 3.30
+      - *Den är kvart i fyra.* 3.45
+
+      **Halv fyra** is half an hour **before** four, not after it. Timetables use the 24-hour clock: *15.30* is *femton och trettio*, or in everyday speech *halv fyra*.
+
+      ## Dates
+
+      Dates use ordinal numbers: *den första maj*, *den tjugofjärde december*. Days and months start with a small letter: *måndag*, *maj*.
+
+      | Number | Ordinal |
+      | --- | --- |
+      | *1* | *första* |
+      | *2* | *andra* |
+      | *3* | *tredje* |
+      | *4* | *fjärde* |
+      | *5* | *femte* |
+      | *10* | *tionde* |
+      | *20* | *tjugonde* |
+
+      ## Small time words
+
+      | Swedish | Meaning |
+      | --- | --- |
+      | *om en vecka* | in a week, from now |
+      | *för en vecka sedan* | a week ago |
+      | *i en vecka* | for a week |
+      | *på måndag* | this coming Monday |
+      | *i måndags* | last Monday |
+      | *på måndagar* | every Monday |
+    items:
+      - type: mc
+        id: c-g-tid-1
+        prompt: Klockan är 14.30. Vad säger man?
+        options:
+          - halv två
+          - halv tre
+          - tre och trettio
+        answer: 1
+        explain: 14.30 is half an hour before three, so it is halv tre.
+      - type: mc
+        id: c-g-tid-2
+        prompt: Klockan är 8.45. Vad säger man?
+        options:
+          - kvart över åtta
+          - kvart i nio
+          - kvart i åtta
+        answer: 1
+        explain: 8.45 is a quarter of an hour before nine, kvart i nio.
+      - type: gap
+        id: c-g-tid-3
+        prompt: Skriv rätt litet ord.
+        sentence: Jag har en tid hos tandläkaren ___ fredag.
+        accept: [på]
+        explain: På fredag means this coming Friday. I fredags would mean last Friday.
+      - type: gap
+        id: c-g-tid-4
+        prompt: Skriv rätt litet ord.
+        sentence: Vi flyttade hit ___ två år sedan.
+        accept: [för]
+        explain: För … sedan means ago, för två år sedan.
+      - type: gap
+        id: c-g-tid-5
+        prompt: Skriv rätt litet ord.
+        sentence: Kursen börjar ___ en vecka.
+        accept: [om]
+        explain: Om en vecka means in a week, from now.
+      - type: mc
+        id: c-g-tid-6
+        prompt: Du har en tid den 3 mars. Hur säger man datumet?
+        options:
+          - den tre mars
+          - den tredje mars
+          - den tredjen mars
+        answer: 1
+        explain: Dates use ordinal numbers. Number 3 is tredje, so den tredje mars.
+      - type: order
+        id: c-g-tid-7
+        prompt: Börja med "I måndags".
+        chunks: [I måndags, var, jag, hos läkaren]
+        explain: I måndags (last Monday) takes place 1, so the verb var comes second and the subject jag after it.
