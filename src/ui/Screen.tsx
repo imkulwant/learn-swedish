@@ -19,7 +19,7 @@ export function Screen({ title, back, action, children }: ScreenProps) {
   return (
     <div className="flex flex-col gap-4 px-4 pb-6">
       <header className="pt-safe sticky top-0 z-10 -mx-4 bg-bg px-4">
-        <div className="flex items-center gap-2 pt-3 pb-2">
+        <div className="flex items-center gap-2 pt-1 pb-2">
           {back && <BackButton fallback={back} />}
           <h1 className="text-2xl font-bold">{title}</h1>
           {action}

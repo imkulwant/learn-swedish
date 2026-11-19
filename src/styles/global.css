@@ -57,6 +57,12 @@ textarea {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+/* The tab bar sits closer to the home indicator than the full inset puts it,
+   the way native iOS tab bars do. Never less than 0.5rem. */
+@utility pb-safe-tight {
+  padding-bottom: max(0.5rem, calc(env(safe-area-inset-bottom, 0px) - 1rem));
+}
+
 @utility px-safe {
   padding-left: env(safe-area-inset-left, 0px);
   padding-right: env(safe-area-inset-right, 0px);

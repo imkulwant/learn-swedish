@@ -65,7 +65,7 @@ export function TabBar() {
   return (
     <nav
       aria-label="Main"
-      className="pb-safe px-safe flex border-t border-border bg-surface"
+      className="pb-safe-tight px-safe flex border-t border-border bg-surface"
     >
       {TABS.map((tab) => (
         <NavLink
