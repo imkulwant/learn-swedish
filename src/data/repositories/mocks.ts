@@ -46,6 +46,10 @@ export async function latestMock(examId: string): Promise<MockRun | undefined> {
 export const listMockRuns = (): Promise<MockRun[]> =>
   db.mocks.orderBy('startedAt').reverse().toArray()
 
+/** The sitting in progress, if any, read through its index. */
+export const runningMock = (): Promise<MockRun | undefined> =>
+  db.mocks.where('status').equals('running').first()
+
 /** Changes one run in a transaction, so two writes never overwrite each other. */
 async function change(id: string, apply: (run: MockRun) => void) {
   await db.transaction('rw', db.mocks, async () => {

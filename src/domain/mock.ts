@@ -105,3 +105,66 @@ export function expiredPart(
   const state = parts[part]
   return state.endsAt !== null && state.endsAt <= now ? part : null
 }
+
+/**
+ * A finished mock's result for each part: Läsa and Höra from the answers
+ * (null while open answers wait for a mark), Skriva and Tala from the
+ * learner's self-assessments (null until every one is made).
+ */
+/**
+ * Whether a learner looks ready for a level (docs/PLAN.md, Key definitions):
+ * every part Ready, and a finished mock of that level with every part at the
+ * Ready mark or above.
+ */
+export function readyFor(
+  level: string,
+  partsReady: boolean,
+  mocks: { level: string; percents: Record<Skill, number | null> | null }[],
+  mark: number,
+): { ready: boolean; partsReady: boolean; mockReady: boolean } {
+  const mockReady = mocks.some(
+    (m) =>
+      m.level === level &&
+      m.percents !== null &&
+      EXAM_ORDER.every((s) => (m.percents![s] ?? -1) >= mark),
+  )
+  return { ready: partsReady && mockReady, partsReady, mockReady }
+}
+
+export function mockPercents(
+  parts: {
+    lasa: Item[]
+    hora: Item[]
+    /** The ids of the writing prompts, and of the speaking task and topic. */
+    skriva: string[]
+    tala: string[]
+  },
+  run: {
+    responses: Record<string, MockResponse>
+    marks: Record<string, boolean>
+    assessments: Record<string, Record<string, 0 | 1 | 2>>
+  },
+): Record<Skill, number | null> {
+  const scored = (items: Item[]) => {
+    const r = partResult(items, run.responses, run.marks)
+    return r.pending.length ? null : r.percent
+  }
+  const assessed = (ids: string[]) => {
+    const all = ids.map((id) => run.assessments[id])
+    if (!all.length || all.some((a) => !a)) return null
+    // Each task is rounded down first, as the result screen shows it.
+    const share = (a: Record<string, 0 | 1 | 2>) => {
+      const v = Object.values(a)
+      return Math.floor(
+        (v.reduce<number>((n, x) => n + x, 0) / (v.length * 2)) * 100,
+      )
+    }
+    return Math.floor(all.reduce((n, a) => n + share(a!), 0) / all.length)
+  }
+  return {
+    lasa: scored(parts.lasa),
+    hora: scored(parts.hora),
+    skriva: assessed(parts.skriva),
+    tala: assessed(parts.tala),
+  }
+}

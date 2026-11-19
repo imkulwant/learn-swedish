@@ -25,7 +25,7 @@ test('a listening clip plays, is answered, and then shows its transcript', async
   await expect(
     page.getByRole('region', { name: /Readiness, Höra/ }),
   ).toContainText('(0 so far)')
-  await page.getByRole('link', { name: 'Practise listening' }).click()
+  await page.goto('exam/hora')
   await expect(heading(page, 'Höra – listening')).toBeVisible()
   await page.getByRole('link', { name: new RegExp(PACK) }).click()
   await expect(heading(page, PACK)).toBeVisible()

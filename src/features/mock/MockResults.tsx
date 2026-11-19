@@ -10,7 +10,12 @@ import { getPairSession } from '../../data/repositories/pairs'
 import { getRecording } from '../../data/repositories/recordings'
 import type { Item, Skill } from '../../domain/content/schema'
 import { PART_NAMES } from '../../domain/examFormat'
-import { partResult, scoreItem, type MockResponse } from '../../domain/mock'
+import {
+  mockPercents,
+  partResult,
+  scoreItem,
+  type MockResponse,
+} from '../../domain/mock'
 import {
   PAIR_RUBRIC,
   SPEAKING_RUBRIC,
@@ -107,15 +112,19 @@ export function MockResults({
   const pending = [...lasa.pending, ...hora.pending]
   const all = [...items.lasa, ...items.hora]
 
-  const writing = mock.skriva.map((p) => run.assessments[p.id])
-  const speaking = [
-    ...offered.tasks.map((t) => run.assessments[t.task.id]),
-    ...offered.pairs.map((p) => run.assessments[p.topic.id]),
-  ]
-  const mean = (list: (Record<string, 0 | 1 | 2> | undefined)[]) =>
-    list.every(Boolean)
-      ? Math.floor(list.reduce((n, a) => n + rubricShare(a!), 0) / list.length)
-      : null
+  // The same numbers as Progress, from one function.
+  const percents = mockPercents(
+    {
+      lasa: items.lasa,
+      hora: items.hora,
+      skriva: mock.skriva.map((p) => p.id),
+      tala: [
+        ...offered.tasks.map((t) => t.task.id),
+        ...offered.pairs.map((p) => p.topic.id),
+      ],
+    },
+    run,
+  )
 
   // Once every open answer is marked, the answers count for readiness.
   useEffect(() => {
@@ -160,15 +169,15 @@ export function MockResults({
     ],
     [
       'skriva',
-      mean(writing) === null
+      percents.skriva === null
         ? 'Assess your texts below'
-        : `${mean(writing)}% · self-assessed`,
+        : `${percents.skriva}% · self-assessed`,
     ],
     [
       'tala',
-      mean(speaking) === null
+      percents.tala === null
         ? 'Assess your speaking below'
-        : `${mean(speaking)}% · self-assessed`,
+        : `${percents.tala}% · self-assessed`,
     ],
   ]
 

@@ -3,12 +3,11 @@ import { Link } from 'react-router'
 import { getSetting } from '../../data/repositories/settings'
 import { Screen } from '../../ui/Screen'
 import { ReadinessCard } from '../exam/ReadinessCard'
-import { GrammarStatusCard } from '../learn/grammar/GrammarScreen'
-import { VocabStatusCard } from '../learn/VocabStatusCard'
 import { Welcome } from '../onboarding/Welcome'
 import { UpdateBanner } from '../updates/UpdateBanner'
 import { BackupReminder } from './BackupReminder'
 import { ExamCountdown } from './ExamCountdown'
+import { PlanCard } from './PlanCard'
 
 function SettingsLink() {
   return (
@@ -54,26 +53,22 @@ export function TodayScreen() {
         Your goal: pass the SFI {settings.level} national test.
       </p>
       <ExamCountdown examDate={settings.examDate} />
-      <ReadinessCard level={settings.level} skill="lasa" />
-      <ReadinessCard level={settings.level} skill="hora" />
-      <ReadinessCard level={settings.level} skill="skriva" />
-      <ReadinessCard level={settings.level} skill="tala" />
-      <VocabStatusCard />
-      <GrammarStatusCard />
-      <div className="flex gap-2">
-        <Link
-          to="/exam/lasa"
-          className="tap-target flex flex-1 items-center justify-center rounded-control bg-accent px-4 py-2 font-semibold text-on-accent"
-        >
-          Practise reading
+      <PlanCard level={settings.level} examDate={settings.examDate} />
+      <section
+        aria-labelledby="readiness-heading"
+        className="flex flex-col gap-2"
+      >
+        <h2 id="readiness-heading" className="text-sm text-muted">
+          How ready you are
+        </h2>
+        <ReadinessCard level={settings.level} skill="lasa" />
+        <ReadinessCard level={settings.level} skill="hora" />
+        <ReadinessCard level={settings.level} skill="skriva" />
+        <ReadinessCard level={settings.level} skill="tala" />
+        <Link to="/progress" className="font-semibold text-accent">
+          See all your progress
         </Link>
-        <Link
-          to="/exam/hora"
-          className="tap-target flex flex-1 items-center justify-center rounded-control bg-accent px-4 py-2 font-semibold text-on-accent"
-        >
-          Practise listening
-        </Link>
-      </div>
+      </section>
     </Screen>
   )
 }

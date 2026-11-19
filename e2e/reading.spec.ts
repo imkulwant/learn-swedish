@@ -38,7 +38,8 @@ test('a D reading drill from Today to a stored result', async ({ page }) => {
     'Answer 15 questions to see how ready you are (0 so far)',
   )
 
-  await page.getByRole('link', { name: 'Practise reading' }).click()
+  // Nothing practised yet: the plan's focus is the first part of the test.
+  await page.getByRole('link', { name: /10 minutes of Läsa – reading/ }).click()
   await expect(heading(page, 'Läsa – reading')).toBeVisible()
   await expect(page.getByRole('button', { name: 'Level D' })).toHaveAttribute(
     'aria-pressed',

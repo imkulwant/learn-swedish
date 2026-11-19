@@ -12,7 +12,8 @@
 - **Slice 7b (Tala pair discussion: scripted partner, with a friend, phrase cards, database version 3):** done. Pack `d-tala-2` reviewed by Anna.
 - **Slice 8 (everyday scenarios: phrases, dialogue with questions, role-play with hints):** done. Pack `vardag-1` (3 scenarios) reviewed by Anna.
 - **Slice 9a (mock exams: runner with resumable timers, results with review, first D mock):** done. Mock `d-prov-1` reviewed by Anna.
-- Next slice: 9b, Today plan and Progress screen.
+- **Slice 9b (Today plan and streak, Progress screen with "Ready for D", study calendar, mock history and archive):** built.
+- Next slice: 10, hardening and release.
 
 ## Known issues and open items
 

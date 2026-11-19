@@ -10,7 +10,7 @@ import { GrammarScreen } from '../features/learn/grammar/GrammarScreen'
 import { LessonScreen } from '../features/learn/grammar/LessonScreen'
 import { LearnScreen } from '../features/learn/LearnScreen'
 import { VocabScreen } from '../features/learn/VocabScreen'
-import { ComingSoonScreen } from '../features/placeholder/ComingSoonScreen'
+import { ProgressScreen } from '../features/progress/ProgressScreen'
 import { SettingsScreen } from '../features/settings/SettingsScreen'
 import { PairScreen } from '../features/speaking/PairScreen'
 import { SpeakingPartScreen } from '../features/speaking/SpeakingPartScreen'
@@ -60,15 +60,7 @@ export function AppRoutes() {
         <Route path="learn/grammatik/:lessonId" element={<LessonScreen />} />
         <Route path="everyday" element={<EverydayScreen />} />
         <Route path="everyday/:scenarioId" element={<ScenarioScreen />} />
-        <Route
-          path="progress"
-          element={
-            <ComingSoonScreen
-              title="Progress"
-              description="Readiness for every part, your study calendar and mock exam results."
-            />
-          }
-        />
+        <Route path="progress" element={<ProgressScreen />} />
         <Route path="settings" element={<SettingsScreen />} />
         <Route path="*" element={<NotFoundScreen />} />
       </Route>

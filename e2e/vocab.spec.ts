@@ -33,6 +33,11 @@ test('words are learned in Swedish first, then heard, and kept across a reload',
   page,
 }) => {
   await openToday(page)
+  // Today's plan points to the words waiting.
+  await expect(
+    page.getByRole('link', { name: /Practise 15 words/ }),
+  ).toBeVisible()
+  await page.goto('learn')
   const words = page.getByRole('region', { name: 'Words' })
   await expect(words).toContainText('0 due · 15 new today · 0 learned')
   await words.getByRole('link', { name: 'Practise words' }).click()
@@ -79,6 +84,11 @@ test('words are learned in Swedish first, then heard, and kept across a reload',
 
   await page.reload()
   await openToday(page)
+  // Today's plan counts the words still waiting: 12 new and 1 due.
+  await expect(
+    page.getByRole('link', { name: /Practise 13 words/ }),
+  ).toBeVisible()
+  await page.goto('learn')
   await expect(words).toContainText('12 new today')
   await expect(words).toContainText('1 learned')
 })

@@ -20,6 +20,7 @@ test('a grammar lesson is read, practised and stored, and Today moves on to the 
   page,
 }) => {
   await openToday(page)
+  await page.goto('learn')
   const card = page.getByRole('region', { name: 'Grammar' })
   await expect(card).toContainText('Next: lesson 1 of 5, Verbet på plats två')
   await card.getByRole('link', { name: 'Open lesson' }).click()
@@ -95,9 +96,9 @@ test('a grammar lesson is read, practised and stored, and Today moves on to the 
     page.getByRole('link', { name: /1\. Verbet på plats två/ }),
   ).toContainText('Done')
   await page.goto('./')
-  await expect(page.getByRole('region', { name: 'Grammar' })).toContainText(
-    'Next: lesson 2 of 5, Inte i bisatser',
-  )
+  await expect(
+    page.getByRole('link', { name: /Grammar: Inte i bisatser/ }),
+  ).toBeVisible()
 })
 
 test('typed forms are checked strictly against the accepted answers', async ({

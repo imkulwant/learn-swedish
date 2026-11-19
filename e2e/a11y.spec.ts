@@ -24,6 +24,7 @@ const SCREENS: [string, string][] = [
   ['everyday', 'Everyday'],
   ['everyday/v-apoteket', 'På apoteket'],
   ['exam/prov/d-prov-1', 'Provövning D – 1'],
+  ['progress', 'Progress'],
   ['exam/skriva/s-felanmalan', 'Mejl till hyresvärden'],
   ['learn/grammatik/g-v2', 'Verbet på plats två'],
 ]
