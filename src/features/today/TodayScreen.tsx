@@ -61,10 +61,10 @@ export function TodayScreen() {
         <h2 id="readiness-heading" className="text-sm text-muted">
           How ready you are
         </h2>
-        <ReadinessCard level={settings.level} skill="lasa" />
-        <ReadinessCard level={settings.level} skill="hora" />
-        <ReadinessCard level={settings.level} skill="skriva" />
-        <ReadinessCard level={settings.level} skill="tala" />
+        <ReadinessCard level={settings.level} skill="lasa" linked />
+        <ReadinessCard level={settings.level} skill="hora" linked />
+        <ReadinessCard level={settings.level} skill="skriva" linked />
+        <ReadinessCard level={settings.level} skill="tala" linked />
         <Link to="/progress" className="font-semibold text-accent">
           See all your progress
         </Link>

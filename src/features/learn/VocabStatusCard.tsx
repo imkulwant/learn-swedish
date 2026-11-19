@@ -4,7 +4,7 @@ import { useVocabToday } from './useVocabToday'
 /** How many words are waiting today, with a way in. */
 export function VocabStatusCard() {
   const status = useVocabToday()
-  if (status && !(status instanceof Error) && status.offered === 0) return null
+  const none = !!status && !(status instanceof Error) && status.offered === 0
   return (
     <section
       aria-label="Words"
@@ -15,6 +15,11 @@ export function VocabStatusCard() {
         <p role="alert" className="text-danger">
           Words could not be loaded: {status.message}
         </p>
+      ) : none ? (
+        <p className="text-muted">
+          There are no words for your level yet. They appear here once a
+          reviewer has checked them.
+        </p>
       ) : status ? (
         <p className="text-muted">
           {status.due} due · {status.newToday} new today · {status.known}{' '}
@@ -23,12 +28,22 @@ export function VocabStatusCard() {
       ) : (
         <p className="text-muted">Checking…</p>
       )}
-      <Link
-        to="/learn/ord"
-        className="tap-target flex items-center justify-center rounded-control bg-accent px-4 py-2 font-semibold text-on-accent"
-      >
-        Practise words
-      </Link>
+      {!none && (
+        <>
+          <Link
+            to="/learn/ord"
+            className="tap-target flex items-center justify-center rounded-control bg-accent px-4 py-2 font-semibold text-on-accent"
+          >
+            Practise words
+          </Link>
+          <Link
+            to="/learn/ord/kort"
+            className="tap-target flex items-center justify-center rounded-control bg-surface-2 px-4 py-2 font-semibold text-text active:bg-border"
+          >
+            Flashcards: browse and shuffle
+          </Link>
+        </>
+      )}
     </section>
   )
 }

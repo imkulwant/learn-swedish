@@ -6,6 +6,7 @@ import { ExamScreen } from '../features/exam/ExamScreen'
 import { ListeningDrillScreen } from '../features/exam/ListeningDrillScreen'
 import { PartScreen } from '../features/exam/PartScreen'
 import { ReadingDrillScreen } from '../features/exam/ReadingDrillScreen'
+import { FlashcardsScreen } from '../features/learn/FlashcardsScreen'
 import { GrammarScreen } from '../features/learn/grammar/GrammarScreen'
 import { LessonScreen } from '../features/learn/grammar/LessonScreen'
 import { LearnScreen } from '../features/learn/LearnScreen'
@@ -56,6 +57,7 @@ export function AppRoutes() {
         <Route path="exam/prov/:examId" element={<MockScreen />} />
         <Route path="learn" element={<LearnScreen />} />
         <Route path="learn/ord" element={<VocabScreen />} />
+        <Route path="learn/ord/kort" element={<FlashcardsScreen />} />
         <Route path="learn/grammatik" element={<GrammarScreen />} />
         <Route path="learn/grammatik/:lessonId" element={<LessonScreen />} />
         <Route path="everyday" element={<EverydayScreen />} />

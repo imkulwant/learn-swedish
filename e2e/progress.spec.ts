@@ -64,3 +64,32 @@ test('Today plans the day, and Progress shows readiness, the calendar and the ar
   await expect(page.getByText('No mock finished yet.')).toBeVisible()
   await expect(page.getByText('No texts handed in yet.')).toBeVisible()
 })
+
+test('each readiness card on Today and Progress opens its part of the exam', async ({
+  page,
+}) => {
+  await openToday(page, { level: 'C' })
+  const parts = [
+    ['Läsa – reading', 'lasa'],
+    ['Höra – listening', 'hora'],
+    ['Skriva – writing', 'skriva'],
+    ['Tala – speaking', 'tala'],
+  ] as const
+  for (const [name, part] of parts) {
+    await page
+      .getByRole('region', { name: new RegExp(`Readiness, ${name}`) })
+      .getByRole('link', { name })
+      .click()
+    await expect(page).toHaveURL(new RegExp(`/exam/${part}$`))
+    await expect(heading(page, name)).toBeVisible()
+    await page.goBack()
+    await expect(heading(page, 'Today')).toBeVisible()
+  }
+
+  await page.getByRole('link', { name: 'Progress', exact: true }).click()
+  await page
+    .getByRole('region', { name: /Readiness, Läsa/ })
+    .getByRole('link', { name: 'Läsa – reading' })
+    .click()
+  await expect(page).toHaveURL(/\/exam\/lasa$/)
+})

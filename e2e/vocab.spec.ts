@@ -101,3 +101,52 @@ test('the words in the packs are listed under Learn', async ({ page }) => {
   await expect(packs).toContainText('Level D · 30 words')
   await expect(packs).toContainText('Ord – hälsa och vård')
 })
+
+test('flashcards flip, move on and shuffle without touching the schedule', async ({
+  page,
+}) => {
+  await openToday(page)
+  await page.goto('learn')
+  await page
+    .getByRole('region', { name: 'Words' })
+    .getByRole('link', { name: /Flashcards/ })
+    .click()
+  await expect(heading(page, 'Flashcards')).toBeVisible()
+  await expect(page.getByText('Card 1 of 60')).toBeVisible()
+  await expect(card(page)).toContainText('en arbetsgivare')
+  await expect(card(page)).not.toContainText('employer')
+
+  await page.getByRole('button', { name: 'Show answer' }).click()
+  await expect(card(page)).toContainText('employer')
+
+  // The next card starts face down.
+  await page.getByRole('button', { name: 'Next', exact: true }).click()
+  await expect(page.getByText('Card 2 of 60')).toBeVisible()
+  await expect(card(page)).not.toContainText('employer')
+  await page.getByRole('button', { name: 'Previous' }).click()
+  await expect(page.getByText('Card 1 of 60')).toBeVisible()
+  // Going back from the first card wraps to the last.
+  await page.getByRole('button', { name: 'Previous' }).click()
+  await expect(page.getByText('Card 60 of 60')).toBeVisible()
+
+  await page.getByRole('button', { name: 'Shuffle' }).click()
+  await expect(page.getByText('Card 1 of 60')).toBeVisible()
+
+  await page.getByRole('button', { name: 'English to Swedish' }).click()
+  await expect(card(page)).toContainText('How do you say it in Swedish?')
+
+  // Free practice leaves no spaced-repetition cards behind.
+  expect(await storedCards(page)).toEqual([])
+})
+
+test('a level without word packs says so instead of hiding the words', async ({
+  page,
+}) => {
+  await openToday(page, { level: 'C' })
+  await page.goto('learn')
+  const words = page.getByRole('region', { name: 'Words' })
+  await expect(words).toContainText('no words for your level yet')
+  await expect(words.getByRole('link')).toHaveCount(0)
+  await page.goto('learn/ord/kort')
+  await expect(page.getByText('No words for level C yet')).toBeVisible()
+})

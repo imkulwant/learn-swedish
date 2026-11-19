@@ -1,4 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks'
+import { Link } from 'react-router'
 import type { Level, Skill } from '../../domain/content/schema'
 import { getReadiness } from '../../data/repositories/readiness'
 import type { Readiness } from '../../domain/readiness'
@@ -16,24 +17,41 @@ const BAND: Record<Exclude<Readiness['status'], 'insufficient'>, string> = {
   ready: 'Ready',
 }
 
-/** How ready the learner looks for one part, from the latest answers. */
+/**
+ * How ready the learner looks for one part, from the latest answers. With
+ * `linked`, the whole card opens that part of the exam.
+ */
 export function ReadinessCard({
   level,
   skill,
+  linked = false,
 }: {
   level: Level
   skill: Skill
+  linked?: boolean
 }) {
   const state = useLiveQuery(() => getReadiness(level, skill), [level, skill])
   const selfAssessed = skill === 'skriva' || skill === 'tala'
+  const title = (
+    <>
+      {SKILL_NAMES[skill]} <span className="text-muted">· {level}</span>
+    </>
+  )
 
   return (
     <section
       aria-label={`Readiness, ${SKILL_NAMES[skill]}, level ${level}`}
-      className="flex flex-col gap-1 rounded-card border border-border bg-surface p-4"
+      className={`relative flex flex-col gap-1 rounded-card border border-border bg-surface p-4 ${linked ? 'active:bg-surface-2' : ''}`}
     >
       <h2 className="font-semibold">
-        {SKILL_NAMES[skill]} <span className="text-muted">· {level}</span>
+        {linked ? (
+          // The link's ::after covers the card, so the whole card is the tap target.
+          <Link to={`/exam/${skill}`} className="after:absolute after:inset-0">
+            {title}
+          </Link>
+        ) : (
+          title
+        )}
       </h2>
       {!state ? null : state.status === 'insufficient' ? (
         <p className="text-muted">

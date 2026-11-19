@@ -198,7 +198,7 @@ export function ProgressScreen() {
           The four parts
         </h2>
         {EXAM_ORDER.map((s) => (
-          <ReadinessCard key={s} level={level} skill={s} />
+          <ReadinessCard key={s} level={level} skill={s} linked />
         ))}
       </section>
       <section aria-label="In numbers" className="grid grid-cols-2 gap-2">

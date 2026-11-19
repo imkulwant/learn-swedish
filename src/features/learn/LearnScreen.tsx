@@ -31,11 +31,6 @@ export function LearnScreen() {
           </ul>
         </section>
       )}
-      {offered.status === 'ready' && offered.value.packs.length === 0 && (
-        <p className="text-muted">
-          Word packs appear here once a reviewer has checked them.
-        </p>
-      )}
       <p className="text-sm text-muted">Pronunciation practice comes later.</p>
     </Screen>
   )
