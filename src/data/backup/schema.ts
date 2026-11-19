@@ -3,12 +3,15 @@ import { ATTEMPT_SKILLS, LEVELS } from '../../domain/content/schema'
 import { isLocalDate } from '../../domain/dates'
 import type {
   Attempt,
+  MockRun,
   Setting,
   StudyDay,
   VocabCard,
   Writing,
 } from '../../domain/types'
 import { RUBRIC } from '../../domain/writing'
+import { EXAM_ORDER } from '../../domain/examFormat'
+import { partDurationMs } from '../../domain/mock'
 
 // Importing the content schema also sets Zod to jitless mode, which the
 // Content-Security-Policy needs.
@@ -18,7 +21,7 @@ export const BACKUP_FORMAT = 'sfi-prep-backup'
  * Version 2 adds word cards and study days, version 3 written texts. Older
  * files still import.
  */
-export const BACKUP_SCHEMA_VERSION = 3
+export const BACKUP_SCHEMA_VERSION = 4
 
 // The largest time a JavaScript Date can hold.
 const MAX_DATE_MS = 8.64e15
@@ -165,6 +168,93 @@ const backupV1 = z.strictObject({
   }),
 })
 
+const score = z.union([z.literal(0), z.literal(1), z.literal(2)])
+const shortRecord = <T extends z.ZodType>(value: T) =>
+  z
+    .record(shortId, value)
+    .refine((r) => Object.keys(r).length <= 500, 'too many entries')
+const partState = z.strictObject({
+  startedAt: epochMs.nullable(),
+  endsAt: epochMs.nullable(),
+  finishedAt: epochMs.nullable(),
+})
+
+/** A mock sitting. Its recordings stay on the device, like all recordings. */
+const mockRun = z
+  .strictObject({
+    id: shortId,
+    examId: shortId,
+    packVersion: z.number().int().min(1),
+    level: z.enum(LEVELS),
+    status: z.enum(['running', 'finished']),
+    startedAt: epochMs,
+    finishedAt: epochMs.nullable(),
+    parts: z.strictObject({
+      lasa: partState,
+      hora: partState,
+      skriva: partState,
+      tala: partState,
+    }),
+    responses: shortRecord(
+      z.union([
+        z.number().int(),
+        z.string().max(2000),
+        z.array(z.number().int().nonnegative().nullable()).max(50),
+      ]),
+    ),
+    plays: shortRecord(z.number().int().nonnegative().max(100)),
+    texts: shortRecord(z.string().max(20_000)),
+    speaking: shortRecord(shortId),
+    marks: shortRecord(z.boolean()),
+    assessments: shortRecord(shortRecord(score)),
+    recordedAt: epochMs.nullable(),
+  })
+  .refine(
+    // The fields must tell one story, or the mock screen cannot show it.
+    (m) => {
+      const parts = EXAM_ORDER.map((s) => [s, m.parts[s]] as const)
+      const allDone = parts.every(([, p]) => p.finishedAt !== null)
+      if ((m.status === 'finished') !== allDone) return false
+      if ((m.status === 'finished') !== (m.finishedAt !== null)) return false
+      if (m.recordedAt !== null && m.status !== 'finished') return false
+      let earlierStarted = true
+      for (const [skill, p] of parts) {
+        if (p.startedAt === null) {
+          if (p.endsAt !== null || p.finishedAt !== null) return false
+          earlierStarted = false
+          continue
+        }
+        // Parts start in the test's order.
+        if (!earlierStarted) return false
+        if (p.endsAt === null) return false
+        if (
+          p.endsAt < p.startedAt ||
+          p.endsAt > p.startedAt + partDurationMs(skill)
+        )
+          return false
+        if (
+          p.finishedAt !== null &&
+          (p.finishedAt < p.startedAt || p.finishedAt > p.endsAt)
+        )
+          return false
+      }
+      return true
+    },
+    'mock sitting does not hold together',
+  )
+
+const backupV3 = z.strictObject({
+  ...header,
+  schemaVersion: z.literal(3),
+  data: z.strictObject({
+    attempts: z.array(attempt),
+    settings: z.array(setting),
+    cards: z.array(card),
+    studyDays: z.array(studyDay),
+    writings: z.array(writing),
+  }),
+})
+
 const backupV2 = z.strictObject({
   ...header,
   schemaVersion: z.literal(2),
@@ -185,6 +275,7 @@ export const backupSchema = z.strictObject({
     cards: z.array(card),
     studyDays: z.array(studyDay),
     writings: z.array(writing),
+    mocks: z.array(mockRun),
   }),
 })
 
@@ -194,6 +285,7 @@ export interface BackupData {
   cards: VocabCard[]
   studyDays: StudyDay[]
   writings: Writing[]
+  mocks: MockRun[]
 }
 
 export interface Backup {
@@ -238,7 +330,13 @@ export function parseBackup(
           .transform((v1) => ({
             ...v1,
             schemaVersion: BACKUP_SCHEMA_VERSION,
-            data: { ...v1.data, cards: [], studyDays: [], writings: [] },
+            data: {
+              ...v1.data,
+              cards: [],
+              studyDays: [],
+              writings: [],
+              mocks: [],
+            },
           }))
           .safeParse(json)
       : version === 2
@@ -246,10 +344,18 @@ export function parseBackup(
             .transform((v2) => ({
               ...v2,
               schemaVersion: BACKUP_SCHEMA_VERSION,
-              data: { ...v2.data, writings: [] },
+              data: { ...v2.data, writings: [], mocks: [] },
             }))
             .safeParse(json)
-        : backupSchema.safeParse(json)
+        : version === 3
+          ? backupV3
+              .transform((v3) => ({
+                ...v3,
+                schemaVersion: BACKUP_SCHEMA_VERSION,
+                data: { ...v3.data, mocks: [] },
+              }))
+              .safeParse(json)
+          : backupSchema.safeParse(json)
   if (!parsed.success) {
     const issue = parsed.error.issues[0]
     const where = issue?.path.length ? ` at ${issue.path.join('.')}` : ''
@@ -270,6 +376,16 @@ export function parseBackup(
       c.createdAt,
       c.updatedAt,
       c.lastReviewAt ?? 0,
+    ]),
+    ...backup.data.mocks.flatMap((m) => [
+      m.startedAt,
+      m.finishedAt ?? 0,
+      m.recordedAt ?? 0,
+      // A part's end time lies ahead while it runs, so only start and finish.
+      ...Object.values(m.parts).flatMap((p) => [
+        p.startedAt ?? 0,
+        p.finishedAt ?? 0,
+      ]),
     ]),
     ...backup.data.writings.flatMap((w) => [
       w.createdAt,
@@ -300,6 +416,9 @@ export function parseBackup(
   const cardIds = backup.data.cards.map((c) => c.id)
   if (new Set(cardIds).size !== cardIds.length)
     return { ok: false, error: 'The backup repeats a word card.' }
+  const mockIds = backup.data.mocks.map((m) => m.id)
+  if (new Set(mockIds).size !== mockIds.length)
+    return { ok: false, error: 'The backup repeats a mock.' }
   const writingIds = backup.data.writings.map((w) => w.id)
   if (new Set(writingIds).size !== writingIds.length)
     return { ok: false, error: 'The backup repeats a text.' }

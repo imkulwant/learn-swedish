@@ -2,6 +2,12 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { resetDb } from '../../test/db'
 import { db } from '../db'
 import { recordAttempt, type NewAttempt } from '../repositories/attempts'
+import {
+  finishPart,
+  setResponse,
+  startMock,
+  startPart,
+} from '../repositories/mocks'
 import { answerCard, startWord } from '../repositories/vocab'
 import {
   assessWriting,
@@ -176,7 +182,7 @@ describe('backup', () => {
       days: await db.studyDays.toArray(),
     }
     const backup = await roundTrip()
-    expect(backup.schemaVersion).toBe(3)
+    expect(backup.schemaVersion).toBe(4)
     await resetDb()
     await replaceWithBackup(backup)
     expect(await db.cards.toArray()).toEqual(before.cards)
@@ -237,6 +243,59 @@ describe('backup', () => {
     expect(summariseBackup(backup).writings).toBe(2)
   })
 
+  it('carries mock sittings through a round trip, and merge keeps the one further on', async () => {
+    const run = await startMock(
+      { examId: 'd-prov-1', packVersion: 1, level: 'D' },
+      1000,
+    )
+    await startPart(run.id, 'lasa', 1000)
+    await setResponse(run.id, 'lasa', 'q1', 2, 2000)
+    const backup = await roundTrip()
+    expect(backup.data.mocks).toHaveLength(1)
+
+    // This device went on to finish Läsa after the backup was made.
+    await finishPart(run.id, 'lasa', 3000)
+    await mergeBackup(backup)
+    expect((await db.mocks.get(run.id))?.parts.lasa.finishedAt).toBe(3000)
+
+    await resetDb()
+    await replaceWithBackup(backup)
+    expect(await db.mocks.get(run.id)).toMatchObject({
+      responses: { q1: 2 },
+      status: 'running',
+    })
+  })
+
+  it('merge takes a sitting that has gone further, and keeps the stored one on a tie', async () => {
+    const run = await startMock(
+      { examId: 'd-prov-1', packVersion: 1, level: 'D' },
+      1000,
+    )
+    await startPart(run.id, 'lasa', 1000)
+    await finishPart(run.id, 'lasa', 2000)
+    const further = await roundTrip()
+    await resetDb()
+    const again = await startMock(
+      { examId: 'd-prov-1', packVersion: 1, level: 'D' },
+      1000,
+    )
+    await db.mocks.delete(again.id)
+    await db.mocks.add({
+      ...further.data.mocks[0]!,
+      parts: {
+        ...further.data.mocks[0]!.parts,
+        lasa: { startedAt: 1000, endsAt: 1000 + 90 * 60_000, finishedAt: null },
+      },
+    })
+    await mergeBackup(further)
+    expect((await db.mocks.get(run.id))?.parts.lasa.finishedAt).toBe(2000)
+
+    // A tie keeps what is stored, even when the file differs.
+    await db.mocks.update(run.id, { responses: { here: 1 } })
+    await mergeBackup(further)
+    expect((await db.mocks.get(run.id))?.responses).toEqual({ here: 1 })
+  })
+
   it('names files after the local date', () => {
     expect(backupFileName(new Date(2026, 10, 17, 23, 30).getTime())).toBe(
       'sfi-prep-2026-11-17.json',
@@ -247,7 +306,7 @@ describe('backup', () => {
 describe('parseBackup', () => {
   const valid = (): Record<string, unknown> => ({
     format: 'sfi-prep-backup',
-    schemaVersion: 3,
+    schemaVersion: 4,
     exportedAt: 1,
     appVersion: '1.0.0',
     data: {
@@ -256,6 +315,7 @@ describe('parseBackup', () => {
       cards: [],
       studyDays: [],
       writings: [],
+      mocks: [],
     },
   })
   // Test files name only the tables they are about; the rest are empty.
@@ -265,6 +325,7 @@ describe('parseBackup', () => {
       cards: [],
       studyDays: [],
       writings: [],
+      mocks: [],
       ...v.data,
     }
     return parseBackup(JSON.stringify(v.data ? { ...v, data } : v))
@@ -293,8 +354,8 @@ describe('parseBackup', () => {
     expect(result).toMatchObject({
       ok: true,
       backup: {
-        schemaVersion: 3,
-        data: { cards: [], studyDays: [], writings: [] },
+        schemaVersion: 4,
+        data: { cards: [], studyDays: [], writings: [], mocks: [] },
       },
     })
   })
@@ -307,7 +368,17 @@ describe('parseBackup', () => {
     }
     expect(parseBackup(JSON.stringify(v2))).toMatchObject({
       ok: true,
-      backup: { schemaVersion: 3, data: { writings: [] } },
+      backup: { schemaVersion: 4, data: { writings: [], mocks: [] } },
+    })
+  })
+
+  it('imports a version 3 file, which has no mocks', () => {
+    const older = { ...(valid().data as Record<string, unknown>) }
+    delete older.mocks
+    const v3 = { ...valid(), schemaVersion: 3, data: older }
+    expect(parseBackup(JSON.stringify(v3))).toMatchObject({
+      ok: true,
+      backup: { schemaVersion: 4, data: { mocks: [] } },
     })
   })
 
@@ -332,6 +403,92 @@ describe('parseBackup', () => {
   it('refuses a version 3 file without its word cards', () => {
     const noCards = { ...valid(), data: { attempts: [], settings: [] } }
     expect(parseBackup(JSON.stringify(noCards)).ok).toBe(false)
+  })
+
+  it('refuses mock sittings that do not hold together, and checks their size and times', async () => {
+    const run = await startMock(
+      { examId: 'd-prov-1', packVersion: 1, level: 'D' },
+      1000,
+    )
+    await startPart(run.id, 'lasa', 1000)
+    const backup = await roundTrip()
+    const sitting = backup.data.mocks[0]!
+    const withMock = (m: unknown) =>
+      parse({ ...valid(), data: { attempts: [], settings: [], mocks: [m] } })
+    expect(withMock(sitting).ok).toBe(true)
+    const done = {
+      startedAt: 1000,
+      endsAt: 1000 + 60_000,
+      finishedAt: 1000 + 60_000,
+    }
+    // "Running" with every part done would leave no part to show.
+    expect(
+      withMock({
+        ...sitting,
+        parts: { lasa: done, hora: done, skriva: done, tala: done },
+      }),
+    ).toMatchObject({ ok: false, error: /does not hold together/ })
+    // A part that starts before the one before it.
+    expect(
+      withMock({ ...sitting, parts: { ...sitting.parts, hora: done } }).ok,
+    ).toBe(true)
+    expect(
+      withMock({
+        ...sitting,
+        parts: {
+          ...sitting.parts,
+          lasa: { startedAt: null, endsAt: null, finishedAt: null },
+          hora: done,
+        },
+      }).ok,
+    ).toBe(false)
+    // An end time beyond the part's length.
+    expect(
+      withMock({
+        ...sitting,
+        parts: {
+          ...sitting.parts,
+          lasa: { startedAt: 1000, endsAt: 8e15, finishedAt: null },
+        },
+      }).ok,
+    ).toBe(false)
+    expect(
+      withMock({ ...sitting, startedAt: Date.now() + 3 * 86_400_000 }),
+    ).toMatchObject({
+      ok: false,
+    })
+    const many = Object.fromEntries(
+      Array.from({ length: 501 }, (_, i) => [`q${i}`, 0]),
+    )
+    expect(withMock({ ...sitting, responses: many }).ok).toBe(false)
+    expect(parse({ ...valid(), data: { attempts: [], settings: [] } }).ok).toBe(
+      true,
+    )
+    const v4NoMocks = { ...valid() }
+    const data = { ...(v4NoMocks.data as Record<string, unknown>) }
+    delete data.mocks
+    expect(parseBackup(JSON.stringify({ ...v4NoMocks, data })).ok).toBe(false)
+  })
+
+  it('keeps a "__proto__" key in a mock as plain data, never as a prototype', async () => {
+    const run = await startMock(
+      { examId: 'd-prov-1', packVersion: 1, level: 'D' },
+      1000,
+    )
+    const backup = await roundTrip()
+    const text = JSON.stringify({
+      ...backup,
+      data: {
+        ...backup.data,
+        mocks: [{ ...backup.data.mocks[0]!, id: run.id }],
+      },
+    }).replace('"responses":{}', '"responses":{"__proto__":{"polluted":1}}')
+    const result = parseBackup(text)
+    expect(({} as Record<string, unknown>).polluted).toBeUndefined()
+    if (result.ok)
+      expect(
+        Object.getPrototypeOf(result.backup.data.mocks[0]!.responses),
+      ).toBe(Object.prototype)
   })
 
   it('accepts an empty backup', () => {

@@ -132,6 +132,18 @@ export function MockPart({
   }, [])
   const left = Math.max(0, (run.parts[skill].endsAt ?? now) - now)
   const over = left === 0
+  const warning =
+    left > 0 && left <= 60_000
+      ? 'Less than 1 minute left'
+      : left > 0 && left <= 5 * 60_000
+        ? 'Less than 5 minutes left'
+        : ''
+  // Written after the screen appears, so a learner who resumes near the end
+  // hears it too; screen readers announce changes, not what is there at first.
+  const announcer = useRef<HTMLParagraphElement>(null)
+  useEffect(() => {
+    if (announcer.current) announcer.current.textContent = warning
+  }, [warning])
   const answer =
     (itemId: string) => (value: Parameters<typeof setResponse>[3]) =>
       store(setResponse(run.id, skill, itemId, value))
@@ -270,6 +282,8 @@ export function MockPart({
         </>
       )}
 
+      {/* Said at 5 minutes and at 1 minute, not shown by colour alone. */}
+      <p ref={announcer} role="status" className="sr-only" />
       {writeFailed && (
         <p role="alert" className="text-danger">
           Your last answer could not be saved. Check that the phone has free

@@ -39,10 +39,12 @@ describe('mock runs', () => {
   it('refuses answers once the time is up, and ends the part at its end time', async () => {
     const run = await startMock(source, 0)
     await startPart(run.id, 'lasa', 0)
-    await setResponse(run.id, 'lasa', 'q1', 1, 90 * MIN + 1)
+    // Within the grace of a save typed just before the end, then after it.
+    await setResponse(run.id, 'lasa', 'q0', 1, 90 * MIN + 1)
+    await setResponse(run.id, 'lasa', 'q1', 1, 90 * MIN + 5000)
     await finishPart(run.id, 'lasa', 200 * MIN)
     const back = await latestMock('d-prov-1')
-    expect(back?.responses).toEqual({})
+    expect(back?.responses).toEqual({ q0: 1 })
     expect(back?.parts.lasa.finishedAt).toBe(90 * MIN)
     expect(back?.status).toBe('running')
   })
@@ -87,7 +89,7 @@ describe('mock runs', () => {
     const run = await startMock(source, 0)
     await startPart(run.id, 'skriva', 0)
     await setMockText(run.id, 'p1', 'Hej', 10)
-    await setMockText(run.id, 'p1', 'För sent', 90 * MIN)
+    await setMockText(run.id, 'p1', 'För sent', 90 * MIN + 5000)
     await addPlay(run.id, 'c1')
     await addPlay(run.id, 'c1')
     await setMark(run.id, 'q1', true)
@@ -102,5 +104,40 @@ describe('mock runs', () => {
       assessments: { p1: { task: 2 } },
     })
     expect(back?.parts.skriva.finishedAt).toBe(5)
+  })
+
+  it('takes a save from within the grace even after the clock ended the part, but not after an early hand-in', async () => {
+    const run = await startMock(source, 0)
+    await startPart(run.id, 'skriva', 0)
+    await finishPart(run.id, 'skriva', 90 * MIN) // the screen's clock
+    await setMockText(run.id, 'p1', 'Sista ordet', 90 * MIN + 500)
+    expect((await latestMock('d-prov-1'))?.texts).toEqual({ p1: 'Sista ordet' })
+
+    const early = await startMock(source, 1)
+    await startPart(early.id, 'lasa', 1)
+    await finishPart(early.id, 'lasa', 10 * MIN)
+    await setResponse(early.id, 'lasa', 'q1', 1, 10 * MIN + 500)
+    expect((await db.mocks.get(early.id))?.responses).toEqual({})
+  })
+
+  it('gives mock attempts one id per sitting and item, so two phones do not double them', async () => {
+    const run = await startMock(source, 0)
+    const attempt = {
+      itemId: 'q1',
+      packId: 'd-prov-1',
+      packVersion: 1,
+      level: 'D',
+      skill: 'lasa',
+      mode: 'mock',
+      score: 1,
+      maxScore: 1,
+      selfMarked: false,
+      response: 1,
+      answeredAt: 5,
+    } as const
+    await recordMockAttempts(run.id, [attempt])
+    expect((await db.attempts.toArray()).map((a) => a.id)).toEqual([
+      `${run.id}:q1`,
+    ])
   })
 })

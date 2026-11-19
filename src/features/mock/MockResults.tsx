@@ -360,7 +360,10 @@ function SpeakingResult({
       <h2 className="text-lg font-semibold">{title}</h2>
       {!storedId && <p className="text-muted">Nothing was recorded.</p>}
       {storedId && stored && !stored.recording && !stored.session && (
-        <p className="text-muted">The recording was deleted.</p>
+        <p className="text-muted">
+          The recording is not on this phone. It may have been deleted, or made
+          on another phone.
+        </p>
       )}
       {stored?.recording && <RecordingPlayer recording={stored.recording} />}
       {stored?.session && (

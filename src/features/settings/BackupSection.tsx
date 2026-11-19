@@ -27,7 +27,8 @@ export function BackupSection() {
       <p className="text-muted">
         Your progress lives only on this device. Save a backup to Files now and
         then, and use it to move to a new phone. The file holds your answers,
-        words and texts as readable text. Recordings are not included.
+        words, texts and mock exams as readable text. Recordings are not
+        included.
       </p>
       <SaveBackupButton />
       <ImportBackup />

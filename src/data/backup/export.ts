@@ -13,7 +13,7 @@ export async function buildBackup(
 ): Promise<Backup> {
   const data = await db.transaction(
     'r',
-    [db.attempts, db.settings, db.cards, db.studyDays, db.writings],
+    [db.attempts, db.settings, db.cards, db.studyDays, db.writings, db.mocks],
     async () => ({
       attempts: await db.attempts.toArray(),
       settings: [
@@ -25,6 +25,7 @@ export async function buildBackup(
       cards: await db.cards.toArray(),
       studyDays: await db.studyDays.toArray(),
       writings: await db.writings.toArray(),
+      mocks: await db.mocks.toArray(),
     }),
   )
   return {

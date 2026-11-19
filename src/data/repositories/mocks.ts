@@ -81,14 +81,20 @@ export const finishPart = (id: string, skill: Skill, now = Date.now()) =>
     }
   })
 
+/**
+ * A save may arrive a moment after the end time for text typed before it:
+ * the screen's clock ticks each second and typing is saved after a pause.
+ */
+export const MOCK_GRACE_MS = 2000
+
 /** Answers are refused once their part has ended. */
 const open = (run: MockRun, skill: Skill, now: number) => {
   const part = run.parts[skill]
-  return (
-    part.startedAt !== null &&
-    part.finishedAt === null &&
-    (part.endsAt === null || now < part.endsAt)
-  )
+  if (part.startedAt === null) return false
+  const inTime = part.endsAt === null || now < part.endsAt + MOCK_GRACE_MS
+  // A part that timed out still takes a save from within the grace, even if
+  // the screen's clock already ended it; a part handed in early takes none.
+  return inTime && (part.finishedAt === null || part.finishedAt === part.endsAt)
 }
 
 export const setResponse = (
@@ -150,8 +156,10 @@ export async function recordMockAttempts(
     // Dated when stored, so the backup reminder counts them even when the
     // marking was finished after a backup.
     const now = Date.now()
-    await db.attempts.bulkAdd(
-      attempts.map((a) => ({ ...a, id: crypto.randomUUID(), answeredAt: now })),
+    // One id per sitting and item, so a sitting marked on two phones merges
+    // into one set of attempts, not two.
+    await db.attempts.bulkPut(
+      attempts.map((a) => ({ ...a, id: `${id}:${a.itemId}`, answeredAt: now })),
     )
     await db.mocks.update(id, { recordedAt: now })
   })

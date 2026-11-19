@@ -87,7 +87,11 @@ export function AudioPlayer({
   function toggle() {
     if (limit) {
       // On the test a clip is heard from the start and cannot be paused.
-      if (!playing && limit.used < limit.max) void play(true)
+      if (playing) return
+      // iOS can pause a clip itself, for a call or the lock screen: it goes
+      // on without using a play.
+      if (position === 'middle') void play(false)
+      else if (limit.used < limit.max) void play(true)
       return
     }
     if (playing) audio.current?.pause()
@@ -140,15 +144,21 @@ export function AudioPlayer({
         {limit ? (
           <Button
             onClick={toggle}
-            disabled={playing || limit.used >= limit.max}
+            // Never natively disabled, so focus stays on it; taps are
+            // ignored while playing or when no plays are left.
+            aria-disabled={
+              playing || (position !== 'middle' && limit.used >= limit.max)
+            }
           >
             {playing
               ? 'Playing…'
-              : limit.used >= limit.max
-                ? 'No plays left'
-                : limit.used === 0
-                  ? 'Play'
-                  : 'Play again'}
+              : position === 'middle'
+                ? 'Resume'
+                : limit.used >= limit.max
+                  ? 'No plays left'
+                  : limit.used === 0
+                    ? 'Play'
+                    : 'Play again'}
           </Button>
         ) : (
           <Button onClick={toggle}>

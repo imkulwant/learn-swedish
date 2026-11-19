@@ -1,4 +1,5 @@
 import { db } from '../db'
+import type { MockRun } from '../../domain/types'
 import type { Backup } from './schema'
 
 export interface BackupSummary {
@@ -34,13 +35,22 @@ export function summariseBackup(backup: Backup): BackupSummary {
  * Adds a backup to what is stored. Answers never change once given, so only
  * answers this device lacks are added. For a setting in both, the newer one
  * wins, and a tie keeps the stored one. The time of the last backup is never
- * taken from the file. A written text keeps its latest change. One transaction: if any write fails,
+ * taken from the file. A written text keeps its latest change, and a mock
+ * sitting the copy that has gone further. One transaction: if any write fails,
  * nothing changes. Returns how many records were written.
  */
 export async function mergeBackup(backup: Backup): Promise<number> {
-  const tables = [db.attempts, db.settings, db.cards, db.studyDays, db.writings]
+  const tables = [
+    db.attempts,
+    db.settings,
+    db.cards,
+    db.studyDays,
+    db.writings,
+    db.mocks,
+  ]
   return db.transaction('rw', tables, async () => {
-    const { attempts, settings, cards, studyDays, writings } = backup.data
+    const { attempts, settings, cards, studyDays, writings, mocks } =
+      backup.data
     const stored = await db.attempts.bulkGet(attempts.map((a) => a.id))
     const missing = attempts.filter((_, i) => !stored[i])
     await db.attempts.bulkAdd(missing)
@@ -84,15 +94,38 @@ export async function mergeBackup(backup: Backup): Promise<number> {
         !storedWritings[i] || w.updatedAt > storedWritings[i]!.updatedAt,
     )
     await db.writings.bulkPut(laterWritings)
+    // A mock sitting keeps the copy that has gone further: finished before
+    // running, then more parts done, then marked results. A tie keeps the
+    // stored one.
+    const progress = (m: MockRun) =>
+      (m.status === 'finished' ? 100 : 0) +
+      Object.values(m.parts).filter((p) => p.finishedAt !== null).length * 10 +
+      (m.recordedAt !== null ? 1 : 0)
+    const storedMocks = await db.mocks.bulkGet(mocks.map((m) => m.id))
+    const furtherMocks = mocks.filter(
+      (m, i) => !storedMocks[i] || progress(m) > progress(storedMocks[i]!),
+    )
+    await db.mocks.bulkPut(furtherMocks)
     return (
-      missing.length + newer.length + moreAnswered.length + laterWritings.length
+      missing.length +
+      newer.length +
+      moreAnswered.length +
+      laterWritings.length +
+      furtherMocks.length
     )
   })
 }
 
 /** Swaps everything stored for the contents of a backup, in one transaction. */
 export async function replaceWithBackup(backup: Backup): Promise<void> {
-  const tables = [db.attempts, db.settings, db.cards, db.studyDays, db.writings]
+  const tables = [
+    db.attempts,
+    db.settings,
+    db.cards,
+    db.studyDays,
+    db.writings,
+    db.mocks,
+  ]
   await db.transaction('rw', tables, async () => {
     for (const table of tables) await table.clear()
     await db.attempts.bulkAdd(backup.data.attempts)
@@ -100,5 +133,6 @@ export async function replaceWithBackup(backup: Backup): Promise<void> {
     await db.cards.bulkAdd(backup.data.cards)
     await db.studyDays.bulkAdd(backup.data.studyDays)
     await db.writings.bulkAdd(backup.data.writings)
+    await db.mocks.bulkAdd(backup.data.mocks)
   })
 }

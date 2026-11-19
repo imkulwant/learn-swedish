@@ -22,7 +22,7 @@ export function Button({
   return (
     <button
       type={type}
-      className={`tap-target inline-flex items-center justify-center gap-2 rounded-control px-4 py-2 font-semibold transition-colors motion-reduce:transition-none disabled:opacity-40 ${VARIANTS[variant]} ${className}`}
+      className={`tap-target inline-flex items-center justify-center gap-2 rounded-control px-4 py-2 font-semibold transition-colors motion-reduce:transition-none disabled:opacity-40 aria-disabled:opacity-40 ${VARIANTS[variant]} ${className}`}
       {...props}
     />
   )

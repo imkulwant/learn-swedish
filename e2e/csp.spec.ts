@@ -76,7 +76,13 @@ test.describe('Content-Security-Policy', () => {
       'exam/hora/d-hora-1',
       'learn',
       'learn/ord',
+      'learn/grammatik/g-v2',
+      'exam/skriva/s-felanmalan',
+      'exam/tala/t-nytt-jobb',
+      'exam/tala/par/p-trivas-jobbet',
+      'exam/prov/d-prov-1',
       'everyday',
+      'everyday/v-apoteket',
       'progress',
       'settings',
     ]) {

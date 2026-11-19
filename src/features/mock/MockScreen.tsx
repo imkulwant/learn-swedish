@@ -173,7 +173,15 @@ function Mock({ offered }: { offered: OfferedMock }) {
         </Button>
       </div>
     )
-  const skill = currentPart(run.parts)!
+  const skill = currentPart(run.parts)
+  // A sitting whose parts are all done is finished, whatever it says.
+  if (!skill)
+    return (
+      <EmptyState
+        title="This mock cannot go on"
+        description="Its parts are all done but it is not marked as finished. Take the mock again."
+      />
+    )
   if (run.parts[skill].startedAt === null) return <BeforePart run={run} />
   return <MockPart key={skill} offered={offered} run={run} skill={skill} />
 }
